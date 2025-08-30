@@ -10,7 +10,8 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 
-
+import route from "./Routes/userRoutes.js"
+app.use("/user",route)
 
 const PORT  = process.env.PORT
 connectDB().then(
