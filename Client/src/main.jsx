@@ -6,19 +6,21 @@ import './index.css'
 import Layout from './Layout.jsx'
 import UserSignUpWrapper from './Components/UserSignUp/UserSignUpWrapper.jsx'
 import { Provider } from 'react-redux'
-import {Store} from './Store/Store.js'
-const router=createBrowserRouter(
+import { Store } from './Store/Store.js'
+const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='' element={<Layout/>}>
+    <>
       <Route path='/user-signup' element={<UserSignUpWrapper></UserSignUpWrapper>}></Route>
-    </Route>
+      <Route path='' element={<Layout />}>
+      </Route>
+    </>
   )
 )
 
 createRoot(document.getElementById('root')).render(
-    <Provider store={Store}>
-      <ToastContainer/>
+  <Provider store={Store}>
+    <ToastContainer />
     <RouterProvider router={router} />
-    </Provider>
- 
+  </Provider>
+
 )
