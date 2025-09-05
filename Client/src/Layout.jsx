@@ -1,10 +1,7 @@
-import { useState } from 'react'
 import {Outlet} from 'react-router-dom'
-import {Header} from './Components/Header/Header'
-import {Footer} from './Components/Footer/Footer'
+import Footer from './Components/Footer/Footer'
+import Header from './Components/Header/Header'
 function Layout() {
-  const [count, setCount] = useState(0)
-
   return (
    <>
     <Header/>
