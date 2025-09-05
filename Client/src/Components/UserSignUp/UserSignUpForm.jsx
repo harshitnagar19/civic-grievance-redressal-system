@@ -21,17 +21,17 @@ const UserSignUpForm = ({ formikProps }) => {
         <h1 className="text-xl sm:text-2xl font-bold text-gray-700">Create Account</h1>
       </div>
 
-      <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">Username</label>
+      <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">UserName</label>
       <Field
         type="text"
-        name="name"
+        name="userName"
         placeholder="Enter your username"
         value={values.name}
-        onChange={(e) => setFieldValue("name", e.target.value)}
+        onChange={(e) => setFieldValue("userName", e.target.value)}
         className="w-full p-2 sm:p-3 mb-3 sm:mb-4 border rounded-lg text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
         onBlur={handleBlur}
       />
-      <ErrorMessage name="name" component="div" className="text-red-500 text-xs sm:text-sm mb-3 sm:mb-4" />
+      <ErrorMessage name="userName" component="div" className="text-red-500 text-xs sm:text-sm mb-3 sm:mb-4" />
 
       <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">Email</label>
       <Field
@@ -45,17 +45,17 @@ const UserSignUpForm = ({ formikProps }) => {
       />
       <ErrorMessage name="email" component="div" className="text-red-500 text-xs sm:text-sm mb-3 sm:mb-4" />
 
-      <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">Mobile</label>
+      <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">MobileNumber</label>
       <Field
         type="text"
-        name="mobile"
+        name="mobileNumber"
         placeholder="Enter mobile number"
         value={values.mobile}
-        onChange={(e) => setFieldValue("mobile", e.target.value)}
+        onChange={(e) => setFieldValue("mobileNumber", e.target.value)}
         className="w-full p-2 sm:p-3 mb-3 sm:mb-4 border rounded-lg text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
         onBlur={handleBlur}
       />
-      <ErrorMessage name="mobile" component="div" className="text-red-500 text-xs sm:text-sm mb-3 sm:mb-4" />
+      <ErrorMessage name="mobileNumber" component="div" className="text-red-500 text-xs sm:text-sm mb-3 sm:mb-4" />
 
       <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">Password</label>
       <Field
