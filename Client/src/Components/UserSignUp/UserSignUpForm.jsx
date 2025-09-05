@@ -10,10 +10,10 @@ const UserSignUpForm = ({ formikProps }) => {
                 <div><h1>UserSignUpForm</h1></div>
 
                 <Field type="text"
-                    name="name"
+                    name="userName"
                     placeholder='UserName'
-                    value={values.name}
-                    onChange={(e) => { setFieldValue("name", e.target.value) }}
+                    value={values.userName}
+                    onChange={(e) => { setFieldValue("userName", e.target.value) }}
                     className='border'
                     onBlur={handleBlur}
                 />
@@ -34,10 +34,10 @@ const UserSignUpForm = ({ formikProps }) => {
                 <br />
                 <Field
                     type="text"
-                    name='mobile'
+                    name='mobileNumber'
                     placeholder='7024******'
-                    value={values.mobile}
-                    onChange={(e) => { setFieldValue("mobile", e.target.value) }}
+                    value={values.mobileNumber}
+                    onChange={(e) => { setFieldValue("mobileNumber", e.target.value) }}
                     className='border'
                     onBlur={handleBlur}
                 />
