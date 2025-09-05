@@ -1,7 +1,7 @@
 import { object, string,ref } from "yup";
 
 export const UserSignUpValidation = object({
-    name: string()
+    userName: string()
       .required("Name is required")
       .min(2, "Name must be at least 2 characters")
       .max(50, "Name can't be more than 50 characters"),
@@ -10,7 +10,7 @@ export const UserSignUpValidation = object({
       .email("Invalid email format")
       .required("Email is required"),
   
-    mobile: string()
+    mobileNumber: string()
       .required("Mobile number is required")
       .matches(/^[6-9]\d{9}$/, "Invalid Indian mobile number"),
   
