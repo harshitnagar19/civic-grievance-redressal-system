@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import { useDispatch, useSelector } from 'react-redux'
-import { UserSignUpValidation } from "../../validations/UserSignUpValidation"
+import { UserSignUpValidation } from "../../validations/UserValidations"
 import UserSignUpForm from "./UserSignUpForm";
 import axios from 'axios'
 import { addUserData } from '../../Store/userDataSlice';
 import { toast } from 'react-toastify';
-
+import { useNavigate } from "react-router-dom";
 const UserSignUpWrapper = () => {
 
   const notifyError = (err) => toast.error(err);
   const notifySuccess = (suc) => toast.success(suc);
-
+  const navigate=useNavigate();
   const dispatch = useDispatch();
 
   const initialValues = {
@@ -21,7 +21,11 @@ const UserSignUpWrapper = () => {
     password: "",
     confirmPassword: "",
   };
-
+  useEffect(() => {
+          if (localStorage.getItem("token")) {
+              navigate('/user-dashboard');
+          }
+      }, [])
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
     try {
@@ -32,6 +36,7 @@ const UserSignUpWrapper = () => {
           localStorage.setItem("token", response.data.data[0].token)
           dispatch(addUserData(response.data.data[0]))
           notifySuccess(response.data.msg)
+          navigate('/user-dashboard');
         })
     } catch (error) {
       notifyError(error?.response?.data?.msg || "Error")
