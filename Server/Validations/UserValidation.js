@@ -1,5 +1,6 @@
 import Joi from "joi";
 
+// signup schema
 export const userSignUpValidationSchema = Joi.object({
 
   userName: Joi.string().trim().min(3).max(45).required().messages({
@@ -35,4 +36,16 @@ export const userSignUpValidationSchema = Joi.object({
   role: Joi.string().trim().valid("user").default("user").messages({
     "any.only": "Role must be 'user'",
   })
+}).required();
+
+
+// login schema 
+export const userLoginValidationSchema = Joi.object({
+  email:Joi.string().trim().lowercase().email().required().messages({
+    "string.email": "Please provide a valid email",
+    "any.required": "Email is required",
+  }),
+  password: Joi.string().trim().required().messages({
+    "any.required": "Password is required",
+  }),
 }).required();
