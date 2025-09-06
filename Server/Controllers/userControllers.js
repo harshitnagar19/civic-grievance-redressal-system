@@ -9,11 +9,11 @@ userControllers.signup = async (req, res) => {
     const { value, error } = userSignUpValidationSchema.validate(req.body);
     //in-valid body
     if (error) {
-      return res.status(400).json({
-        status: "ERR",
-        msg: err.message,
-        data: [],
-      });
+        return res.status(400).json({
+          status: "ERR",
+          msg: err.message,
+          data: [],
+        });
     }
     //valid body
     else {
