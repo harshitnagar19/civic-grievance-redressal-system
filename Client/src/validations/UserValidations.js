@@ -24,3 +24,15 @@ export const UserSignUpValidation = object({
       .oneOf([ref('password')], "Passwords must match"),
   });
   
+export const UserLoginValidation = object({
+  email: string()
+    .email("Invalid email format")
+    .required("Email is required"),
+
+  password: string()
+    .required("Password is required")
+    .min(4, "Password must be at least 6 characters")
+    .max(20, "Password can't be more than 20 characters"),
+});
+
+  
