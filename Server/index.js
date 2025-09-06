@@ -11,7 +11,9 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 
 import route from "./Routes/userRoutes.js"
+import deptRoute from "./Routes/departmentRoutes.js";
 app.use("/user",route)
+app.use("/department",deptRoute)
 
 const PORT  = process.env.PORT
 connectDB().then(
