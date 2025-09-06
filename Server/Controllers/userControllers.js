@@ -1,7 +1,11 @@
 import UserServices from "../Services/UserServices.js";
 import hashPassword from "../utils/password/hashPassword.js";
+import verifyPassword from "../utils/password/verifyPassword.js";
 import { generateToken } from "../utils/token/generateToken.js";
-import { userSignUpValidationSchema } from "../Validations/UserValidation.js";
+import {
+  userSignUpValidationSchema,
+  userLoginValidationSchema,
+} from "../Validations/UserValidation.js";
 
 const userControllers = {};
 userControllers.signup = async (req, res) => {
@@ -9,11 +13,11 @@ userControllers.signup = async (req, res) => {
     const { value, error } = userSignUpValidationSchema.validate(req.body);
     //in-valid body
     if (error) {
-        return res.status(400).json({
-          status: "ERR",
-          msg: err.message,
-          data: [],
-        });
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      });
     }
     //valid body
     else {
@@ -30,24 +34,26 @@ userControllers.signup = async (req, res) => {
             value.password = hashedPassword;
             const registerUser = await UserServices.signup(value);
             if (registerUser.status == "OK") {
-               const userObj = registerUser.data[0].toObject();
-               delete userObj.password;
-               try{
-                const token = generateToken({email:userObj.email , role:userObj.role});
-                userObj["token"] = token
+              const userObj = registerUser.data[0].toObject();
+              delete userObj.password;
+              try {
+                const token = generateToken({
+                  email: userObj.email,
+                  role: userObj.role,
+                });
+                userObj["token"] = token;
                 return res.status(200).send({
                   status: "OK",
                   msg: "user signup sucessfully",
                   data: [userObj],
                 });
-               }
-               catch(err){
+              } catch (err) {
                 return res.status(500).send({
-                  status:"ERR",
-                  msg:"error in server while generating token",
-                  data:[]
-                })
-               }
+                  status: "ERR",
+                  msg: "error in server while generating token",
+                  data: [],
+                });
+              }
             } else {
               return res.status(500).send({
                 status: "ERR",
@@ -66,9 +72,9 @@ userControllers.signup = async (req, res) => {
         } else {
           // user founded means already register eith email
           return res.status(400).send({
-            status:"ERR",
-            msg:"user already register with given email",
-            data:[]
+            status: "ERR",
+            msg: "user already register with given email",
+            data: [],
           });
         }
       }
@@ -78,6 +84,65 @@ userControllers.signup = async (req, res) => {
     return res.status(500).send({
       status: "ERR",
       msg: `error at server while signup user ${err.message}`,
+      data: [],
+    });
+  }
+};
+
+userControllers.login = async (req, res) => {
+  try {
+    const { value, error } = userLoginValidationSchema.validate(req.body);
+    //in-valid body
+    if (error) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      });
+    }else{
+      const user = await UserServices.getUserByEmail(value.email)
+      if(user.status=="ERR"){
+        return res.status(500).send({
+          status:"ERR",
+          msg:"error at server in user login",
+          data:[]
+        })
+      }
+      if(user.status=="OK" && user.data.length==0){
+        return res.status(400).send({
+          status:"ERR",
+          msg:"user not register with enterd mail",
+          data:[]
+        })
+      }
+      if(user.status=="OK" && user.data.length>0){
+          try{  
+            const isPasswordCorrect = verifyPassword( value.password, user.data.password)
+            if(isPasswordCorrect){
+              // const userObj = 
+            }else{
+              return res.status(400).send({
+                status:"ERR",
+                msg:"invalid password",
+                data:[]
+              })
+            }
+
+          }catch(err){
+            return res.status(500).send({
+              status:"ERR",
+              msg:err.message,
+              data:[]
+            })
+          }
+      }
+    }
+
+
+  } catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: `err in server at user login , ${err.message}`,
       data: [],
     });
   }
