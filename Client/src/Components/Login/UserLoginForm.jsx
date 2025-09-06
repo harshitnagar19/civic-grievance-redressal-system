@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, ErrorMessage } from "formik";
 import { NavLink } from 'react-router-dom';
-
+import {routes} from '../../data/routes'
 const UserLoginForm = ({ formikProps }) => {
   const { values, setFieldValue, isSubmitting, handleBlur } = formikProps;
 
@@ -69,7 +69,7 @@ const UserLoginForm = ({ formikProps }) => {
           <div className="mt-2 text-center">
             <span className="text-xs sm:text-sm text-gray-600">
               Don't have an account?
-            <NavLink to='/user-signup' className='text-blue-500 hover:underline ml-1'>
+            <NavLink to={routes.userSignup} className='text-blue-500 hover:underline ml-1'>
             SignUp
             </NavLink>
             </span>

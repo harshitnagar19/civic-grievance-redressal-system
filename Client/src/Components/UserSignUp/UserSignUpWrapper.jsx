@@ -7,6 +7,7 @@ import axios from 'axios'
 import { addUserData } from '../../Store/userDataSlice';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import {routes} from '../../data/routes'
 const UserSignUpWrapper = () => {
 
   const notifyError = (err) => toast.error(err);
@@ -23,7 +24,7 @@ const UserSignUpWrapper = () => {
   };
   useEffect(() => {
           if (localStorage.getItem("token")) {
-              navigate('/user-dashboard');
+              navigate(routes.userDashboard);
           }
       }, [])
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -36,7 +37,7 @@ const UserSignUpWrapper = () => {
           localStorage.setItem("token", response.data.data[0].token)
           dispatch(addUserData(response.data.data[0]))
           notifySuccess(response.data.msg)
-          navigate('/user-dashboard');
+          navigate(routes.userDashboard);
         })
     } catch (error) {
       notifyError(error?.response?.data?.msg || "Error")

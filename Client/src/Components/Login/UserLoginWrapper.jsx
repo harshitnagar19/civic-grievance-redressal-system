@@ -7,7 +7,7 @@ import axios from 'axios';
 import { addUserData } from '../../Store/userDataSlice';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-
+import {routes} from '../../data/routes'
 
 const UserLoginWrapper = () => {
     const notifyError = (err) => toast.error(err);
@@ -21,7 +21,7 @@ const UserLoginWrapper = () => {
 
     useEffect(() => {
         if (localStorage.getItem("token")) {
-            navigate('/user-dashboard');
+            navigate(routes.userDashboard);
         }
     }, [])
 
@@ -34,7 +34,7 @@ const UserLoginWrapper = () => {
                     localStorage.setItem("token", response.data.data[0].token);
                     dispatch(addUserData(response.data.data[0]));
                     notifySuccess(response.data.msg);
-                    navigate('/user-dashboard');
+                    navigate(routes.userDashboard);
                 });
         } catch (error) {
             notifyError(error?.response?.data?.msg || "Login failed");
