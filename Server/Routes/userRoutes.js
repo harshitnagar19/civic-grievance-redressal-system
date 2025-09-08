@@ -3,7 +3,9 @@ import express from "express"
 const route = express.Router()
 
 import userControllers from "../Controllers/userControllers.js"
+import { verifyToken } from "../middleware/verifyToken.js"
 route.post("/signup",userControllers.signup)
 route.post("/login",userControllers.login)
+route.post("/refresh",verifyToken,userControllers.refresh)
 
 export default route; 
