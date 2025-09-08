@@ -11,6 +11,7 @@ const DepartmentSchema = new Schema({
   },
   DepartmentName: {
     type: String,
+    required: true
     
   },
   DepartmentShortName: {
@@ -19,6 +20,10 @@ const DepartmentSchema = new Schema({
     enum: ["ELEC", "WATER", "ROAD", "EDU", "HEALTH", "ENV", "SEVAGE"],
    
   },
+  HeadOfDepartment:{
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,
@@ -26,7 +31,7 @@ const DepartmentSchema = new Schema({
   },
   password: {
     type: String,
-    
+    required: true,
   },
   mobileNumber: {
     type: String,
@@ -35,11 +40,15 @@ const DepartmentSchema = new Schema({
   },
   city: {
     type: String,
-  
+    required: true,
   },
   state: {
     type: String,
-    
+    required: true,
+  },
+  deptAddress:{
+    type:String,
+    required: true,
   },
   solve_issue: {
     type: [String],
