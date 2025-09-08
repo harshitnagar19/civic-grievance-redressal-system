@@ -10,8 +10,9 @@ import UserLoginWrapper from './Components/Login/UserLoginWrapper.jsx';
 import UserDashboard from './Components/Dashboard/UserDashboard.jsx';
 import { routes } from './data/routes.js';
 import NotFound from './Components/404/NotFound.jsx';
-import OurTeam from './Components/screens/aboutus/OurTeam.jsx';
+import AboutUs from './Components/screens/AboutUs.jsx';
 import { Parallax, ParallaxProvider, useParallax } from 'react-scroll-parallax';
+import OAuth from './Components/auth/OAuth.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +21,7 @@ const router = createBrowserRouter(
       <Route path={routes.userLogin} element={<UserLoginWrapper />}></Route>
       <Route path='' element={<Layout />}>
         <Route path={routes.userDashboard} element={<UserDashboard />}></Route>
-      <Route path='/about-us' element={<OurTeam/>}></Route>
+      <Route path='/about-us' element={<OAuth><AboutUs/></OAuth>}></Route>
       </Route>
       <Route path='*' element={<NotFound/>}></Route>
     </>
