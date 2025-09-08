@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
+import { routes } from "../../data/routes";
 const Header = () => {
   const data = useSelector((store) => store.userData);
   const token = data?.token;
@@ -14,36 +15,39 @@ const Header = () => {
   return (
     <header className="w-full sticky top-0 z-50 shadow-md">
       {/* Top Govt Info */}
-<div className="bg-[#1565C0] text-white text-center py-1">
-  <p className="text-sm font-semibold leading-none m-0">
-    भारत सरकार | Government of India
-  </p>
-  <p className="text-sm font-semibold leading-none m-0">
-    कार्मिक, लोक शिकायत| Ministry of Personnel, Public
-    Grievances
-  </p>
-</div>
-      
+      <div className="bg-[#1565C0] text-white text-center py-1">
+        <p className="text-sm font-semibold leading-none m-0">
+          भारत सरकार | Government of India
+        </p>
+        <p className="text-sm font-semibold leading-none m-0">
+          कार्मिक, लोक शिकायत| Ministry of Personnel, Public
+          Grievances
+        </p>
+      </div>
+
 
       {/* Navbar */}
-      <div className="flex items-center justify-between px-6 md:px-12 lg:px-12 py-3 bg-[#F5F5F5]">
+      <div className="flex items-center justify-between px-6 md:px-12 lg:px-12 py-1 bg-[#F5F5F5]">
         {/* Logo + Title */}
         <div className="flex items-center space-x-2">
-          <img
-            src="/logo.png"
-            alt="Civic Eye Logo"
-            className="w-16 h-16 object-contain" // smaller logo
-          />
+          <Link to={routes.userDashboard}>
+
+            <img
+              src="/logo.png"
+              alt="Civic Eye Logo"
+              className="w-16 h-16 object-contain" // smaller logo
+            />
+          </Link>
         </div>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-5">
-          <a
-            href="#"
+          <Link
+            to={routes.aboutUs}
             className="text-[#212121] hover:text-[#1565C0] transition font-medium"
           >
             About Us
-          </a>
+          </Link>
           <a
             href="#"
             className="text-[#212121] hover:text-[#1565C0] transition font-medium"
@@ -93,12 +97,12 @@ const Header = () => {
       {/* Mobile Dropdown */}
       {isOpen && (
         <div className="md:hidden flex flex-col space-y-3 px-6 pb-4 bg-[#F5F5F5] border-t">
-          <a
-            href="#"
+          <Link
+            to={routes.aboutUs}
             className="text-[#212121] hover:text-[#1565C0] transition font-medium"
           >
             About Us
-          </a>
+          </Link>
           <a
             href="#"
             className="text-[#212121] hover:text-[#1565C0] transition font-medium"
