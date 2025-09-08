@@ -99,46 +99,66 @@ userControllers.login = async (req, res) => {
         msg: error.message,
         data: [],
       });
-    }else{
-      const user = await UserServices.getUserByEmail(value.email)
-      if(user.status=="ERR"){
+    } else {
+      const user = await UserServices.getUserByEmail(value.email);
+      if (user.status == "ERR") {
         return res.status(500).send({
-          status:"ERR",
-          msg:"error at server in user login",
-          data:[]
-        })
+          status: "ERR",
+          msg: "error at server in user login",
+          data: [],
+        });
       }
-      if(user.status=="OK" && user.data.length==0){
+      if (user.status == "OK" && user.data.length == 0) {
         return res.status(400).send({
-          status:"ERR",
-          msg:"user not register with enterd mail",
-          data:[]
-        })
+          status: "ERR",
+          msg: "user not register with enterd mail",
+          data: [],
+        });
       }
-      if(user.status=="OK" && user.data.length>0){
-          try{  
-            const isPasswordCorrect = verifyPassword( value.password, user.data.password)
-            if(isPasswordCorrect){
-              // const userObj = 
-            }else{
-              return res.status(400).send({
-                status:"ERR",
-                msg:"invalid password",
-                data:[]
-              })
-            }
+      if (user.status == "OK" && user.data.length > 0) {
+        try {
+          const isPasswordCorrect = await verifyPassword(
+            value.password,
+            user.data[0].password
+          );
+          if (isPasswordCorrect) {
+            const userObj = user.data[0].toObject();
+            delete userObj.password;
 
-          }catch(err){
-            return res.status(500).send({
-              status:"ERR",
-              msg:err.message,
-              data:[]
-            })
+            try {
+              const token = generateToken({
+                email: userObj.email,
+                role: userObj.role,
+              });
+              userObj["token"] = token;
+              return res.status(200).send({
+                status: "OK",
+                msg: "user login sucessfully",
+                data: [userObj],
+              });
+            } catch (authErr) {
+              return res.status(500).send({
+                status: "ERR",
+                msg: authErr.message,
+                data: [],
+              });
+            }
+          } else {
+            return res.status(400).send({
+              status: "ERR",
+              msg: "invalid password",
+              data: [],
+            });
           }
+        } catch (err) {
+          return res.status(500).send({
+            status: "ERR",
+            msg: err.message,
+            data: [],
+          });
+        }
       }
     }
-
-
   } catch (err) {
     res.status(500).send({
       status: "ERR",
@@ -147,5 +167,42 @@ userControllers.login = async (req, res) => {
     });
   }
 };
+
+userControllers.refresh = async(req,res)=>{
+  try{
+    const {email , role} = req.user;
+    const response = await UserServices.getUserByEmail(email);
+
+    if (response.status == "ERR") {
+      return res.status(500).send({
+        status: "ERR",
+        msg: "error at server in user login",
+        data: [],
+      });
+    }
+    if (response.status == "OK" && response.data.length == 0) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "user not register with enterd mail",
+        data: [],
+      });
+    }
+    if (response.status == "OK" && response.data.length > 0){
+        const userObj = response.data[0].toObject()
+        delete userObj.password
+        return res.status(200).send({
+          status:"OK",
+          msg:"user is valid",
+          data:[userObj]
+        })
+    }
+  }catch(err){
+    return res.status(500).send({
+      status:"ERR",
+      msg:"error in refresh at server",
+      data:[]
+    })
+  }
+}
 
 export default userControllers;
