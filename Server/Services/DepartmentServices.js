@@ -33,11 +33,13 @@ DepartmentServices.getDepartmentByEmail = async(email)=>{
 DepartmentServices.signup = async ({
   DepartmentName,
   DepartmentShortName,
+  HeadOfDepartment,
   email,
   password,
   mobileNumber,
   city,
   state,
+  deptAddress,
   solve_issue = [],
   role = "department",
 }) => {
@@ -45,11 +47,13 @@ DepartmentServices.signup = async ({
     const signupData = await Department.create({
       DepartmentName,
       DepartmentShortName,
+      HeadOfDepartment,
       email,
-      password,          // Make sure to hash the password before saving!
+      password,  
       mobileNumber,
       city,
       state,
+      deptAddress,
       solve_issue,
       role,
     });

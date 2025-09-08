@@ -17,6 +17,14 @@ export const departmentSignUpValidationSchema = Joi.object({
       "any.required": "Department short name is required",
     }),
 
+  HeadOfDepartment: Joi.string().trim().min(3).max(100).required().messages({
+    "string.base": "Head of Department should be text",
+    "string.empty": "Head of Department cannot be empty",
+    "string.min": "Head of Department should have at least 3 characters",
+    "string.max": "Head of Department should not exceed 100 characters",
+    "any.required": "Head of Department is required",
+  }),
+
   email: Joi.string().trim().lowercase().email().required().messages({
     "string.email": "Please provide a valid email",
     "any.required": "Email is required",
@@ -53,6 +61,14 @@ export const departmentSignUpValidationSchema = Joi.object({
     "any.required": "State is required",
   }),
 
+  deptAddress: Joi.string().trim().min(5).max(200).required().messages({
+    "string.base": "Department address should be text",
+    "string.empty": "Department address cannot be empty",
+    "string.min": "Department address should have at least 5 characters",
+    "string.max": "Department address should not exceed 200 characters",
+    "any.required": "Department address is required",
+  }),
+
   solve_issue: Joi.array()
     .items(Joi.string().min(3).max(50))
     .messages({
@@ -64,5 +80,15 @@ export const departmentSignUpValidationSchema = Joi.object({
 
   role: Joi.string().valid("department").default("department").messages({
     "any.only": "Role must be 'department'",
+  }),
+}).required();
+
+export const departmentLoginValidationSchema = Joi.object({
+  email:Joi.string().trim().lowercase().email().required().messages({
+    "string.email": "Please provide a valid email",
+    "any.required": "Email is required",
+  }),
+  password: Joi.string().trim().required().messages({
+    "any.required": "Password is required",
   }),
 }).required();
