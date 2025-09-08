@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
+import {Link} from "react-router-dom"
 const Header = () => {
   const data = useSelector((store) => store.userData);
   const token = data?.token;
@@ -111,12 +111,12 @@ const Header = () => {
           >
             View Department Info
           </a>
-          <a
-            href="#"
+          <Link
+            to="/about-us"
             className="text-[#212121] hover:text-[#1565C0] transition font-medium"
           >
             Contact Support
-          </a>
+          </Link>
 
           {/* Conditional Login/Logout in mobile */}
           {token ? (
