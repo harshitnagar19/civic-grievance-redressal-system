@@ -38,7 +38,8 @@ departmentControllers.signup = async (req, res) => {
                 return res.status(200).send({
                   status: "OK",
                   msg: "Department signup sucessfully",
-                  data: [departmentObj],
+                  // data: [departmentObj],
+                  data:[]
                 });
               }
               catch (err) {
@@ -114,6 +115,14 @@ departmentControllers.login = async (req, res) => {
       if (department.status == "OK" && department.data.length > 0) {
         try {
           const departmentObj = department.data[0];
+            // check department verified or not
+          if (!departmentObj.isVerified) {
+            return res.status(403).send({
+              status: "ERR",
+              msg: "Department not verified yet. Contact admin for approval.",
+              data: []
+            });
+          }
           // verify pwd
           const isPasswordCorrect = await verifyPassword(value.password, departmentObj.password)
           if (isPasswordCorrect) {
