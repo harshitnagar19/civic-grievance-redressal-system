@@ -15,8 +15,8 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 
 
-import deptRoute from "./Routes/departmentRoutes.js";
-app.use("/department",deptRoute)
+import route  from "./Routes/DepartmentRoutes.js";
+app.use("/department",route )
 
 import route from "./Routes/userRoutes.js";
 app.use("/user", route);
