@@ -1,9 +1,9 @@
 import express from "express"
 import departmentControllers from "../Controllers/departmentControllers.js"
 
-const route  = express.Router()
+const deptroute  = express.Router()
 
-route .post("/signup",departmentControllers.signup)
-route .post("/login",departmentControllers.login)
+deptroute .post("/signup",departmentControllers.signup)
+deptroute .post("/login",departmentControllers.login)
 
-export default route ;
+export default deptroute ;
