@@ -172,4 +172,43 @@ departmentControllers.login = async (req, res) => {
     });
   }
 }
+
+departmentControllers.refresh = async(req,res)=>{
+  try {
+    const {email ,role} = req.department;
+    const response = await DepartmentServices.getDepartmentByEmail(email);
+
+    if(response.status == "ERR"){
+      return res.status(500).send({
+        status : "ERR",
+        msg : "error at server in department login",
+        data: [],
+      })
+    }
+    if(response.status == "OK " && response.data.length==0){
+      return res.status(400).send({
+        status: "ERR",
+        msg: "department not register with enterd mail",
+        data: [],
+      })
+    }
+    if(response.status =="OK" && response.data.length>0){
+      const departmentObj = response.data[0].toObject()
+      delete departmentObj.password 
+      res.status(200).send({
+        status : "OK",
+        msg:"department is valid",
+        data:[departmentObj]
+      })
+    }
+
+  } catch (error) {
+    return res.status(500).send({
+      status:"ERR",
+      msg:"error in refresh at server",
+      data:[]
+    })
+  }
+}
+
 export default departmentControllers;
