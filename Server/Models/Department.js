@@ -58,6 +58,10 @@ const DepartmentSchema = new Schema({
     type: String,
     enum: ['department'],
     default: 'department'
+  },
+  isVerified: {
+    type: Boolean,
+    default: false  
   }
 }, {
   timestamps: true,
