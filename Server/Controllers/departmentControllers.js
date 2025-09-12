@@ -174,6 +174,7 @@ departmentControllers.login = async (req, res) => {
 }
 
 departmentControllers.refresh = async(req,res)=>{
+  
   try {
     const {email ,role} = req.department;
     const response = await DepartmentServices.getDepartmentByEmail(email);
@@ -185,7 +186,7 @@ departmentControllers.refresh = async(req,res)=>{
         data: [],
       })
     }
-    if(response.status == "OK " && response.data.length==0){
+    if(response.status == "OK" && response.data.length==0){
       return res.status(400).send({
         status: "ERR",
         msg: "department not register with enterd mail",

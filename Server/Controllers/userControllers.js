@@ -172,7 +172,7 @@ userControllers.refresh = async(req,res)=>{
   try{
     const {email , role} = req.user;
     const response = await UserServices.getUserByEmail(email);
-
+    
     if (response.status == "ERR") {
       return res.status(500).send({
         status: "ERR",
