@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom"
 import { routes } from "../../data/routes";
+import logo2 from '../../assets/logo2.png'
 const Header = () => {
   const data = useSelector((store) => store.userData);
   const token = data?.token;
@@ -33,9 +34,9 @@ const Header = () => {
           <Link to={routes.userDashboard}>
 
             <img
-              src="/logo.png"
+              src={logo2}
               alt="Civic Eye Logo"
-              className="w-16 h-16 object-contain" // smaller logo
+              className="w-40 h-20 object-contain" // smaller logo
             />
           </Link>
         </div>

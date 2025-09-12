@@ -1,9 +1,8 @@
-import React from 'react';
 import { Field, ErrorMessage } from "formik";
 import { NavLink } from 'react-router-dom';
 import {routes} from '../../data/routes'
 import logo2 from '../../assets/logo2.png'
-const UserLoginForm = ({ formikProps }) => {
+const DepartmentSignInForm = ({ formikProps }) => {
   const { values, setFieldValue, isSubmitting, handleBlur } = formikProps;
 
   return (
@@ -70,7 +69,7 @@ const UserLoginForm = ({ formikProps }) => {
           <div className="mt-2 text-center">
             <span className="text-xs sm:text-sm text-gray-600">
               Don't have an account?
-            <NavLink to={routes.userSignup} className='text-blue-500 hover:underline ml-1'>
+            <NavLink to={routes.deptSignUp} className='text-blue-500 hover:underline ml-1'>
             SignUp
             </NavLink>
             </span>
@@ -81,4 +80,4 @@ const UserLoginForm = ({ formikProps }) => {
   );
 };
 
-export default UserLoginForm;
+export default DepartmentSignInForm;
