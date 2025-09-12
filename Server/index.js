@@ -21,6 +21,8 @@ app.use("/department",deptroute )
 import route from "./Routes/userRoutes.js";
 app.use("/user", route);
 
+import complainRoute from "./Routes/complainRoutes.js";
+app.use("/complain",complainRoute);
 
 const PORT = process.env.PORT;
 connectDB().then(() => {
