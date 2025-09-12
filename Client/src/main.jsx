@@ -13,15 +13,19 @@ import NotFound from './Components/404/NotFound.jsx';
 import AboutUs from './Components/screens/AboutUs.jsx';
 import { Parallax, ParallaxProvider, useParallax } from 'react-scroll-parallax';
 import OAuth from './Components/auth/OAuth.jsx';
+import DepartmentSignUpWrapper from './Components/DepartmentSignUp/DepartmentSignUpWrapper.jsx';
+import DepartmentLoginWrapper from './Components/DepartmentSign/DepartmentSignInWrapper.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path={routes.userSignup} element={<UserSignUpWrapper />}></Route>
       <Route path={routes.userLogin} element={<UserLoginWrapper />}></Route>
+      <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper/>}></Route>
+      <Route path={routes.deptLogin} element={<DepartmentLoginWrapper/>}></Route>
       <Route path='' element={<Layout />}>
         <Route path={routes.userDashboard} element={<UserDashboard />}></Route>
-      <Route path='/about-us' element={<OAuth><AboutUs/></OAuth>}></Route>
+      <Route path='/about-us' element={<AboutUs/>}></Route>
       </Route>
       <Route path='*' element={<NotFound/>}></Route>
     </>
