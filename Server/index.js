@@ -13,10 +13,14 @@ app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-import route from "./Routes/userRoutes.js"
-import deptRoute from "./Routes/departmentRoutes.js";
-app.use("/user",route)
-app.use("/department",deptRoute)
+
+
+import deptroute  from "./Routes/DepartmentRoutes.js";
+app.use("/department",deptroute )
+
+import route from "./Routes/userRoutes.js";
+app.use("/user", route);
+
 
 const PORT = process.env.PORT;
 connectDB().then(() => {
