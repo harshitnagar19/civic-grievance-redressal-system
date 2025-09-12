@@ -3,8 +3,8 @@ import OurTeam from './aboutus/CivicIssues'
 function AboutUs() {
   return (
     <div>
-        <OurTeam/>
         <OurTeams/>
+        <OurTeam/>
     </div>
   )
 }
