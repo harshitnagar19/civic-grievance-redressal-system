@@ -18,11 +18,15 @@ export const problemCategories = [
 
 // Lighter and warmer background gradients
 export const backgroundGradients = [
-    'bg-gradient-to-br from-blue-400 via-cyan-300 to-teal-400',       
-    'bg-gradient-to-br from-yellow-400 via-orange-300 to-red-400',    
-    'bg-gradient-to-br from-gray-400 via-slate-300 to-zinc-400',      
-    'bg-gradient-to-br from-green-400 via-emerald-300 to-teal-400',   
-    'bg-gradient-to-br from-purple-400 via-indigo-300 to-blue-400'    
+    // 'bg-gradient-to-br from-blue-400 via-cyan-300 to-teal-400',       
+    // 'bg-gradient-to-br from-yellow-400 via-orange-300 to-red-400',    
+    // 'bg-gradient-to-br from-gray-400 via-slate-300 to-zinc-400',      
+    // 'bg-gradient-to-br from-green-400 via-emerald-300 to-teal-400',   
+    // 'bg-gradient-to-br from-purple-400 via-indigo-300 to-blue-400'    
+    "#c8d2e0",
+    "#c8d2e0",
+    "#c8d2e0",
+    "#c8d2e0"
 ];
 
 // Header content for complaint portal

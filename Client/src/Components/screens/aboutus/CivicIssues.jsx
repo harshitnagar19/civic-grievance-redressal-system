@@ -6,7 +6,7 @@ import {
     problemCategories
 } from "../../../data/aboutUsData";
 
-export default function ComplaintCategories() {
+export default function CivicIssues() {
     const [scrollY, setScrollY] = useState(0);
     const [bgIndex, setBgIndex] = useState(0);
 
@@ -25,20 +25,20 @@ export default function ComplaintCategories() {
     }, []);
 
     return (
-        <div className={`relative overflow-hidden z-0 transition-all duration-1000 ease-in-out ${backgroundGradients[bgIndex]}`}>
-            <div className="absolute inset-0 bg-black/40 pointer-events-none"></div>
+        <div className={`relative overflow-hidden  transition-all duration-1000 ease-in-out ${backgroundGradients[bgIndex]}`}>
+            <div className="absolute  bg-black/40 pointer-events-none"></div>
 
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0 text-center px-4 gap-3">
-                <h1 className="text-2xl md:text-4xl mb-4 lg:text-5xl font-bold text-black drop-shadow-2xl text-shadow-lg leading-tight mt-2">
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2text-center px-2 gap-3">
+                <h1 className="text-2xl md:text-4xl  lg:text-5xl font-bold text-black drop-shadow-2xl text-shadow-lg leading-tight mt-6">
                     {headerContent.title2}
                 </h1>
-                <p className="text-black text-sm md:text-lg mt-4 mb-4 max-w-2xl mx-auto drop-shadow-xl">
+                <p className="text-black text-center text-sm md:text-lg  max-w-2xl mx-auto drop-shadow-xl">
                     {headerContent.subtitle}
                 </p>
             </div>
 
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 text-center px-4">
-                <h1 className="text-2xl md:text-4xl mb-4 lg:text-5xl font-bold text-black drop-shadow-2xl text-shadow-lg leading-tight">
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center px-4">
+                <h1 className="text-2xl md:text-4xl  lg:text-5xl font-bold text-black drop-shadow-2xl text-shadow-lg leading-tight">
                     {headerContent.title1}
                 </h1>
             </div>
