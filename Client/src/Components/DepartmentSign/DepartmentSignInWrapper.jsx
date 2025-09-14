@@ -27,7 +27,7 @@ function DepartmentSignInWrapper() {
                     dispatch(addDeptData(response.data.data[0]));
                     console.log(response);
                     notifySuccess(response.data.msg);
-                    navigate(routes.userDashboard);
+                    navigate(routes.deptDashboard);
                 })
         } catch (error) {
             notifyError(error?.response?.data?.msg || "Login Failed")
