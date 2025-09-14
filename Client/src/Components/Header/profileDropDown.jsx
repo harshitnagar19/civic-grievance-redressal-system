@@ -15,10 +15,7 @@ const ProfileDropDown = () => {
 
   const handleLogout = () => {
     // Clear authentication flags
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("userRole");
-    sessionStorage.removeItem("isAuthenticated");
-    sessionStorage.removeItem("userRole");
+    localStorage.removeItem("token");
     
     // Redirect to login page
     navigate(routes.userLogin);
