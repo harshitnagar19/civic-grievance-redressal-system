@@ -17,7 +17,7 @@ function OAuth({ children }) {
             navigate(routes.userLogin)
         } else {
             try {
-                await axios.post(`${import.meta.env.VITE_BASEURL}/user/refresh`, {},{ headers: { token: token } })
+                await axios.post(`${import.meta.env.VITE_BASEURL}/refresh`, {},{ headers: { token: token } })
                     .then((response) => {
                         if (response.data.status === "OK") {
                             dispatch(addUserData(response.data.data[0]));
