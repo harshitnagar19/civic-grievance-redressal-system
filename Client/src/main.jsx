@@ -15,7 +15,8 @@ import { Parallax, ParallaxProvider, useParallax } from 'react-scroll-parallax';
 import Hero from './Components/Hero/Hero.jsx';
 import OAuth from './Components/auth/OAuth.jsx';
 import DepartmentSignUpWrapper from './Components/DepartmentSignUp/DepartmentSignUpWrapper.jsx';
-import DepartmentLoginWrapper from './Components/DepartmentSign/DepartmentSignInWrapper.jsx';
+import DepartmentSignInWrapper from './Components/DepartmentSign/DepartmentSignInWrapper.jsx';
+import DepartmentDashboard from './Components/Dashboard/DepartmentDashboard.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,12 +27,13 @@ const router = createBrowserRouter(
 
     {/* department */}
       <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper/>}></Route>
-      <Route path={routes.deptLogin} element={<DepartmentLoginWrapper/>}></Route>
+      <Route path={routes.deptLogin} element={<DepartmentSignInWrapper/>}></Route>
 
 
         <Route path="/" element={<Hero/>}></Route>
       <Route path='' element={<Layout />}>
         <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
+        <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard/></OAuth>}></Route>
         <Route path={routes.aboutUs} element={<AboutUs/>}></Route>
       </Route>
       <Route path='*' element={<NotFound/>}></Route>

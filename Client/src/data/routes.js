@@ -2,10 +2,10 @@ export const routes = {
     userSignup: '/user-signup',
     userLogin: '/user-login',
     userDashboard: '/user-dashboard',
+    deptDashboard: '/dept-dashboard',
     aboutUs:'/about-us',
-    deptSignUp:'/deptSignUp',
-    deptLogin:'/deptLogin',
+    deptSignUp:'/dept-signUp',
+    deptLogin:'/dept-login',
 
 
-    aboutUs:'about-us'
 };
