@@ -31,7 +31,7 @@ userControllers.sendOtp = async (req, res) => {
   try {
     const { value, error } = userOtpValidationSchema.validate(req.body);
     if (error) {
-      console.log(error)
+      console.log(error);
       return res.status(400).send({
         status: "ERR",
         msg: error.message,
@@ -125,13 +125,11 @@ userControllers.signup = async (req, res) => {
           try {
             const entry = otpStore.get(value.sessionId);
             if (!entry)
-              return res
-                .status(400)
-                .send({
-                  status: "ERR",
-                  msg: "Invalid or expired session",
-                  data: [],
-                });
+              return res.status(400).send({
+                status: "ERR",
+                msg: "Invalid or expired session",
+                data: [],
+              });
 
             if (Date.now() > entry.expiresAt) {
               otpStore.delete(value.sessionId);
@@ -290,41 +288,5 @@ userControllers.login = async (req, res) => {
   }
 };
 
-userControllers.refresh = async (req, res) => {
-  try {
-    const { email, role } = req.user;
-    const response = await UserServices.getUserByEmail(email);
-
-    if (response.status == "ERR") {
-      return res.status(500).send({
-        status: "ERR",
-        msg: "error at server in user login",
-        data: [],
-      });
-    }
-    if (response.status == "OK" && response.data.length == 0) {
-      return res.status(400).send({
-        status: "ERR",
-        msg: "user not register with enterd mail",
-        data: [],
-      });
-    }
-    if (response.status == "OK" && response.data.length > 0) {
-      const userObj = response.data[0].toObject();
-      delete userObj.password;
-      return res.status(200).send({
-        status: "OK",
-        msg: "user is valid",
-        data: [userObj],
-      });
-    }
-  } catch (err) {
-    return res.status(500).send({
-      status: "ERR",
-      msg: "error in refresh at server",
-      data: [],
-    });
-  }
-};
 
 export default userControllers;
