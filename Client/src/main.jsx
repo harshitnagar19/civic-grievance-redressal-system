@@ -12,6 +12,7 @@ import { routes } from './data/routes.js';
 import NotFound from './Components/404/NotFound.jsx';
 import AboutUs from './Components/screens/AboutUs.jsx';
 import { Parallax, ParallaxProvider, useParallax } from 'react-scroll-parallax';
+import Hero from './Components/Hero/Hero.jsx';
 import OAuth from './Components/auth/OAuth.jsx';
 import DepartmentSignUpWrapper from './Components/DepartmentSignUp/DepartmentSignUpWrapper.jsx';
 import DepartmentLoginWrapper from './Components/DepartmentSign/DepartmentSignInWrapper.jsx';
@@ -27,7 +28,8 @@ const router = createBrowserRouter(
       <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper/>}></Route>
       <Route path={routes.deptLogin} element={<DepartmentLoginWrapper/>}></Route>
 
-    
+
+        <Route path="/" element={<Hero/>}></Route>
       <Route path='' element={<Layout />}>
         <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
         <Route path={routes.aboutUs} element={<AboutUs/>}></Route>
