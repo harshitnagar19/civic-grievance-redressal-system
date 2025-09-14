@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Field, ErrorMessage } from "formik";
 import { NavLink } from 'react-router-dom';
 import { routes } from '../../data/routes';
 import logo2 from '../../assets/logo2.png';
 
-const UserSignUpForm = ({ formikProps,onSendOtp }) => {
+const UserSignUpForm = ({ formikProps, onSendOtp, isOtpLoading }) => {
     const { values, setFieldValue, isSubmitting, handleBlur } = formikProps;
-
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
@@ -54,10 +53,11 @@ const UserSignUpForm = ({ formikProps,onSendOtp }) => {
                         />
                         <button
                             type="button"
-                            onClick={()=>{onSendOtp(values.email)}}
-                            className="px-3 sm:px-4 py-2 bg-green-500 text-white rounded-lg text-xs sm:text-sm hover:bg-green-600 transition duration-200"
+                            onClick={() => { onSendOtp(values.email) }}
+                            disabled={isOtpLoading}
+                            className={`px-3 sm:px-4 py-2 text-white rounded-lg text-xs sm:text-sm transition duration-200 ${isOtpLoading ? " hover:bg-gray-700" : "hover:bg-green-600"}  ${isOtpLoading ? "bg-gray-500" : "bg-green-500"}`}
                         >
-                            Send OTP
+                            {isOtpLoading? "Sending..." : "Send OTP"}
                         </button>
                     </div>
                     <ErrorMessage name="email" component="div" className="text-red-500 text-xs sm:text-sm mb-3 sm:mb-4" />
