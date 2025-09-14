@@ -29,7 +29,7 @@ const router = createBrowserRouter(
 
     
       <Route path='' element={<Layout />}>
-        <Route path={routes.userDashboard} element={<UserDashboard />}></Route>
+        <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
         <Route path={routes.aboutUs} element={<AboutUs/>}></Route>
       </Route>
       <Route path='*' element={<NotFound/>}></Route>
