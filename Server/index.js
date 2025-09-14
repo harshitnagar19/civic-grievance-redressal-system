@@ -24,6 +24,9 @@ app.use("/user", route);
 import complainRoute from "./Routes/complainRoutes.js";
 app.use("/complain",complainRoute);
 
+import refreshroute from "./Routes/refreshRoutes.js";
+app.use("/refresh",refreshroute);
+
 const PORT = process.env.PORT;
 connectDB().then(() => {
   app.listen(PORT, () => {

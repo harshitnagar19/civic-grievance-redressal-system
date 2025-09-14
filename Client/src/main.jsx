@@ -19,13 +19,18 @@ import DepartmentLoginWrapper from './Components/DepartmentSign/DepartmentSignIn
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+    {/* user */}
       <Route path={routes.userSignup} element={<UserSignUpWrapper />}></Route>
       <Route path={routes.userLogin} element={<UserLoginWrapper />}></Route>
+
+    {/* department */}
       <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper/>}></Route>
       <Route path={routes.deptLogin} element={<DepartmentLoginWrapper/>}></Route>
+
+    
       <Route path='' element={<Layout />}>
         <Route path={routes.userDashboard} element={<UserDashboard />}></Route>
-      <Route path='/about-us' element={<AboutUs/>}></Route>
+        <Route path={routes.aboutUs} element={<AboutUs/>}></Route>
       </Route>
       <Route path='*' element={<NotFound/>}></Route>
     </>

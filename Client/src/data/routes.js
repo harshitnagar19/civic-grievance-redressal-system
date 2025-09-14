@@ -4,5 +4,8 @@ export const routes = {
     userDashboard: '/user-dashboard',
     aboutUs:'/about-us',
     deptSignUp:'/deptSignUp',
-    deptLogin:'/deptLogin'
+    deptLogin:'/deptLogin',
+
+
+    aboutUs:'about-us'
 };

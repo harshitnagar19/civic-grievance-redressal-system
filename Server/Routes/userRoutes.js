@@ -8,6 +8,5 @@ import { verifyToken } from "../middleware/verifyToken.js"
 route.post("/send-otp",userControllers.sendOtp)
 route.post("/signup",userControllers.signup)
 route.post("/login",userControllers.login)
-route.post("/refresh",verifyToken,userControllers.refresh)
 
 export default route; 
