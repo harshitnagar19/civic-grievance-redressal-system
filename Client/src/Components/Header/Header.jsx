@@ -45,7 +45,7 @@ const Header = () => {
         </div>
 
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center space-x-6">
+        <nav className=" lg:flex items-center space-x-6">
           <Link
             to={routes.aboutUs}
             className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1"
