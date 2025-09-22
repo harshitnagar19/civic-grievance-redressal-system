@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 
 import deptroute  from "./Routes/DepartmentRoutes.js";
-app.use("/department",deptroute )
+app.use("/department",deptroute)
 
 import route from "./Routes/userRoutes.js";
 app.use("/user", route);
@@ -26,6 +26,7 @@ app.use("/complain",complainRoute);
 
 import refreshroute from "./Routes/refreshRoutes.js";
 app.use("/refresh",refreshroute);
+
 
 const PORT = process.env.PORT;
 connectDB().then(() => {

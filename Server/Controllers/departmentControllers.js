@@ -7,6 +7,7 @@ import {
 import { generateToken } from "../utils/token/generateToken.js";
 import hashPassword from "../utils/password/hashPassword.js";
 import verifyPassword from "../utils/password/verifyPassword.js";
+import Department from "../Models/Department.js";
 
 const departmentControllers = {};
 departmentControllers.signup = async (req, res) => {
@@ -181,38 +182,44 @@ departmentControllers.login = async (req, res) => {
   }
 };
 
-departmentControllers.refresh = async (req, res) => {
+departmentControllers.getAllState = async (req, res) => {
   try {
-    const { email, role } = req.department;
-    const response = await DepartmentServices.getDepartmentByEmail(email);
-
+    const response = await DepartmentServices.getStatesOfAllDepartment();
     if (response.status == "ERR") {
-      return res.status(500).send({
-        status: "ERR",
-        msg: "error at server in department login",
-        data: [],
-      });
+      return res.status(500).send(response);
+    } else {
+      return res.status(200).send(response);
     }
-    if (response.status == "OK " && response.data.length == 0) {
+  } catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: "error in sserver to get all state",
+      data: [],
+    });
+  }
+};
+
+departmentControllers.getAllDistrictsOfState = async (req, res) => {
+  try {
+    const { state } = req.query;
+    if (!state) {
       return res.status(400).send({
         status: "ERR",
-        msg: "department not register with enterd mail",
+        msg: "State is required in query param",
         data: [],
       });
     }
-    if (response.status == "OK" && response.data.length > 0) {
-      const departmentObj = response.data[0].toObject();
-      delete departmentObj.password;
-      res.status(200).send({
-        status: "OK",
-        msg: "department is valid",
-        data: [departmentObj],
-      });
+    const cities = await DepartmentServices.getAllDistrictsInState({state})
+    if(cities.status=="ERR"){
+      res.status(500).send(cities)
     }
-  } catch (error) {
-    return res.status(500).send({
+    else{
+      res.status(200).send(cities)
+    }
+  } catch (err) {
+    res.status(500).send({
       status: "ERR",
-      msg: "error in refresh at server",
+      msg: `error in server to get all districts, ${err.message}`,
       data: [],
     });
   }
