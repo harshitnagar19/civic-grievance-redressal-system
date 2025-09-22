@@ -17,6 +17,7 @@ import OAuth from './Components/auth/OAuth.jsx';
 import DepartmentSignUpWrapper from './Components/DepartmentSignUp/DepartmentSignUpWrapper.jsx';
 import DepartmentSignInWrapper from './Components/DepartmentSign/DepartmentSignInWrapper.jsx';
 import DepartmentDashboard from './Components/Dashboard/DepartmentDashboard.jsx';
+import AllStates from './Components/AllStates/AllStates.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,11 +31,12 @@ const router = createBrowserRouter(
       <Route path={routes.deptLogin} element={<DepartmentSignInWrapper/>}></Route>
 
 
-        <Route path="/" element={<Hero/>}></Route>
       <Route path='' element={<Layout />}>
+        <Route path="/" element={<Hero/>}></Route>
         <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
         <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard/></OAuth>}></Route>
         <Route path={routes.aboutUs} element={<AboutUs/>}></Route>
+        <Route path={routes.departmentInfo} element={<AllStates/>}></Route>
       </Route>
       <Route path='*' element={<NotFound/>}></Route>
     </>
