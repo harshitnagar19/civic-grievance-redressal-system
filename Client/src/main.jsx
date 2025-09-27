@@ -18,6 +18,7 @@ import DepartmentSignUpWrapper from './Components/DepartmentSignUp/DepartmentSig
 import DepartmentSignInWrapper from './Components/DepartmentSign/DepartmentSignInWrapper.jsx';
 import DepartmentDashboard from './Components/Dashboard/DepartmentDashboard.jsx';
 import AllStates from './Components/AllStates/AllStates.jsx';
+import AllDistricts from './Components/AllDistricts/AllDistricts.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
         <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard/></OAuth>}></Route>
         <Route path={routes.aboutUs} element={<AboutUs/>}></Route>
         <Route path={routes.departmentInfo} element={<AllStates/>}></Route>
+        <Route path={`${routes.departmentInfo}/:param`} element={<AllDistricts/>}></Route>
       </Route>
       <Route path='*' element={<NotFound/>}></Route>
     </>

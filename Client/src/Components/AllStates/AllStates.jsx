@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { notifyError } from '../../utils/tostify'
 import { useNavigate } from 'react-router-dom'
+import LocationCard from '../../utils/LocationCard'
 
 const AllStates = () => {
 
@@ -24,18 +25,18 @@ const AllStates = () => {
         getAllStates();
     }, [])
     return (
-        <div className='p-16'>{
+        <div className='p-16 flex gap-15 flex-wrap shrink-1 '>{
             states?.map((ele, ind) => {
                 return (
-                <button
+                <LocationCard
                     key={ind}
-                    className='border rounded-xl px-3 py-2 bg-amber-300'
+                    className='cursor-pointer border rounded-xl px-3 py-2 bg-amber-300'
                     onClick={()=>{
                         navigate(`${ele}`)
                     }}
-                > 
-                    {ele}
-                </button>)
+                    locName={ele}
+                    locType={"States"}
+                ></LocationCard>)
             })
         }</div>
     )
