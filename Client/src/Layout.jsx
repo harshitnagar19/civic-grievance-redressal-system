@@ -5,7 +5,7 @@ import OAuth from './Components/auth/OAuth'
 function Layout() {
   return (
    <>
-   <OAuth> <Header/></OAuth>
+    <Header/>
     <Outlet/>
     <Footer/>
    </>

@@ -4,7 +4,6 @@ import React from 'react'
   return (
     <div>
         <h1>HERO PAGE</h1>
-
     </div>
 
   )

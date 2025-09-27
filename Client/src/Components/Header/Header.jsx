@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { routes } from "../../data/routes";
 import logo2 from "../../assets/logo2.png";
 import ProfileDropDown from "./profileDropDown";
+import OAuth from "../auth/OAuth";
 
 const Header = () => {
   const userData = useSelector((store) => store.userData);
@@ -72,32 +73,28 @@ const Header = () => {
           </Link>
 
           {/* Conditional Login/Logout */}
-          {userRole !== "" || deptRole !=="" ? (
-            <div className="flex items-center space-x-4 ml-4">
-              <ProfileDropDown />
-              <button
-                onClick={handleLogout}
-                className="px-5 py-2 rounded-full bg-[#E0E0E0] text-[#212121] font-semibold hover:bg-gray-400 transition-colors duration-200"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center space-x-3 ml-4">
-              <Link
-                to={routes.userLogin}
-                className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-colors duration-200"
-              >
-                User Login
-              </Link>
-              <Link
-                to={routes.deptLogin}
-                className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-colors duration-200"
-              >
-                Department Login
-              </Link>
-            </div>
-          )}
+          <OAuth>
+            {userRole !== "" || deptRole !== "" ? (
+              <div className="flex items-center space-x-4 ml-4">
+                <ProfileDropDown />
+              </div>
+            ) : (
+              <div className="flex items-center space-x-3 ml-4">
+                <Link
+                  to={routes.userLogin}
+                  className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-colors duration-200"
+                >
+                  User Login
+                </Link>
+                <Link
+                  to={routes.deptLogin}
+                  className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-colors duration-200"
+                >
+                  Department Login
+                </Link>
+              </div>
+            )}
+          </OAuth>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -127,7 +124,7 @@ const Header = () => {
             View Department Works
           </Link>
           <Link
-            to={routes.departmentInfo}
+            to={`${routes.departmentInfo}`}
             className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium py-2"
             onClick={() => setIsOpen(false)}
           >
