@@ -18,6 +18,7 @@ function DepartmentSignUpWrapper() {
         city: "",
         state: "",
         deptAddress: "",
+        district:''
     }
     const handleSubmit = () => {
 
