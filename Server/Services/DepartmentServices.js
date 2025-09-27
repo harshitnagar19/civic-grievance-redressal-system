@@ -103,4 +103,37 @@ DepartmentServices.getAllDistrictsInState = async ({state})=>{
   }
 }
 
+DepartmentServices.getAllDepartmentInDisrtict = async ({state , district}) =>{
+  try{
+    const response = await Department.distinct("DepartmentName" , {state , city:district , isVerified:true})
+    return {
+      status:"OK",
+      msg:"sucessfully get all districts in state",
+      data:response
+    }
+  }catch(err){
+    return {
+      status: "ERR",
+      msg: err.message,
+      data: [],
+    };
+  }
+}
+DepartmentServices.getDepartmentInfo = async ({state,district,departmentName})=>{
+  try{
+    const response = await Department.find({state, DepartmentName:departmentName, city:district, isVerified:true})
+    return {
+      status:"OK",
+      msg:"sucessfully get Department Info",
+      data:response
+    }
+  }catch(err){
+    return {
+      status: "ERR",
+      msg: err.message,
+      data: [],
+    };
+  }
+}
+
 export default DepartmentServices;

@@ -37,12 +37,7 @@ const AllDistricts = () => {
             return (
                 <div className='pb-14  ' key={ind}>
                 <LocationCard
-                
-                // className='cursor-pointer border rounded-xl px-3 py-2 bg-amber-300'
                 onClick={(e)=>{
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log("Card clicked!");
                     navigate(`${ele}`)
                 }}
                 locName={ele}

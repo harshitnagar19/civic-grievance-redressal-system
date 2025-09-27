@@ -225,4 +225,55 @@ departmentControllers.getAllDistrictsOfState = async (req, res) => {
   }
 };
 
+departmentControllers.getAllDepartmentOfDistrict = async (req,res)=>{
+  try {
+    const { district , state } = req.query;
+    if (!district || !state) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "district and state is required in query param",
+        data: [],
+      });
+    }
+    const department = await DepartmentServices.getAllDepartmentInDisrtict({state ,district})
+    if(department.status=="ERR"){
+      res.status(500).send(department);
+    }else{
+      res.status(200).send(department)
+    }
+  }catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: `error in server to get all getAllDepartmentOfDistrict, ${err.message}`,
+      data: [],
+    });
+  }
+}
+
+departmentControllers.getDepartmenInfo = async (req,res)=>{
+  try{
+    const { district , state , departmentName} = req.query;
+    if (!district || !state || !departmentName) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "district and state and departmentName is required in query param",
+        data: [],
+      });
+    }else{
+      const departInfo = await DepartmentServices.getDepartmentInfo({district , state , departmentName})
+      if(departInfo.status=="ERR"){
+        return res.status(500).send(departInfo)
+      }else{
+        return res.status(200).send(departInfo)
+      }
+    }
+  }catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: `error in server to get all getAllDepartmentOfDistrict, ${err.message}`,
+      data: [],
+    });
+  }
+}
+
 export default departmentControllers;

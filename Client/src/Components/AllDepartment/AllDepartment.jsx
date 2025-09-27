@@ -1,33 +1,40 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { notifyError } from '../../utils/tostify'
-import { useNavigate } from 'react-router-dom'
+import {useParams, useNavigate } from 'react-router-dom'
 import LocationCard from '../../utils/LocationCard'
+import { routes } from '../../data/routes';
 
-const AllStates = () => {
+const AllDepartment = () => {
+    const [department, setDepartment] = useState([])
+    const navigate = useNavigate()
+    const {param,district} =  useParams()
 
-    const getAllStates = async () => {
-        await axios.get(`${import.meta.env.VITE_BASEURL}/department/get-all-state-of-department`).then((res) => {
+    const getAllDepartment = async () => {
+        await axios.get(`${import.meta.env.VITE_BASEURL}/department/get-all-department-of-district?state=${param}&district=${district}`).then((res) => {
             if (res.data.status == "OK") {
-                setStates(res.data.data)
+                if(res.data.data.length==0){
+                    navigate(routes.departmentInfo)
+                }
+                setDepartment(res.data.data)
             } else {
                 notifyError(res.data.msg)
             }
         }).catch((err) => {
-            const msg = `err on AllState on calling axios ${err.message}`
+            const msg = `err on getAllDepartment on calling axios ${err.message}`
             notifyError(msg);
         })
     }
 
-    const [states, setStates] = useState([])
-    const navigate = useNavigate()
+ 
     useEffect(() => {
-        getAllStates();
+        getAllDepartment();
     }, [])
-    if(states.length==0) return <>Loading...</> 
+
+    if(department.length==0) return <>Loading...</> 
     return (
         <div className='p-16 flex gap-15 flex-wrap shrink-1 '>{
-            states?.map((ele, ind) => {
+            department?.map((ele, ind) => {
                 return (
                 <LocationCard
                     key={ind}
@@ -43,4 +50,4 @@ const AllStates = () => {
     )
 }
 
-export default AllStates
+export default AllDepartment
