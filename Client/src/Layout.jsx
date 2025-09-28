@@ -14,7 +14,6 @@ function Layout() {
   return (
     <>
       <Header />
-
       {userRole !== "" || deptRole !== "" ?
         userRole !== "" ?
           <div className={'flex gap-7'}>
@@ -28,10 +27,6 @@ function Layout() {
           </div>
         : ''
       }
-
-
-
-
       <Footer />
     </>
   )

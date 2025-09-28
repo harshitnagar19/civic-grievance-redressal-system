@@ -27,7 +27,7 @@ function OAuth({ children }) {
                             } else if (response.data.data[0].role === "user") {
 
                                 dispatch(addUserData(response.data.data[0]));
-                                notifySuccess(response.data.msg);
+                                // notifySuccess(response.data.msg);
                             }
                         }
                         if (response.data.data.status === "ERR") {
