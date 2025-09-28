@@ -21,7 +21,7 @@ const Header = () => {
 
 
   return (
-    <header className="w-full sticky top-0 z-50 shadow-md">
+    <header className="w-full sticky top-0 z-50 shadow-md ">
       {/* Top Govt Info */}
       <div className="bg-[#1565C0] text-white text-center py-2">
         <p className="text-sm font-semibold leading-tight m-0">
@@ -46,7 +46,7 @@ const Header = () => {
         </div>
 
         {/* Desktop Nav */}
-        <nav className=" lg:flex items-center space-x-6">
+        <nav className="hidden lg:flex items-center space-x-6">
           <Link
             to={routes.aboutUs}
             className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1"
@@ -139,34 +139,30 @@ const Header = () => {
           </Link>
 
           {/* Conditional Login/Logout (Mobile) */}
-          {isAuthenticated ? (
-            <div className="flex flex-col space-y-3 pt-3 border-t">
-              <ProfileDropDown />
-              <button
-                onClick={handleLogout}
-                className="px-5 py-2 rounded-full bg-[#E0E0E0] text-[#212121] font-semibold hover:bg-gray-400 transition-colors duration-200 text-center"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <div className="flex flex-col space-y-3 pt-3 border-t">
-              <Link
-                to={routes.userLogin}
-                className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-colors duration-200 text-center"
-                onClick={() => setIsOpen(false)}
-              >
-                User Login
-              </Link>
-              <NavLink
-                to={routes.deptLogin}
-                className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-colors duration-200 text-center"
-                onClick={() => setIsOpen(false)}
-              >
-                Department Login
-              </NavLink>
-            </div>
-          )}
+          <OAuth>
+            {userRole !== "" || deptRole !== "" ? (
+              <div className="flex flex-col space-y-3 pt-3 border-t">
+                <ProfileDropDown />
+              </div>
+            ) : (
+              <div className="flex flex-col space-y-3 pt-3 border-t">
+                <Link
+                  to={routes.userLogin}
+                  className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-colors duration-200 text-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  User Login
+                </Link>
+                <NavLink
+                  to={routes.deptLogin}
+                  className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-colors duration-200 text-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Department Login
+                </NavLink>
+              </div>
+            )}
+          </OAuth>
         </div>
       )}
     </header>

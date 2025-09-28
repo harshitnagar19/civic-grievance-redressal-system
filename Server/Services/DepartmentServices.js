@@ -26,6 +26,7 @@ DepartmentServices.getDepartmentByEmail = async (email) => {
     };
   }
 };
+
 DepartmentServices.signup = async ({
   DepartmentName,
   DepartmentShortName,
@@ -119,6 +120,7 @@ DepartmentServices.getAllDepartmentInDisrtict = async ({state , district}) =>{
     };
   }
 }
+
 DepartmentServices.getDepartmentInfo = async ({state,district,departmentName})=>{
   try{
     const response = await Department.find({state, DepartmentName:departmentName, city:district, isVerified:true})
