@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { routes } from "../../data/routes";
 
-const ProfileDropDown = () => {
+const ProfileDropDown = ({handleLogOut}) => {
   const data = useSelector((store) => store.userData);
   const role = data?.role;
   const userName = data?.userName;
@@ -13,18 +13,6 @@ const ProfileDropDown = () => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const handleLogout = () => {
-    // Clear authentication flags
-    localStorage.removeItem("token");
-    
-    // Redirect to login page
-    navigate(routes.userLogin);
-    
-    // Force reload to completely reset the application state
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -81,7 +69,9 @@ const ProfileDropDown = () => {
             </li>
             <li>
               <button
-                onClick={handleLogout}
+                onClick={()=>{
+                  handleLogOut();
+                }}
                 className="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
               >
                 Logout

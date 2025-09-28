@@ -34,7 +34,7 @@ const UserLoginWrapper = () => {
                 .then((response) => {
                     localStorage.setItem("token", response.data.data[0].token);
                     dispatch(addUserData(response.data.data[0]));
-                    notifySuccess(response.data.msg);
+                    // notifySuccess(response.data.msg);
                     navigate(routes.userDashboard);
                 });
         } catch (error) {

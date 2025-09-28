@@ -21,12 +21,10 @@ function DepartmentSignInWrapper() {
         try {
             await axios.post(`${import.meta.env.VITE_BASEURL}/department/login`, values)
                 .then((response) => {
-                    localStorage.setItem("token", response.data.data[0].token);
-                    console.log(response.data.data[0]);
-                    
+                    localStorage.setItem("token", response.data.data[0].token);                 
                     dispatch(addDeptData(response.data.data[0]));
                     console.log(response);
-                    notifySuccess(response.data.msg);
+                    // notifySuccess(response.data.msg);
                     navigate(routes.deptDashboard);
                 })
         } catch (error) {
