@@ -79,7 +79,7 @@ export default function UserSidebarNavigation() {
         fixed md:relative top-0 left-0 h-full z-40 
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        ${isMobile ? 'w-80' : 'w-72'}
+        ${isMobile ? 'w-80 mt-39' : 'w-72'}
       `}>
         <div className="h-full bg-white shadow-2xl flex flex-col">
           {/* Header with User Profile */}
