@@ -13,12 +13,14 @@ import {
   ChevronRight
 } from 'lucide-react';
 import image from "../../assets/teamImages/hemant.jpg"
+import { routes } from '../../data/routes';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserSidebarNavigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState('complaints');
+  const [activeItem, setActiveItem] = useState('DashBoard');
   const [isMobile, setIsMobile] = useState(false);
-
+  const navigate = useNavigate()
   // Check screen size
   useEffect(() => {
     const checkScreenSize = () => {
@@ -34,7 +36,7 @@ export default function UserSidebarNavigation() {
   }, []);
 
   const menuItems = [
-    { id: 'complaints', text: "Your Complaints", icon: FileText },
+    { id: 'DashBoard', text: "DashBoard", icon: FileText , navigateTo:routes.userDashboard  },
     { id: 'completed', text: "Your Completed Complaints", icon: CheckCircle },
     { id: 'rise', text: "Rise Complaints", icon: TrendingUp },
     { id: 'areas', text: "Issue In Areas", icon: MapPin },
@@ -49,6 +51,7 @@ export default function UserSidebarNavigation() {
 
   const handleItemClick = (item) => {
     setActiveItem(item.id);
+    navigate(item?.navigateTo)
     if (isMobile) {
       setIsOpen(false);
     }

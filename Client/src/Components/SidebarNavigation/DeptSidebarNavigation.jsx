@@ -12,10 +12,11 @@ import {
   User,
   ChevronRight
 } from 'lucide-react';
+import { routes } from '../../data/routes';
 
 export default function DeptSidebarNavigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState('complaints');
+  const [activeItem, setActiveItem] = useState('DashBoard');
   const [isMobile, setIsMobile] = useState(false);
 
   // Check screen size
@@ -33,7 +34,7 @@ export default function DeptSidebarNavigation() {
   }, []);
 
   const menuItems = [
-    { id: 'complaints', text: " Complaints", icon: FileText },
+    { id: 'DashBoard', text: "DashBoard", icon: FileText , navigateTo:routes.deptDashboard },
     { id: 'completed', text: "Your Completed Complaints", icon: CheckCircle },
     { id: 'rise', text: "Rise Complaints", icon: TrendingUp },
     { id: 'areas', text: "Issue In Areas", icon: MapPin },
