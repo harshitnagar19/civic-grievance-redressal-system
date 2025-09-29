@@ -21,6 +21,8 @@ import AllStates from './Components/AllStates/AllStates.jsx';
 import AllDistricts from './Components/AllDistricts/AllDistricts.jsx';
 import AllDepartment from './Components/AllDepartment/AllDepartment.jsx';
 import DepartmentInfo from './Components/DepartmentInfo/DepartmentInfo.jsx';
+import Header from './Components/Header/Header.jsx';
+import Footer from './Components/Footer/Footer.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,13 +34,14 @@ const router = createBrowserRouter(
     {/* department */}
       <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper/>}></Route>
       <Route path={routes.deptLogin} element={<DepartmentSignInWrapper/>}></Route>
+      
+      <Route path={routes.aboutUs} element={ <><Header/><AboutUs/><Footer/></>}></Route>
 
+        <Route path="/" element={<><Header/><Hero/><Footer/></>}></Route>
 
       <Route path='' element={<Layout />}>
-        <Route path="/" element={<Hero/>}></Route>
         <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
         <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard/></OAuth>}></Route>
-        <Route path={routes.aboutUs} element={<AboutUs/>}></Route>
         <Route path={routes.departmentInfo} element={<AllStates/>}></Route>
         <Route path={`${routes.departmentInfo}/:param`} element={<AllDistricts/>}></Route>
         <Route path={`${routes.departmentInfo}/:param/:district`} element={<AllDepartment/>}></Route>

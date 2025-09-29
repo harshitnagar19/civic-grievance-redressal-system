@@ -17,12 +17,12 @@ function Layout() {
       {userRole !== "" || deptRole !== "" ?
         userRole !== "" ?
           <div className={'flex gap-7'}>
-            <UserSidebarNavigation />
+           <OAuth> <UserSidebarNavigation /></OAuth>
             <Outlet />
           </div>
           :
           <div className={'flex gap-7'}>
-            <DeptSidebarNavigation />
+           <OAuth> <DeptSidebarNavigation /></OAuth>
             <Outlet />
           </div>
         : ''
