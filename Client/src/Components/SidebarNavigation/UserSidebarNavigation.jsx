@@ -12,7 +12,7 @@ import {
   User,
   ChevronRight
 } from 'lucide-react';
-import image from "../../assets/image.png"
+import image from "../../assets/teamImages/hemant.jpg"
 
 export default function UserSidebarNavigation() {
   const [isOpen, setIsOpen] = useState(false);
