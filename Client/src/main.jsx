@@ -23,31 +23,33 @@ import AllDepartment from './Components/AllDepartment/AllDepartment.jsx';
 import DepartmentInfo from './Components/DepartmentInfo/DepartmentInfo.jsx';
 import Header from './Components/Header/Header.jsx';
 import Footer from './Components/Footer/Footer.jsx';
-
+import ComplaintWrapper from './Components/complaint/ComplaintWrapper.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-    {/* user */}
+      {/* user */}
       <Route path={routes.userSignup} element={<UserSignUpWrapper />}></Route>
       <Route path={routes.userLogin} element={<UserLoginWrapper />}></Route>
 
-    {/* department */}
-      <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper/>}></Route>
-      <Route path={routes.deptLogin} element={<DepartmentSignInWrapper/>}></Route>
-      
-      <Route path={routes.aboutUs} element={ <><Header/><AboutUs/><Footer/></>}></Route>
+      {/* department */}
+      <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper />}></Route>
+      <Route path={routes.deptLogin} element={<DepartmentSignInWrapper />}></Route>
 
-        <Route path="/" element={<><Header/><Hero/><Footer/></>}></Route>
+      <Route path={routes.aboutUs} element={<><Header /><AboutUs /><Footer /></>}></Route>
+      <Route path={routes.raiseComplaint} element={<><Header /><ComplaintWrapper /><Footer /></>}></Route>
+
+      <Route path="/" element={<><Header /><Hero /><Footer /></>}></Route>
 
       <Route path='' element={<Layout />}>
         <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
-        <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard/></OAuth>}></Route>
-        <Route path={routes.departmentInfo} element={<AllStates/>}></Route>
-        <Route path={`${routes.departmentInfo}/:param`} element={<AllDistricts/>}></Route>
-        <Route path={`${routes.departmentInfo}/:param/:district`} element={<AllDepartment/>}></Route>
-        <Route path={`${routes.departmentInfo}/:param/:district/:departmentName`} element={<DepartmentInfo/>}></Route>
+        <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard /></OAuth>}></Route>
+        <Route path={routes.departmentInfo} element={<AllStates />}></Route>
+        <Route path={`${routes.departmentInfo}/:param`} element={<AllDistricts />}></Route>
+        <Route path={`${routes.departmentInfo}/:param/:district`} element={<AllDepartment />}></Route>
+        <Route path={`${routes.departmentInfo}/:param/:district/:departmentName`} element={<DepartmentInfo />}></Route>
+        <Route path={routes.raiseComplaint} element={<ComplaintWrapper />}></Route>
       </Route>
-      <Route path='*' element={<NotFound/>}></Route>
+      <Route path='*' element={<NotFound />}></Route>
     </>
   )
 )
