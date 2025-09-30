@@ -35,19 +35,19 @@ const router = createBrowserRouter(
       <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper />}></Route>
       <Route path={routes.deptLogin} element={<DepartmentSignInWrapper />}></Route>
 
+      
+      <Route path="/" element={<Hero />}></Route>
       <Route path={routes.aboutUs} element={<><Header /><AboutUs /><Footer /></>}></Route>
-      <Route path={routes.raiseComplaint} element={<><Header /><ComplaintWrapper /><Footer /></>}></Route>
-
-      <Route path="/" element={<><Header /><Hero /><Footer /></>}></Route>
-
-      <Route path='' element={<Layout />}>
+      <Route path={routes.departmentInfo} element={<><Header /><AllStates /><Footer/></>}></Route>
+      <Route path={`${routes.departmentInfo}/:param`} element={<><Header /><AllDistricts /><Footer/></>}></Route>
+      <Route path={`${routes.departmentInfo}/:param/:district`} element={<><Header /><AllDepartment /><Footer/></>}></Route>
+      <Route path={`${routes.departmentInfo}/:param/:district/:departmentName`} element={<><Header /><DepartmentInfo /><Footer/></>}></Route>
+      
+      
+      <Route path='' element={<OAuth><Layout /></OAuth>}>
         <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
         <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard /></OAuth>}></Route>
-        <Route path={routes.departmentInfo} element={<AllStates />}></Route>
-        <Route path={`${routes.departmentInfo}/:param`} element={<AllDistricts />}></Route>
-        <Route path={`${routes.departmentInfo}/:param/:district`} element={<AllDepartment />}></Route>
-        <Route path={`${routes.departmentInfo}/:param/:district/:departmentName`} element={<DepartmentInfo />}></Route>
-        <Route path={routes.raiseComplaint} element={<ComplaintWrapper />}></Route>
+        <Route path={routes.raiseComplaint} element={<OAuth><ComplaintWrapper /></OAuth>}></Route>
       </Route>
       <Route path='*' element={<NotFound />}></Route>
     </>

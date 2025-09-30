@@ -7,8 +7,12 @@ import ProfileDropDown from "./profileDropDown";
 import OAuth from "../auth/OAuth";
 
 const Header = () => {
+  console.log("running")
   const userData = useSelector((store) => store.userData);
   const deptData = useSelector((store) => store.departmentData);
+
+  // const [userRole , setUserRole] = useState(userData?.role)
+  // const [deptRole , setDeptRole] = useState(deptData?.role)
   const userRole = userData?.role;
   const deptRole = deptData?.role;
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +51,7 @@ const Header = () => {
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center space-x-6">
-        <Link
+          <Link
             to={'/'}
             className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1"
           >
@@ -79,7 +83,7 @@ const Header = () => {
           </Link>
 
           {/* Conditional Login/Logout */}
-          <OAuth>
+          {/* <OAuth>
             {userRole !== "" || deptRole !== "" ? (
               <div className="flex items-center space-x-4 ml-4">
                 <ProfileDropDown handleLogOut={handleLogOut} />
@@ -100,19 +104,19 @@ const Header = () => {
                 </Link>
               </div>
             )}
-          </OAuth>
+          </OAuth> */}
         </nav>
 
         {/* Mobile ProfileDropDown and Menu Button */}
         <div className="lg:hidden flex items-center space-x-3">
           {/* ProfileDropDown for mobile - positioned on the right */}
-          <OAuth>
+          {/* <OAuth>
             {(userRole !== "" || deptRole !== "") && (
               <div className="relative">
                 <ProfileDropDown handleLogOut={handleLogOut} />
               </div>
             )}
-          </OAuth>
+          </OAuth> */}
 
           {/* Mobile Menu Button */}
           <button
@@ -132,13 +136,13 @@ const Header = () => {
       {/* Mobile Dropdown with Animation */}
       <div
         className={`lg:hidden overflow-hidden bg-[#F5F5F5] border-t shadow-inner transition-all duration-300 ease-in-out ${isOpen
-            ? 'max-h-96 opacity-100'
-            : 'max-h-0 opacity-0'
+          ? 'max-h-96 opacity-100'
+          : 'max-h-0 opacity-0'
           }`}
       >
         <div className={`transform transition-all duration-300 ease-in-out ${isOpen
-            ? 'translate-y-0 scale-100'
-            : '-translate-y-4 scale-95'
+          ? 'translate-y-0 scale-100'
+          : '-translate-y-4 scale-95'
           }`}>
           <div className="flex flex-col space-y-4 px-6 py-5">
             <Link
@@ -171,26 +175,26 @@ const Header = () => {
             </Link>
 
             {/* Conditional Login Buttons for Mobile */}
-            <OAuth>
-              {userRole === "" && deptRole === "" && (
-                <div className="flex flex-col space-y-3 pt-3 border-t">
-                  <Link
-                    to={routes.userLogin}
-                    className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-all duration-200 text-center transform hover:scale-105"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    User Login
-                  </Link>
-                  <Link
-                    to={routes.deptLogin}
-                    className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-all duration-200 text-center transform hover:scale-105"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Department Login
-                  </Link>
-                </div>
-              )}
-            </OAuth>
+            {/* <OAuth>
+            {userRole === "" && deptRole === "" && (
+              <div className="flex flex-col space-y-3 pt-3 border-t">
+                <Link
+                  to={routes.userLogin}
+                  className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-all duration-200 text-center transform hover:scale-105"
+                  onClick={() => setIsOpen(false)}
+                >
+                  User Login
+                </Link>
+                <Link
+                  to={routes.deptLogin}
+                  className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-all duration-200 text-center transform hover:scale-105"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Department Login
+                </Link>
+              </div>
+            )}
+            </OAuth> */}
           </div>
         </div>
       </div>
