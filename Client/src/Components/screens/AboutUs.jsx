@@ -1,10 +1,11 @@
-import OurTeams from "./aboutus/OurTeams"
-import OurTeam from './aboutus/CivicIssues'
+
+import CivicIssues from './aboutus/CivicIssues'
+import OurTeams from './aboutus/OurTeams'
 function AboutUs() {
   return (
     <div>
-        <OurTeam/>
         <OurTeams/>
+        <CivicIssues/>
     </div>
   )
 }

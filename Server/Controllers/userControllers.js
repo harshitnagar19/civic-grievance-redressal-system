@@ -5,9 +5,101 @@ import { generateToken } from "../utils/token/generateToken.js";
 import {
   userSignUpValidationSchema,
   userLoginValidationSchema,
+  userOtpValidationSchema,
 } from "../Validations/UserValidation.js";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 
 const userControllers = {};
+const otpStore = new Map();
+
+const genOtp = () => String(Math.floor(100000 + Math.random() * 900000));
+const genSessionId = () => crypto.randomBytes(16).toString("hex");
+const hash = (str) => crypto.createHash("sha256").update(str).digest("hex");
+const OTP_TTL_MS = 1 * 60 * 1000; // 5 minutes
+const MAX_OTP_ATTEMPTS = 5;
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "ayushpatel062004@gmail.com",
+    pass: "hiok hpiz nrib crqq",
+  },
+});
+
+userControllers.sendOtp = async (req, res) => {
+  try {
+    const { value, error } = userOtpValidationSchema.validate(req.body);
+    if (error) {
+      console.log(error);
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      });
+    } else {
+      const existingUser = await UserServices.getUserByEmail(value?.email);
+      if (existingUser?.status == "ERR") {
+        return res.status(500).send(existingUser);
+      } else {
+        if (existingUser.data.length == 0) {
+          const otp = genOtp();
+          const sessionId = genSessionId();
+          const expiresAt = Date.now() + OTP_TTL_MS;
+          const email = value.email;
+          otpStore.set(sessionId, {
+            email,
+            otpHash: hash(otp),
+            expiresAt,
+            attempts: 0,
+          });
+
+          let mailOptions = {
+            from: "ayushpatel062004@gmail.com",
+            to: email,
+            subject: "Your verification OTP",
+            text: `Your one-time verification code is ${otp}. It expires in ${
+              OTP_TTL_MS / 60000
+            } minutes.`,
+            html: `<p>Your one-time verification code is <b>${otp}</b>. It expires in ${
+              OTP_TTL_MS / 60000
+            } minutes.</p>`,
+          };
+
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              return res.status(500).send({
+                status: "ERR",
+                msg: `error in sending mail ${error?.message}`,
+                data: [],
+              });
+            } else {
+              res.status(200).send({
+                status: "OK",
+                msg: "OTP sent",
+                sessionId,
+                ttl: OTP_TTL_MS,
+              });
+            }
+          });
+        } else {
+          return res.status(400).send({
+            status: "ERR",
+            msg: "user already register with given email",
+            data: [],
+          });
+        }
+      }
+    }
+  } catch (err) {
+    return res.status(500).send({
+      status: "ERR",
+      msg: `error at server while sending OTP to user ${err.message}`,
+      data: [],
+    });
+  }
+};
+
 userControllers.signup = async (req, res) => {
   try {
     const { value, error } = userSignUpValidationSchema.validate(req.body);
@@ -19,6 +111,7 @@ userControllers.signup = async (req, res) => {
         data: [],
       });
     }
+
     //valid body
     else {
       const existingUser = await UserServices.getUserByEmail(value?.email);
@@ -30,6 +123,33 @@ userControllers.signup = async (req, res) => {
         // user not found , means need to signup
         if (existingUser.data.length == 0) {
           try {
+            const entry = otpStore.get(value.sessionId);
+            if (!entry)
+              return res.status(400).send({
+                status: "ERR",
+                msg: "Invalid or expired session",
+                data: [],
+              });
+
+            if (Date.now() > entry.expiresAt) {
+              otpStore.delete(value.sessionId);
+              return res
+                .status(400)
+                .send({ status: "ERR", msg: "OTP expired", data: [] });
+            }
+            entry.attempts += 1;
+            if (entry.attempts > MAX_OTP_ATTEMPTS) {
+              otpStore.delete(value.sessionId);
+              return res
+                .status(400)
+                .send({ status: "ERR", msg: "Too many attempts" });
+            }
+            if (hash(value.otp) !== entry.otpHash) {
+              return res
+                .status(400)
+                .json({ status: "ERR", msg: "Incorrect OTP" });
+            }
+            //
             const hashedPassword = await hashPassword(value.password);
             value.password = hashedPassword;
             const registerUser = await UserServices.signup(value);
