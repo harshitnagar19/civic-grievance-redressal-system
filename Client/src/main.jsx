@@ -27,34 +27,32 @@ import ComplaintWrapper from './Components/complaint/ComplaintWrapper.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      {/* Public routes without Layout */}
-      <Route path={routes.userSignup} element={<UserSignUpWrapper />} />
-      <Route path={routes.userLogin} element={<UserLoginWrapper />} />
-      <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper />} />
-      <Route path={routes.deptLogin} element={<DepartmentSignInWrapper />} />
-      <Route index element={<Hero />} />
-      {/* Routes with Layout */}
-      <Route path="/" element={<Layout />}>
-        
-        <Route path={routes.aboutUs} element={<AboutUs />} />
-        <Route path={routes.raiseComplaint} element={<ComplaintWrapper />} />
+      {/* user */}
+      <Route path={routes.userSignup} element={<UserSignUpWrapper />}></Route>
+      <Route path={routes.userLogin} element={<UserLoginWrapper />}></Route>
 
-        {/* User/Department Dashboards (protected by OAuth) */}
-        <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>} />
-        <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard /></OAuth>} />
+      {/* department */}
+      <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper />}></Route>
+      <Route path={routes.deptLogin} element={<DepartmentSignInWrapper />}></Route>
 
-        {/* Department Info Routes */}
-        <Route path={routes.departmentInfo} element={<AllStates />} />
-        <Route path={`${routes.departmentInfo}/:param`} element={<AllDistricts />} />
-        <Route path={`${routes.departmentInfo}/:param/:district`} element={<AllDepartment />} />
-        <Route path={`${routes.departmentInfo}/:param/:district/:departmentName`} element={<DepartmentInfo />} />
+      <Route path={routes.aboutUs} element={<><Header /><AboutUs /><Footer /></>}></Route>
+      <Route path={routes.raiseComplaint} element={<><Header /><ComplaintWrapper /><Footer /></>}></Route>
+
+      <Route path="/" element={<><Header /><Hero /><Footer /></>}></Route>
+
+      <Route path='' element={<Layout />}>
+        <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
+        <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard /></OAuth>}></Route>
+        <Route path={routes.departmentInfo} element={<AllStates />}></Route>
+        <Route path={`${routes.departmentInfo}/:param`} element={<AllDistricts />}></Route>
+        <Route path={`${routes.departmentInfo}/:param/:district`} element={<AllDepartment />}></Route>
+        <Route path={`${routes.departmentInfo}/:param/:district/:departmentName`} element={<DepartmentInfo />}></Route>
+        <Route path={routes.raiseComplaint} element={<ComplaintWrapper />}></Route>
       </Route>
-
-      {/* 404 */}
-      <Route path="*" element={<NotFound />} />
+      <Route path='*' element={<NotFound />}></Route>
     </>
   )
-);
+)
 
 createRoot(document.getElementById('root')).render(
   <Provider store={Store}>
