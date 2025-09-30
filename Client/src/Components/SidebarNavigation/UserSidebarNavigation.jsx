@@ -36,9 +36,9 @@ export default function UserSidebarNavigation() {
   }, []);
 
   const menuItems = [
-    { id: 'DashBoard', text: "DashBoard", icon: FileText , navigateTo:routes.userDashboard  },
+    { id: 'DashBoard', text: "DashBoard", icon: FileText , navigateTo:routes.userDashboard },
     { id: 'completed', text: "Your Completed Complaints", icon: CheckCircle },
-    { id: 'rise', text: "Rise Complaints", icon: TrendingUp },
+    { id: 'rise', text: "Rise Complaints", icon: TrendingUp , navigateTo:routes.raiseComplaint },
     { id: 'areas', text: "Issue In Areas", icon: MapPin },
     { id: 'announcements', text: "Announcements", icon: Bell },
     { id: 'settings', text: "Settings", icon: Settings },

@@ -12,7 +12,7 @@ const Header = () => {
   const userRole = userData?.role;
   const deptRole = deptData?.role;
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const handleLogOut = () => {
     localStorage.removeItem("token");
     setTimeout(() => {
@@ -33,7 +33,7 @@ const Header = () => {
       </div>
 
       {/* Navbar */}
-      <div className="flex items-center justify-between px-6 md:px-16 lg:px-20 py-3 bg-[#F5F5F5] relative">
+      <div className="flex items-center justify-between px-6 md:px-16 lg:px-20 py-2 bg-[#F5F5F5] relative">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <Link to={userRole === "" ? (deptRole === "" ? routes.deptLogin : routes.deptDashboard) : routes.userDashboard}>
@@ -49,25 +49,25 @@ const Header = () => {
         <nav className="hidden lg:flex items-center space-x-6">
           <Link
             to={routes.aboutUs}
-            className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1"
+            className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-2 shadow-blue-200 hover:bg-gray-200 rounded-2xl"
           >
             About Us
           </Link>
           <Link
             to={routes.departmentWorks}
-            className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1"
+            className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1 shadow-blue-200 hover:bg-gray-200 rounded-2xl"
           >
             View Department Works
           </Link>
           <Link
             to={routes.departmentInfo}
-            className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1"
+            className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1 shadow-blue-200 hover:bg-gray-200 rounded-2xl"
           >
             View Department Info
           </Link>
           <Link
             to={routes.contactSupport}
-            className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1"
+            className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1 shadow-blue-200 hover:bg-gray-200 rounded-2xl"
           >
             Contact Support
           </Link>
@@ -103,7 +103,7 @@ const Header = () => {
           <OAuth>
             {(userRole !== "" || deptRole !== "") && (
               <div className="relative">
-                <ProfileDropDown handleLogOut={handleLogOut}/>
+                <ProfileDropDown handleLogOut={handleLogOut} />
               </div>
             )}
           </OAuth>
@@ -124,18 +124,16 @@ const Header = () => {
       </div>
 
       {/* Mobile Dropdown with Animation */}
-      <div 
-        className={`lg:hidden overflow-hidden bg-[#F5F5F5] border-t shadow-inner transition-all duration-300 ease-in-out ${
-          isOpen 
-            ? 'max-h-96 opacity-100' 
+      <div
+        className={`lg:hidden overflow-hidden bg-[#F5F5F5] border-t shadow-inner transition-all duration-300 ease-in-out ${isOpen
+            ? 'max-h-96 opacity-100'
             : 'max-h-0 opacity-0'
-        }`}
+          }`}
       >
-        <div className={`transform transition-all duration-300 ease-in-out ${
-          isOpen 
-            ? 'translate-y-0 scale-100' 
+        <div className={`transform transition-all duration-300 ease-in-out ${isOpen
+            ? 'translate-y-0 scale-100'
             : '-translate-y-4 scale-95'
-        }`}>
+          }`}>
           <div className="flex flex-col space-y-4 px-6 py-5">
             <Link
               to={routes.aboutUs}
