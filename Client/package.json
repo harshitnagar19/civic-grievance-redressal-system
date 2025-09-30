@@ -24,6 +24,7 @@
     "react-scroll-parallax": "^3.4.5",
     "react-toastify": "^11.0.5",
     "tailwindcss": "^4.1.12",
+    "three": "^0.180.0",
     "yup": "^1.7.0"
   },
   "devDependencies": {

@@ -12,15 +12,20 @@ import {
   User,
   ChevronRight
 } from 'lucide-react';
-import image from "../../assets/teamImages/hemant.jpg"
 import { routes } from '../../data/routes';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import image from '../../assets/image.png'
 
 export default function UserSidebarNavigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeItem, setActiveItem] = useState('DashBoard');
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate()
+  const userData = useSelector((store) => store.userData);
+  const deptData = useSelector((store) => store.departmentData);
+  // const userRole = userData?.role;
+  // const deptRole = deptData?.role;
   // Check screen size
   useEffect(() => {
     const checkScreenSize = () => {
@@ -93,8 +98,8 @@ export default function UserSidebarNavigation() {
                 <img src={image} alt="" className='w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm' />
               </div>
               <div className="flex-1">
-                <h2 className="font-semibold text-lg">John Doe</h2>
-                <p className="text-blue-100 text-sm">john.doe@example.com</p>
+                <h2 className="font-semibold text-lg">{userData.userName}</h2>
+                <p className="text-blue-100 text-sm">{userData.email}</p>
               </div>
             </div>
           </div>
