@@ -13,11 +13,16 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { routes } from '../../data/routes';
+import image from '../../assets/image.png'
 
 export default function DeptSidebarNavigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeItem, setActiveItem] = useState('DashBoard');
   const [isMobile, setIsMobile] = useState(false);
+  const userData = useSelector((store) => store.userData);
+  const deptData = useSelector((store) => store.departmentData);
+  // const userRole = userData?.role;
+  // const deptRole = deptData?.role;
 
   // Check screen size
   useEffect(() => {
@@ -86,11 +91,13 @@ export default function DeptSidebarNavigation() {
           <div className="p-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                <User className="w-6 h-6 text-white" />
+                {/* <User className="w-6 h-6 text-white" /> */}
+                <img src={image} alt="" className='w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm' />
               </div>
               <div className="flex-1">
-                <h2 className="font-semibold text-lg">dept Doe</h2>
-                <p className="text-blue-100 text-sm">dept.doe@example.com</p>
+                <h2 className="font-semibold text-lg">{deptData.departmentName}</h2>
+                <h2 className="font-semibold text-lg">{deptData.departmentShortName}</h2>
+                <p className="text-blue-100 text-sm">{deptData.email}</p>
               </div>
             </div>
           </div>
