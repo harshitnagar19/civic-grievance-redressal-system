@@ -7,5 +7,5 @@ export const routes = {
     deptSignUp:'/dept-signUp',
     deptLogin:'/dept-login',
     departmentInfo:'/department-state',
-    
+    raiseComplaint:'/raise-complaint',
 };

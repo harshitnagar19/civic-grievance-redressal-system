@@ -1,23 +1,25 @@
 import { Field, ErrorMessage } from "formik";
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import { routes } from '../../data/routes';
-import logo2 from '../../assets/logo2.png'
-import { stateData } from '../../data/departmentData/stateData'
+import Select from "react-select";
+import { routes } from "../../data/routes";
+import logo2 from "../../assets/logo2.png";
+import { stateData } from "../../data/departmentData/stateData";
+
 const DepartmentSignUpForm = ({ formikProps }) => {
   const { values, setFieldValue, isSubmitting, handleBlur } = formikProps;
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
-  
-  const [selectedState,setSelectedState]=useState("Madhya Pradesh")
 
-  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, totalSteps));
-  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
-  
-  const handleStateClick =(e)=>{
-    setFieldValue("state", e.target.value);
-    setSelectedState(e.target.value)
-  }
+  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+
+  const stateOptions = Object.keys(stateData).map((s) => ({ value: s, label: s }));
+  const districtOptions =
+    values.state && stateData[values.state]
+      ? stateData[values.state].map((d) => ({ value: d, label: d }))
+      : [];
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
       <div className="bg-white shadow-xl rounded-2xl overflow-hidden w-full max-w-2xl mt-6">
@@ -32,22 +34,28 @@ const DepartmentSignUpForm = ({ formikProps }) => {
           <div className="flex items-center justify-between mb-4">
             {[1, 2, 3].map((step) => (
               <div key={step} className="flex items-center">
-                <div className={`rounded-full h-8 w-8 flex items-center justify-center text-sm font-medium ${step <= currentStep ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'
-                  }`}>
+                <div
+                  className={`rounded-full h-8 w-8 flex items-center justify-center text-sm font-medium ${
+                    step <= currentStep ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-600"
+                  }`}
+                >
                   {step}
                 </div>
                 {step < totalSteps && (
-                  <div className={`h-1 w-20 mx-2 ${step < currentStep ? 'bg-blue-500' : 'bg-gray-200'
-                    }`} />
+                  <div
+                    className={`h-1 w-20 mx-2 ${step < currentStep ? "bg-blue-500" : "bg-gray-200"}`}
+                  />
                 )}
               </div>
             ))}
           </div>
           <div className="text-center text-sm text-gray-600">
-            Step {currentStep} of {totalSteps}: {
-              currentStep === 1 ? 'Department Information' :
-                currentStep === 2 ? 'Contact Details' : 'Address & Security'
-            }
+            Step {currentStep} of {totalSteps}:{" "}
+            {currentStep === 1
+              ? "Department Information"
+              : currentStep === 2
+              ? "Contact Details"
+              : "Address & Security"}
           </div>
         </div>
 
@@ -67,7 +75,11 @@ const DepartmentSignUpForm = ({ formikProps }) => {
                   className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   onBlur={handleBlur}
                 />
-                <ErrorMessage name="departmentName" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="departmentName"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <div>
@@ -81,7 +93,11 @@ const DepartmentSignUpForm = ({ formikProps }) => {
                   className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   onBlur={handleBlur}
                 />
-                <ErrorMessage name="headOfDepartment" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="headOfDepartment"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <div>
@@ -95,7 +111,11 @@ const DepartmentSignUpForm = ({ formikProps }) => {
                   className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   onBlur={handleBlur}
                 />
-                <ErrorMessage name="departmentShortName" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="departmentShortName"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
             </div>
           )}
@@ -130,7 +150,11 @@ const DepartmentSignUpForm = ({ formikProps }) => {
                   onBlur={handleBlur}
                   autoComplete="tel"
                 />
-                <ErrorMessage name="mobileNumber" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="mobileNumber"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
             </div>
           )}
@@ -138,60 +162,55 @@ const DepartmentSignUpForm = ({ formikProps }) => {
           {/* Step 3: Address & Security */}
           {currentStep === 3 && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 grid-rows-2 gap-x-4 gap-y-2">
-                <div className="w-full max-w-xs mx-auto">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1">State</label>
-                  <Field
-                    as="select"
+                  <Select
+                    options={stateOptions}
+                    value={stateOptions.find((opt) => opt.value === values.state)}
+                    onChange={(selected) => {
+                      setFieldValue("state", selected.value);
+                      setFieldValue("district", "");
+                    }}
+                    placeholder="Select State"
+                  />
+                  <ErrorMessage
                     name="state"
-                    value={values.state}
-                    onChange={(e)=>(handleStateClick(e))}
-                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 sm:max-w-xs md:max-w-sm lg:max-w-md"
-                    onBlur={handleBlur}
-                    autoComplete="address-level1"
-                  >
-                    <option value="" disabled>All States</option>
-                    {Object.keys(stateData).map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </Field>
-                  <ErrorMessage name="state" component="div" className="text-red-500 text-sm mt-1" />
-                </div>
-
-
-                <div className="w-full max-w-xs mx-auto">
-                  <label className="block text-sm font-medium text-gray-600 mb-1">District</label>
-                  <Field
-                    as="select"
-                    name="district"
-                    value={values.district}
-                    onChange={(e) => setFieldValue("district", e.target.value)}
-                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 sm:max-w-xs md:max-w-sm lg:max-w-md"
-                    onBlur={handleBlur}
-                    autoComplete="address-level1"
-                  >
-                    <option value="" disabled>Select District</option>
-                    {stateData[selectedState].map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </Field>
-                  <ErrorMessage name="state" component="div" className="text-red-500 text-sm mt-1" />
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-1">City</label>
-                  <Field
-                    type="text"
-                    name="city"
-                    placeholder="City"
-                    value={values.city}
-                    onChange={(e) => setFieldValue("city", e.target.value)}
-                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    onBlur={handleBlur}
-                    autoComplete="address-level2"
+                  <label className="block text-sm font-medium text-gray-600 mb-1">District</label>
+                  <Select
+                    options={districtOptions}
+                    value={districtOptions.find((opt) => opt.value === values.district)}
+                    onChange={(selected) => setFieldValue("district", selected.value)}
+                    placeholder="Select District"
+                    isDisabled={!values.state}
                   />
-                  <ErrorMessage name="city" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage
+                    name="district"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">City</label>
+                <Field
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  value={values.city}
+                  onChange={(e) => setFieldValue("city", e.target.value)}
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  onBlur={handleBlur}
+                  autoComplete="address-level2"
+                />
+                <ErrorMessage name="city" component="div" className="text-red-500 text-sm mt-1" />
               </div>
 
               <div>
@@ -207,7 +226,11 @@ const DepartmentSignUpForm = ({ formikProps }) => {
                   onBlur={handleBlur}
                   autoComplete="street-address"
                 />
-                <ErrorMessage name="deptAddress" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="deptAddress"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <div>
@@ -222,7 +245,11 @@ const DepartmentSignUpForm = ({ formikProps }) => {
                   onBlur={handleBlur}
                   autoComplete="new-password"
                 />
-                <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
             </div>
           )}
