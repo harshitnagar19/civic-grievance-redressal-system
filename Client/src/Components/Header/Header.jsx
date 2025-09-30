@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { routes } from "../../data/routes";
 import logo2 from "../../assets/logo2.png";
 import ProfileDropDown from "./profileDropDown";
-import OAuth from "../auth/OAuth";
 
 const Header = () => {
   const userData = useSelector((store) => store.userData);
   const deptData = useSelector((store) => store.departmentData);
-  const userRole = userData?.role;
-  const deptRole = deptData?.role;
+  const userRole = userData?.role || "";
+  const deptRole = deptData?.role || "";
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogOut = () => {
@@ -36,7 +35,15 @@ const Header = () => {
       <div className="flex items-center justify-between px-6 md:px-16 lg:px-20 py-2 bg-[#F5F5F5] relative">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <Link to={userRole === "" ? (deptRole === "" ? routes.deptLogin : routes.deptDashboard) : routes.userDashboard}>
+          <Link
+            to={
+              userRole
+                ? routes.userDashboard
+                : deptRole
+                ? routes.deptDashboard
+                : "/"
+            }
+          >
             <img
               src={logo2}
               alt="Civic Eye Logo"
@@ -47,8 +54,8 @@ const Header = () => {
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center space-x-6">
-        <Link
-            to={'/'}
+          <Link
+            to="/"
             className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1"
           >
             Hero
@@ -79,40 +86,35 @@ const Header = () => {
           </Link>
 
           {/* Conditional Login/Logout */}
-          <OAuth>
-            {userRole !== "" || deptRole !== "" ? (
-              <div className="flex items-center space-x-4 ml-4">
-                <ProfileDropDown handleLogOut={handleLogOut} />
-              </div>
-            ) : (
-              <div className="flex items-center space-x-3 ml-4">
-                <Link
-                  to={routes.userLogin}
-                  className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-colors duration-200"
-                >
-                  User Login
-                </Link>
-                <Link
-                  to={routes.deptLogin}
-                  className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-colors duration-200"
-                >
-                  Department Login
-                </Link>
-              </div>
-            )}
-          </OAuth>
+          {userRole || deptRole ? (
+            <div className="flex items-center space-x-4 ml-4">
+              <ProfileDropDown handleLogOut={handleLogOut} />
+            </div>
+          ) : (
+            <div className="flex items-center space-x-3 ml-4">
+              <Link
+                to={routes.userLogin}
+                className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-colors duration-200"
+              >
+                User Login
+              </Link>
+              <Link
+                to={routes.deptLogin}
+                className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-colors duration-200"
+              >
+                Department Login
+              </Link>
+            </div>
+          )}
         </nav>
 
         {/* Mobile ProfileDropDown and Menu Button */}
         <div className="lg:hidden flex items-center space-x-3">
-          {/* ProfileDropDown for mobile - positioned on the right */}
-          <OAuth>
-            {(userRole !== "" || deptRole !== "") && (
-              <div className="relative">
-                <ProfileDropDown handleLogOut={handleLogOut} />
-              </div>
-            )}
-          </OAuth>
+          {(userRole || deptRole) && (
+            <div className="relative">
+              <ProfileDropDown handleLogOut={handleLogOut} />
+            </div>
+          )}
 
           {/* Mobile Menu Button */}
           <button
@@ -121,7 +123,11 @@ const Header = () => {
             aria-label="Toggle mobile menu"
           >
             <div className="w-5 h-5 flex items-center justify-center">
-              <span className={`transform transition-all duration-300 ${isOpen ? 'rotate-45 scale-110' : 'rotate-0'}`}>
+              <span
+                className={`transform transition-all duration-300 ${
+                  isOpen ? "rotate-45 scale-110" : "rotate-0"
+                }`}
+              >
                 {isOpen ? "✖" : "☰"}
               </span>
             </div>
@@ -129,17 +135,17 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Dropdown with Animation */}
+      {/* Mobile Dropdown */}
       <div
-        className={`lg:hidden overflow-hidden bg-[#F5F5F5] border-t shadow-inner transition-all duration-300 ease-in-out ${isOpen
-            ? 'max-h-96 opacity-100'
-            : 'max-h-0 opacity-0'
-          }`}
+        className={`lg:hidden overflow-hidden bg-[#F5F5F5] border-t shadow-inner transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
       >
-        <div className={`transform transition-all duration-300 ease-in-out ${isOpen
-            ? 'translate-y-0 scale-100'
-            : '-translate-y-4 scale-95'
-          }`}>
+        <div
+          className={`transform transition-all duration-300 ease-in-out ${
+            isOpen ? "translate-y-0 scale-100" : "-translate-y-4 scale-95"
+          }`}
+        >
           <div className="flex flex-col space-y-4 px-6 py-5">
             <Link
               to={routes.aboutUs}
@@ -171,26 +177,24 @@ const Header = () => {
             </Link>
 
             {/* Conditional Login Buttons for Mobile */}
-            <OAuth>
-              {userRole === "" && deptRole === "" && (
-                <div className="flex flex-col space-y-3 pt-3 border-t">
-                  <Link
-                    to={routes.userLogin}
-                    className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-all duration-200 text-center transform hover:scale-105"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    User Login
-                  </Link>
-                  <Link
-                    to={routes.deptLogin}
-                    className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-all duration-200 text-center transform hover:scale-105"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Department Login
-                  </Link>
-                </div>
-              )}
-            </OAuth>
+            {!(userRole || deptRole) && (
+              <div className="flex flex-col space-y-3 pt-3 border-t">
+                <Link
+                  to={routes.userLogin}
+                  className="px-5 py-2 rounded-full bg-[#FF9800] text-white font-semibold hover:bg-orange-600 transition-colors duration-200 text-center transform hover:scale-105"
+                  onClick={() => setIsOpen(false)}
+                >
+                  User Login
+                </Link>
+                <Link
+                  to={routes.deptLogin}
+                  className="px-5 py-2 rounded-full bg-[#1565C0] text-white font-semibold hover:bg-blue-700 transition-colors duration-200 text-center transform hover:scale-105"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Department Login
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
