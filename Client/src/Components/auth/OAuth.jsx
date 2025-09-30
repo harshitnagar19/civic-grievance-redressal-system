@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../../data/routes'
 import { toast } from 'react-toastify';
 import axios from 'axios'
+import { addDeptData } from '../../Store/departmentDataSlice'
 function OAuth({ children }) {
     const notifyError = (err) => toast.error(err);
     const notifySuccess = (suc) => toast.success(suc);
@@ -17,11 +18,17 @@ function OAuth({ children }) {
             navigate(routes.userLogin)
         } else {
             try {
-                await axios.post(`${import.meta.env.VITE_BASEURL}/user/refresh`, {},{ headers: { token: token } })
+                await axios.post(`${import.meta.env.VITE_BASEURL}/refresh`, {}, { headers: { token: token } })
                     .then((response) => {
                         if (response.data.status === "OK") {
-                            dispatch(addUserData(response.data.data[0]));
-                            notifySuccess(response.data.msg);
+                            if (response.data.data[0].role === "department") {
+                                dispatch(addDeptData(response.data.data[0]))
+
+                            } else if (response.data.data[0].role === "user") {
+
+                                dispatch(addUserData(response.data.data[0]));
+                                // notifySuccess(response.data.msg);
+                            }
                         }
                         if (response.data.data.status === "ERR") {
                             localStorage.removeItem("token");
@@ -49,8 +56,8 @@ function OAuth({ children }) {
     return (
         <>
             {
-                isLoading ? "loading:..." :  children }
-            
+                isLoading ? "loading:..." : children}
+
         </>
 
     )

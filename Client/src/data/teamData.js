@@ -1,7 +1,7 @@
 // Import team member images
-import image1 from "../assets/CivicProblems/image1.png";
-import image2 from "../assets/CivicProblems/image2.png";
-import image3 from "../assets/CivicProblems/image3.png";
+import image1 from "../assets/teamImages/hemant.jpg";
+import image2 from "../assets/teamImages/Nagar.JPG";
+import image3 from "../assets/teamImages/harshitGawli.png";
 import image4 from "../assets/CivicProblems/image4.png";
 
 
@@ -9,29 +9,29 @@ import image4 from "../assets/CivicProblems/image4.png";
 export const teamMembers = [
     {
         id: 1,
-        name: "Alex Johnson",
+        name: "Hemant Kamliya",
         position: "Frontend Engineer",
         image: image1,
-        linkedin: "https://linkedin.com/in/alexjohnson"
+        linkedin: "https://www.linkedin.com/in/hemant-kamliya-1ab088222/"
     },
     {
         id: 2,
-        name: "Sarah Chen",
-        position: "Frontend Engineer", 
+        name: "Harshit Nagar",
+        position: "Backend Engineer", 
         image: image2,
-        linkedin: "https://linkedin.com/in/sarahchen"
+        linkedin: "https://www.linkedin.com/in/harshit-nagar-7aa701251/"
     },
     {
         id: 3,
-        name: "Mike Rodriguez",
+        name: "Harshit Gawli",
         position: "Backend Engineer",
         image: image3,
-        linkedin: "https://linkedin.com/in/mikerodriguez"
+        linkedin: "https://www.linkedin.com/in/harshit-gawli-4981ab24a/"
     },
     {
         id: 4,
-        name: "Emma Wilson",
-        position: "Backend Engineer",
+        name: "Harsh Chandel",
+        position: "Frontend Engineer",
         image: image4,
         linkedin: "https://linkedin.com/in/emmawilson"
     }

@@ -1,23 +1,30 @@
 // import Department from "../Models/Department.js";
 import DepartmentServices from "../Services/DepartmentServices.js";
-import { departmentSignUpValidationSchema , departmentLoginValidationSchema } from "../Validations/DepartmentValidation.js";
+import {
+  departmentSignUpValidationSchema,
+  departmentLoginValidationSchema,
+} from "../Validations/DepartmentValidation.js";
 import { generateToken } from "../utils/token/generateToken.js";
 import hashPassword from "../utils/password/hashPassword.js";
 import verifyPassword from "../utils/password/verifyPassword.js";
+import Department from "../Models/Department.js";
 
 const departmentControllers = {};
 departmentControllers.signup = async (req, res) => {
   try {
-    const { value, error } = departmentSignUpValidationSchema.validate(req.body);
+    const { value, error } = departmentSignUpValidationSchema.validate(
+      req.body
+    );
     if (error) {
       return res.status(400).json({
         status: "ERR",
         msg: error.message,
         data: [],
       });
-    }
-    else {
-      const existingDepartment = await DepartmentServices.getDepartmentByEmail(value?.email);
+    } else {
+      const existingDepartment = await DepartmentServices.getDepartmentByEmail(
+        value?.email
+      );
       //error while finding department
       if (existingDepartment?.status == "ERR") {
         return res.status(500).send(existingDepartment);
@@ -33,21 +40,23 @@ departmentControllers.signup = async (req, res) => {
               const departmentObj = registerDepartment.data[0].toObject();
               delete departmentObj.password;
               try {
-                const token = generateToken({ email: departmentObj.email, role: departmentObj.role });
-                departmentObj["token"] = token
+                const token = generateToken({
+                  email: departmentObj.email,
+                  role: departmentObj.role,
+                });
+                departmentObj["token"] = token;
                 return res.status(200).send({
                   status: "OK",
                   msg: "Department signup sucessfully",
                   // data: [departmentObj],
-                  data:[]
+                  data: [],
                 });
-              }
-              catch (err) {
+              } catch (err) {
                 return res.status(500).send({
                   status: "ERR",
                   msg: "error in server while generating token",
-                  data: []
-                })
+                  data: [],
+                });
               }
             } else {
               return res.status(500).send({
@@ -69,14 +78,10 @@ departmentControllers.signup = async (req, res) => {
           return res.status(400).send({
             status: "ERR",
             msg: "department already register with given email",
-            data: []
+            data: [],
           });
         }
       }
-
-
-
-
     }
   } catch (err) {
     return res.status(500).send({
@@ -85,7 +90,7 @@ departmentControllers.signup = async (req, res) => {
       data: [],
     });
   }
-}
+};
 
 departmentControllers.login = async (req, res) => {
   try {
@@ -97,70 +102,74 @@ departmentControllers.login = async (req, res) => {
         data: [],
       });
     } else {
-      const department = await DepartmentServices.getDepartmentByEmail(value.email)
+      const department = await DepartmentServices.getDepartmentByEmail(
+        value.email
+      );
       if (department.status == "ERR") {
         return res.status(500).send({
           status: "ERR",
           msg: "error at server in department login",
-          data: []
-        })
+          data: [],
+        });
       }
       if (department.status == "OK" && department.data.length == 0) {
         return res.status(400).send({
           status: "ERR",
           msg: "Department not register with entered mail",
-          data: []
-        })
+          data: [],
+        });
       }
       if (department.status == "OK" && department.data.length > 0) {
         try {
           const departmentObj = department.data[0];
-            // check department verified or not
+          // check department verified or not
           if (!departmentObj.isVerified) {
             return res.status(403).send({
               status: "ERR",
               msg: "Department not verified yet. Contact admin for approval.",
-              data: []
+              data: [],
             });
           }
           // verify pwd
-          const isPasswordCorrect = await verifyPassword(value.password, departmentObj.password)
+          const isPasswordCorrect = await verifyPassword(
+            value.password,
+            departmentObj.password
+          );
           if (isPasswordCorrect) {
             // Remove password before sending
             const deptWithoutPassword = departmentObj.toObject();
             delete deptWithoutPassword.password;
             try {
-                const token = generateToken({
-                  email: deptWithoutPassword.email,
-                  role: deptWithoutPassword.role,
-                });
-                deptWithoutPassword["token"] = token;
-                return res.status(200).send({
-                  status: "OK",
-                  msg: "Department Login sucessfully",
-                  data: [deptWithoutPassword],
-                });
-              } catch (err) {
-                return res.status(500).send({
-                  status: "ERR",
-                  msg: "error in server while generating token",
-                  data: [],
-                });
-              }
-
+              const token = generateToken({
+                email: deptWithoutPassword.email,
+                role: deptWithoutPassword.role,
+              });
+              deptWithoutPassword["token"] = token;
+              return res.status(200).send({
+                status: "OK",
+                msg: "Department Login sucessfully",
+                data: [deptWithoutPassword],
+              });
+            } catch (err) {
+              return res.status(500).send({
+                status: "ERR",
+                msg: "error in server while generating token",
+                data: [],
+              });
+            }
           } else {
             return res.status(400).send({
               status: "ERR",
               msg: "invalid password",
-              data: []
-            })
+              data: [],
+            });
           }
         } catch (err) {
           return res.status(500).send({
             status: "ERR",
             msg: err.message,
-            data: []
-          })
+            data: [],
+          });
         }
       }
     }
@@ -171,44 +180,99 @@ departmentControllers.login = async (req, res) => {
       data: [],
     });
   }
-}
+};
 
-departmentControllers.refresh = async(req,res)=>{
-  
+departmentControllers.getAllState = async (req, res) => {
   try {
-    const {email ,role} = req.department;
-    const response = await DepartmentServices.getDepartmentByEmail(email);
-
-    if(response.status == "ERR"){
-      return res.status(500).send({
-        status : "ERR",
-        msg : "error at server in department login",
-        data: [],
-      })
+    const response = await DepartmentServices.getStatesOfAllDepartment();
+    if (response.status == "ERR") {
+      return res.status(500).send(response);
+    } else {
+      return res.status(200).send(response);
     }
-    if(response.status == "OK" && response.data.length==0){
+  } catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: "error in sserver to get all state",
+      data: [],
+    });
+  }
+};
+
+departmentControllers.getAllDistrictsOfState = async (req, res) => {
+  try {
+    const { state } = req.query;
+    if (!state) {
       return res.status(400).send({
         status: "ERR",
-        msg: "department not register with enterd mail",
+        msg: "State is required in query param",
         data: [],
-      })
+      });
     }
-    if(response.status =="OK" && response.data.length>0){
-      const departmentObj = response.data[0].toObject()
-      delete departmentObj.password 
-      res.status(200).send({
-        status : "OK",
-        msg:"department is valid",
-        data:[departmentObj]
-      })
+    const cities = await DepartmentServices.getAllDistrictsInState({state})
+    if(cities.status=="ERR"){
+      res.status(500).send(cities)
     }
+    else{
+      res.status(200).send(cities)
+    }
+  } catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: `error in server to get all districts, ${err.message}`,
+      data: [],
+    });
+  }
+};
 
-  } catch (error) {
-    return res.status(500).send({
-      status:"ERR",
-      msg:"error in refresh at server",
-      data:[]
-    })
+departmentControllers.getAllDepartmentOfDistrict = async (req,res)=>{
+  try {
+    const { district , state } = req.query;
+    if (!district || !state) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "district and state is required in query param",
+        data: [],
+      });
+    }
+    const department = await DepartmentServices.getAllDepartmentInDisrtict({state ,district})
+    if(department.status=="ERR"){
+      res.status(500).send(department);
+    }else{
+      res.status(200).send(department)
+    }
+  }catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: `error in server to get all getAllDepartmentOfDistrict, ${err.message}`,
+      data: [],
+    });
+  }
+}
+
+departmentControllers.getDepartmenInfo = async (req,res)=>{
+  try{
+    const { district , state , departmentName} = req.query;
+    if (!district || !state || !departmentName) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "district and state and departmentName is required in query param",
+        data: [],
+      });
+    }else{
+      const departInfo = await DepartmentServices.getDepartmentInfo({district , state , departmentName})
+      if(departInfo.status=="ERR"){
+        return res.status(500).send(departInfo)
+      }else{
+        return res.status(200).send(departInfo)
+      }
+    }
+  }catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: `error in server to get all getAllDepartmentOfDistrict, ${err.message}`,
+      data: [],
+    });
   }
 }
 

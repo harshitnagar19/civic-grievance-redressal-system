@@ -2,6 +2,7 @@ import React from 'react';
 import { Field, ErrorMessage } from "formik";
 import { NavLink } from 'react-router-dom';
 import {routes} from '../../data/routes'
+import logo2 from '../../assets/logo2.png'
 const UserLoginForm = ({ formikProps }) => {
   const { values, setFieldValue, isSubmitting, handleBlur } = formikProps;
 
@@ -12,7 +13,7 @@ const UserLoginForm = ({ formikProps }) => {
         {/* Logo Section (Responsive) */}
         <div className="flex w-full lg:w-1/2">
           <img
-            src="./logo.png"
+            src={logo2}
             alt="Civic Eye Logo"
             className="w-full h-48 sm:h-60 md:h-72 lg:h-full object-contain p-4"
           />

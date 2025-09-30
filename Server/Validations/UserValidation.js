@@ -1,6 +1,15 @@
 import Joi from "joi";
 
 // signup schema
+
+export const userOtpValidationSchema = Joi.object({
+    email : Joi.string().trim().lowercase().email().required().messages({
+      "string.email": "Please provide a valid email",
+      "any.required": "Email is required",  
+    })
+}).required("email is required");
+
+
 export const userSignUpValidationSchema = Joi.object({
 
   userName: Joi.string().trim().min(3).max(45).required().messages({
@@ -35,7 +44,17 @@ export const userSignUpValidationSchema = Joi.object({
 
   role: Joi.string().trim().valid("user").default("user").messages({
     "any.only": "Role must be 'user'",
-  })
+  }),
+  sessionId : Joi.string().trim().required().messages({
+    "string.base": "sessionId should be a type of text",
+    "string.empty": "sessionId cannot be empty",
+    "any.required": "sessionId is required",
+  }),
+  otp: Joi.string().trim().required().messages({
+    "string.base": "OTP should be a type of text",
+    "string.empty": "OTP cannot be empty",
+    "any.required": "OTP is required",
+  }),
 }).required();
 
 
@@ -43,7 +62,7 @@ export const userSignUpValidationSchema = Joi.object({
 export const userLoginValidationSchema = Joi.object({
   email:Joi.string().trim().lowercase().email().required().messages({
     "string.email": "Please provide a valid email",
-    "any.required": "Email is required",
+    "any.required": "Email is required",  
   }),
   password: Joi.string().trim().required().messages({
     "any.required": "Password is required",

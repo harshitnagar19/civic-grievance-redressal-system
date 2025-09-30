@@ -6,7 +6,7 @@ import {
     problemCategories
 } from "../../../data/aboutUsData";
 
-export default function ComplaintCategories() {
+export default function CivicIssues() {
     const [scrollY, setScrollY] = useState(0);
     const [bgIndex, setBgIndex] = useState(0);
 
@@ -25,94 +25,93 @@ export default function ComplaintCategories() {
     }, []);
 
     return (
-        <div className={`relative overflow-hidden z-0 transition-all duration-1000 ease-in-out ${backgroundGradients[bgIndex]}`}>
-            {/* Dark overlay for better text contrast */}
-            <div className="absolute inset-0 bg-black/40 pointer-events-none"></div>
+        <div className={`relative overflow-hidden  transition-all duration-1000 ease-in-out ${backgroundGradients[bgIndex]}`}>
+            <div className="absolute  bg-black/40 pointer-events-none"></div>
 
-            {/* FIXED CENTER HEADER - No scrolling, no blur */}
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 text-center px-4">
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-black drop-shadow-2xl text-shadow-lg leading-tight">
-                    {headerContent.title1}
-                </h1>
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-black drop-shadow-2xl text-shadow-lg leading-tight mt-2">
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2text-center px-2 gap-3">
+                <h1 className="text-2xl md:text-4xl  lg:text-5xl font-bold text-black drop-shadow-2xl text-shadow-lg leading-tight mt-6">
                     {headerContent.title2}
                 </h1>
-                <p className="text-black text-sm md:text-lg mt-4 max-w-2xl mx-auto drop-shadow-xl">
+                <p className="text-black text-center text-sm md:text-lg  max-w-2xl mx-auto drop-shadow-xl">
                     {headerContent.subtitle}
                 </p>
             </div>
 
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center px-4">
+                <h1 className="text-2xl md:text-4xl  lg:text-5xl font-bold text-black drop-shadow-2xl text-shadow-lg leading-tight">
+                    {headerContent.title1}
+                </h1>
+            </div>
+
+
             <ParallaxProvider>
-                {/* First Row */}
                 <div className="flex flex-col sm:flex-row justify-center gap-2 md:gap-3 px-2 md:px-0 relative mb-24 md:mb-36 lg:mb-48">
                     <ResponsiveImageColumn
-                        problemData={problemCategories[0]} // Image 1
+                        problemData={problemCategories[0]}
                         speed={-250}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                     />
                     <ResponsiveImageColumn
-                        problemData={problemCategories[1]} // Image 2
+                        problemData={problemCategories[1]}
                         speed={-40}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                         extraClasses="sm:pt-12 md:pt-24"
                     />
                     <ResponsiveImageColumn
-                        problemData={problemCategories[2]} // Image 3
+                        problemData={problemCategories[2]}
                         speed={-50}
                         marginTop="mt-10 md:mt-20 lg:mt-0"
                     />
                     <ResponsiveImageColumn
-                        problemData={problemCategories[3]} // Image 4
+                        problemData={problemCategories[3]}
                         speed={-250}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                     />
                 </div>
 
-                {/* Second Row*/}
                 <div className="flex flex-col sm:flex-row justify-center gap-2 md:gap-3 px-2 md:px-0 relative mb-24 md:mb-36 lg:mb-48">
                     <ResponsiveImageColumn
-                        problemData={problemCategories[4]} // Image 5
+                        problemData={problemCategories[4]}
                         speed={-250}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                     />
                     <ResponsiveImageColumn
-                        problemData={problemCategories[5]} // Image 6
+                        problemData={problemCategories[5]}
                         speed={-40}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                         extraClasses="sm:pt-12 md:pt-24"
                     />
                     <ResponsiveImageColumn
-                        problemData={problemCategories[0]} // Image 1 (repeat)
+                        problemData={problemCategories[0]}
                         speed={-150}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                     />
                     <ResponsiveImageColumn
-                        problemData={problemCategories[1]} // Image 2 (repeat)
+                        problemData={problemCategories[1]}
                         speed={-250}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                     />
                 </div>
 
-                {/* Third Row */}
                 <div className="flex flex-col sm:flex-row justify-center gap-2 md:gap-3 px-2 md:px-0 relative mb-24 md:mb-36 lg:mb-48">
                     <ResponsiveImageColumn
-                        problemData={problemCategories[2]} // Image 3 (repeat)
+                        problemData={problemCategories[2]}
                         speed={-250}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                     />
                     <ResponsiveImageColumn
-                        problemData={problemCategories[3]} // Image 4 (repeat)
+                        problemData={problemCategories[3]}
                         speed={-40}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                         extraClasses="sm:pt-12 md:pt-24"
                     />
                     <ResponsiveImageColumn
-                        problemData={problemCategories[4]} // Image 5 (repeat)
+                        problemData={problemCategories[4]}
                         speed={-150}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                     />
                     <ResponsiveImageColumn
-                        problemData={problemCategories[5]} // Image 6 (repeat)
+                        problemData={problemCategories[5]}
                         speed={-250}
                         marginTop="mt-20 md:mt-40 lg:mt-60"
                     />
@@ -124,13 +123,12 @@ export default function ComplaintCategories() {
     );
 }
 
-// ResponsiveImageColumn component
 function ResponsiveImageColumn({ problemData, speed, marginTop = "", extraClasses = "" }) {
     return (
         <div className={`min-h-[200vh] sm:min-h-[300vh] lg:min-h-[400vh] w-full sm:w-auto ${extraClasses}`}>
             <div className={marginTop}>
                 <Parallax speed={speed}>
-                    <div className="h-[250px] w-full sm:h-[300px] sm:w-[200px] md:h-[350px] md:w-[250px] lg:h-[400px] lg:w-[300px] group relative mx-auto">
+                    <div className="h-[250px] w-full sm:h-[300px] sm:w-[200px] md:h-[350px] md:w-[250px] lg:h-[400px] lg:w-[300px] group relative mx-auto z-10">
                         <img
                             src={problemData.image}
                             alt={problemData.name}
