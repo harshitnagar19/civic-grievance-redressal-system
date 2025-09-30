@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Eye, MapPin, Clock, TrendingUp, CheckCircle, Users, Building2, BarChart3, Shield, Zap, ArrowRight, Sprout, GraduationCap, Droplets, Zap as Electric, Construction, Building, Award, Activity, Phone, Mail, MapPinned, Star, Calendar } from 'lucide-react';
 import * as THREE from 'three';
-
+import Header from "../Header/Header"
 const Hero = () => {
   const canvasRef = useRef(null);
   const [stats, setStats] = useState({ complaints: 0, resolved: 0, departments: 0 });
@@ -205,6 +205,8 @@ const Hero = () => {
   ];
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-x-hidden">
       {/* Hero Section */}
       <div className="relative min-h-screen overflow-hidden">
@@ -596,6 +598,7 @@ const Hero = () => {
         </div>
       </footer>
     </div>
+    </>
   )
 }
 
