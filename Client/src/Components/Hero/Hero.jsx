@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Eye, MapPin, Clock, TrendingUp, CheckCircle, Users, Building2, BarChart3, Shield, Zap, ArrowRight, Sprout, GraduationCap, Droplets, Zap as Electric, Construction, Building, Award, Activity, Phone, Mail, MapPinned, Star, Calendar } from 'lucide-react';
 import * as THREE from 'three';
-import { Link } from 'react-router-dom';
+import { Link,NavLink } from 'react-router-dom';
 import { routes } from '../../data/routes';
 
 const Hero = () => {
@@ -229,18 +229,18 @@ const Hero = () => {
             </div>
          
             <div className="flex gap-4">
-              <button className="px-6 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
+              <NavLink to={routes.userLogin} className="px-6 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
                 User Login
-              </button>
-              <button className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70">
+              </NavLink>
+              <NavLink to={routes.deptLogin} className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70">
                 Department Login
-              </button>
+              </NavLink>
             </div>
           </nav>
           <div className='container mx-auto md:px-24 py-6 flex items-center md:gap-10'>
               <Link
                 to={'/'}
-                className="text-[#212121]  transition-colors duration-200 md:font-medium px-2 py-1"
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-1"
               >
                 <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
                   Hero
@@ -248,7 +248,7 @@ const Hero = () => {
               </Link>
               <Link
                 to={routes.aboutUs}
-                className="text-[#212121]  transition-colors duration-200 md:font-medium px-2 py-2 "
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-2 "
               >
                 <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
                   About Us
@@ -256,7 +256,7 @@ const Hero = () => {
               </Link>
               <Link
                 to={routes.departmentWorks}
-                className="text-[#212121]  transition-colors duration-200 md:font-medium px-2 py-1 "
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-1 "
               >
                 <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
                   View Department Works
@@ -265,7 +265,7 @@ const Hero = () => {
               </Link>
               <Link
                 to={routes.departmentInfo}
-                className="text-[#212121]  transition-colors duration-200 md:font-medium px-2 py-1 "
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-1 "
               >
                 <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
                   View Department Info
@@ -274,7 +274,7 @@ const Hero = () => {
               </Link>
               <Link
                 to={routes.contactSupport}
-                className="text-[#212121]  transition-colors duration-200 md:font-medium px-2 py-1 "
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-1 "
               >
                 <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
                   Contact Support
