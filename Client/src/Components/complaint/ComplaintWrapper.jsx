@@ -4,16 +4,18 @@ import { ComplaintForm } from "./ComplaintForm"
 import { ComplaintValidations } from "../../validations/ComplaintValidations";
 export const ComplaintWrapper = () => {
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-        setSubmitting(false)
-        console.log(values)
-       
-    } catch (error) {
-        console.error(error)
-    } finally {
-        setSubmitting(false)
+        try {
+            setSubmitting(false)
+            console.log(values)
+
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setSubmitting(false)
+        }
     }
-}
+
+    
 
     const initialValues = {
         state: "",
