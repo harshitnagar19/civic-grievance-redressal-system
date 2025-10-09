@@ -39,7 +39,7 @@ export const DepartmentSignUpValidation = object({
         .min(2, "Minimun 2 characters required")
         .max(50, "Name can't be longer than 50 characters"),
 
-    departmentAddress: string()
+    deptAddress: string()
         .required("Department name is required")
         .min(2, "Minimun 2 characters required")
         .max(50, "Name can't be longer than 50 characters"),
