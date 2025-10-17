@@ -23,7 +23,7 @@ function DepartmentSignUpWrapper() {
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    // Gawli ki gandmasti sahi kr rha hunnn
+    
     const { district, departmentName, headOfDepartment, departmentShortName, ...restValues } = values;
     
     const apiPayload = {

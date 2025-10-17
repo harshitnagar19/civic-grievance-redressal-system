@@ -3,9 +3,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import bodyParser from "body-parser";
-import { v2 as cloudinary } from "cloudinary";
-import path from "path";
-import { fileURLToPath } from "url";
 
 const app = express();
 dotenv.config();
@@ -26,6 +23,10 @@ app.use("/complain",complainRoute);
 
 import refreshroute from "./Routes/refreshRoutes.js";
 app.use("/refresh",refreshroute);
+
+
+import areaRoute from "./Routes/areaRoutes.js";
+app.use("/area",areaRoute)
 
 
 const PORT = process.env.PORT;
