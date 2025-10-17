@@ -42,7 +42,7 @@ const router = createBrowserRouter(
       <Route path={`${routes.departmentInfo}/:param`} element={<><Header /><AllDistricts /><Footer/></>}></Route>
       <Route path={`${routes.departmentInfo}/:param/:district`} element={<><Header /><AllDepartment /><Footer/></>}></Route>
       <Route path={`${routes.departmentInfo}/:param/:district/:departmentName`} element={<><Header /><DepartmentInfo /><Footer/></>}></Route>
-      
+
       
       <Route path='' element={<OAuth><Layout /></OAuth>}>
         <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
