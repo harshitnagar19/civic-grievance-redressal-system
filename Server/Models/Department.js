@@ -17,7 +17,6 @@ const DepartmentSchema = new Schema({
   DepartmentShortName: {
     type: String,
     required: true,
-    enum: ["ELEC", "WATER", "ROAD", "EDU", "HEALTH", "ENV", "SEVAGE"],
    
   },
   HeadOfDepartment:{

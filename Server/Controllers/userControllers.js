@@ -288,5 +288,41 @@ userControllers.login = async (req, res) => {
   }
 };
 
+userControllers.refresh = async(req,res)=>{
+  try{
+    const {email , role} = req.user;
+    const response = await UserServices.getUserByEmail(email);
+    
+    if (response.status == "ERR") {
+      return res.status(500).send({
+        status: "ERR",
+        msg: "error at server in user login",
+        data: [],
+      });
+    }
+    if (response.status == "OK" && response.data.length == 0) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "user not register with enterd mail",
+        data: [],
+      });
+    }
+    if (response.status == "OK" && response.data.length > 0){
+        const userObj = response.data[0].toObject()
+        delete userObj.password
+        return res.status(200).send({
+          status:"OK",
+          msg:"user is valid",
+          data:[userObj]
+        })
+    }
+  }catch(err){
+    return res.status(500).send({
+      status:"ERR",
+      msg:"error in refresh at server",
+      data:[]
+    })
+  }
+}
 
 export default userControllers;

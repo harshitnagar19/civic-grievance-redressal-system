@@ -29,9 +29,36 @@ departmentControllers.signup = async (req, res) => {
       if (existingDepartment?.status == "ERR") {
         return res.status(500).send(existingDepartment);
       }
-      if (existingDepartment?.status == "OK") {
+
+      if (existingDepartment.data.length > 0) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "Department already registered with given email",
+        data: [],
+      });
+    }
+
+      const existingDepartmentLocation = await DepartmentServices.getDepartmentByStateAndDistrict(
+        value?.state,
+        value?.city,
+        value?.DepartmentShortName
+      )
+
+      if(existingDepartmentLocation?.status=="ERR"){
+        return res.status(500).send(existingDepartmentLocation)
+      }
+
+      if (existingDepartmentLocation.data.length > 0) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "Department already registered in given state and district",
+        data: [],
+      });
+    }
+
+      if (existingDepartment?.status == "OK" && existingDepartmentLocation?.status=="OK") {
         // department not found , means need to signup
-        if (existingDepartment.data.length == 0) {
+        if (existingDepartment.data.length == 0 && existingDepartmentLocation.data.length==0) {
           try {
             const hashedPassword = await hashPassword(value.password);
             value.password = hashedPassword;
@@ -77,7 +104,7 @@ departmentControllers.signup = async (req, res) => {
           // department founded means already register eith id
           return res.status(400).send({
             status: "ERR",
-            msg: "department already register with given email",
+            msg: "department already register with given email or in given state and district",
             data: [],
           });
         }
