@@ -1,27 +1,77 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import Select from "react-select";
 import logo2 from "../../assets/logo2.png";
-import { departmentData } from "../../data/departmentData/departmentData";
-import { stateData } from "../../data/departmentData/stateData";
-
+import axios from 'axios'
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 export const ComplaintForm = ({ formikProps }) => {
   const { values, setFieldValue, isSubmitting, handleBlur } = formikProps;
+  const [states, setStates] = useState([])
+  const [districts, setDistricts] = useState([])
+  const [department, setDepartment] = useState([])
+  const userEmail=useSelector((state)=>state.userData.email)
+  const notifyError = (err) => toast.error(err)
 
-  const departmentOptions = departmentData.map(dep => ({
-    value: dep.departmentName,
-    label: dep.departmentName,
-  }));
+  //state api call
+  useEffect(() => {
+    const getAllState = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BASEURL}/department/get-all-state-of-department`);
+        // console.log(response.data);
+        setStates(response.data.data)
+      }
+      catch (error) {
+        notifyError(error.msg)
+      }
+    }
+    getAllState();
+  }, [])
 
-  const stateOptions = Object.keys(stateData).map(s => ({
+  //district api call
+  useEffect(() => {
+    const getDistrict = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BASEURL}/department/get-all-districts-of-state?state=Madhya Pradesh`);
+        // console.log(response.data);
+        setDistricts(response.data.data)
+      }
+      catch (error) {
+        notifyError(error.msg)
+      }
+    }
+    getDistrict();
+  }, [states])
+  
+  //department api call
+  useEffect(() => {
+    const getDepartment = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BASEURL}/department/get-all-department-of-district?district=Dewas&state=Madhya Pradesh`);
+        console.log(response.data.data);
+        setDepartment(response.data.data)
+      }
+      catch (error) {
+        notifyError(error.msg)
+      }
+    }
+    getDepartment();
+  }, [districts])
+  
+  const stateOptions = states.map(s => ({
     value: s,
     label: s,
   }));
-
-  const districtOptions =
-    values.state && stateData[values.state]
-      ? stateData[values.state].map(d => ({ value: d, label: d }))
-      : [];
+  
+  const districtOptions = districts.map((d)=>({
+    value:d,
+    label:d,
+  }));
+  
+  const departmentOptions = department.map(dep => ({
+    value: dep,
+    label: dep,
+  }));
 
   const priorityOptions = [
     { value: "1", label: "High" },
@@ -54,8 +104,9 @@ export const ComplaintForm = ({ formikProps }) => {
               <Field
                 type="email"
                 name="userEmail"
-                placeholder="Enter your email"
-                value={values.userEmail}
+                disabled
+                placeholder={userEmail}
+                value={userEmail}
                 onChange={(e) => setFieldValue("userEmail", e.target.value)}
                 className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 onBlur={handleBlur}
@@ -88,19 +139,6 @@ export const ComplaintForm = ({ formikProps }) => {
               <ErrorMessage name="description" component="div" className="text-red-500 text-sm mt-1" />
             </div>
 
-            {/* Department */}
-            <div className="mb-5">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Department</label>
-              <Select
-                options={departmentOptions}
-                value={departmentOptions.find(opt => opt.value === values.department)}
-                onChange={(selected) => setFieldValue("department", selected.value)}
-                placeholder="Select Department"
-                className="w-full"
-              />
-              <ErrorMessage name="department" component="div" className="text-red-500 text-sm mt-1" />
-            </div>
-
             {/* State & District */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
               <div>
@@ -119,6 +157,7 @@ export const ComplaintForm = ({ formikProps }) => {
                 />
                 <ErrorMessage name="state" component="div" className="text-red-500 text-sm mt-1" />
               </div>
+
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">District</label>
                 <Select
@@ -134,6 +173,20 @@ export const ComplaintForm = ({ formikProps }) => {
                 />
                 <ErrorMessage name="district" component="div" className="text-red-500 text-sm mt-1" />
               </div>
+            </div>
+
+            {/* Department */}
+            <div className="mb-5">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Department</label>
+              <Select
+                options={departmentOptions}
+                value={departmentOptions.find(opt => opt.value === values.department)}
+                onChange={(selected) => setFieldValue("department", selected.value)}
+                placeholder="Select Department"
+                isDisabled={!values.district}
+                className="w-full"
+              />
+              <ErrorMessage name="department" component="div" className="text-red-500 text-sm mt-1" />
             </div>
 
             {/* Location fields */}

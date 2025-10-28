@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Eye, MapPin, Clock, TrendingUp, CheckCircle, Users, Building2, BarChart3, Shield, Zap, ArrowRight, Sprout, GraduationCap, Droplets, Zap as Electric, Construction, Building, Award, Activity, Phone, Mail, MapPinned, Star, Calendar } from 'lucide-react';
 import * as THREE from 'three';
+import { Link,NavLink } from 'react-router-dom';
+import { routes } from '../../data/routes';
 
 const Hero = () => {
   const canvasRef = useRef(null);
@@ -13,7 +15,7 @@ const Hero = () => {
     const duration = 2000;
     const steps = 60;
     const interval = duration / steps;
-    
+
     let step = 0;
     const timer = setInterval(() => {
       step++;
@@ -31,7 +33,7 @@ const Hero = () => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    
+
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     camera.position.z = 5;
 
@@ -41,11 +43,11 @@ const Hero = () => {
     const posArray = new Float32Array(particlesCount * 3);
     const colors = new Float32Array(particlesCount * 3);
 
-    for(let i = 0; i < particlesCount * 3; i += 3) {
+    for (let i = 0; i < particlesCount * 3; i += 3) {
       posArray[i] = (Math.random() - 0.5) * 10;
       posArray[i + 1] = (Math.random() - 0.5) * 10;
       posArray[i + 2] = (Math.random() - 0.5) * 10;
-      
+
       const colorChoice = Math.random();
       if (colorChoice < 0.33) {
         colors[i] = 0.4; colors[i + 1] = 0.7; colors[i + 2] = 1;
@@ -74,12 +76,12 @@ const Hero = () => {
     let animationId;
     const animate = () => {
       animationId = requestAnimationFrame(animate);
-      
+
       particlesMesh.rotation.y += 0.001;
       particlesMesh.rotation.x += 0.0005;
 
       const positions = particlesGeometry.attributes.position.array;
-      for(let i = 0; i < positions.length; i += 3) {
+      for (let i = 0; i < positions.length; i += 3) {
         positions[i + 1] += Math.sin(Date.now() * 0.001 + i) * 0.002;
       }
       particlesGeometry.attributes.position.needsUpdate = true;
@@ -208,8 +210,8 @@ const Hero = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-x-hidden">
       {/* Hero Section */}
       <div className="relative min-h-screen overflow-hidden">
-        <canvas 
-          ref={canvasRef} 
+        <canvas
+          ref={canvasRef}
           className="absolute inset-0 w-full h-full"
           style={{ opacity: 0.4 }}
         />
@@ -225,15 +227,62 @@ const Hero = () => {
                 Civic Eye
               </span>
             </div>
+         
             <div className="flex gap-4">
-              <button className="px-6 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
+              <NavLink to={routes.userLogin} className="px-6 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
                 User Login
-              </button>
-              <button className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70">
+              </NavLink>
+              <NavLink to={routes.deptLogin} className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70">
                 Department Login
-              </button>
+              </NavLink>
             </div>
           </nav>
+          <div className='container mx-auto md:px-24 py-6 flex items-center md:gap-10'>
+              <Link
+                to={'/'}
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-1"
+              >
+                <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
+                  Hero
+                </button>
+              </Link>
+              <Link
+                to={routes.aboutUs}
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-2 "
+              >
+                <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
+                  About Us
+                </button>
+              </Link>
+              <Link
+                to={routes.departmentWorks}
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-1 "
+              >
+                <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
+                  View Department Works
+                </button>
+
+              </Link>
+              <Link
+                to={routes.departmentInfo}
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-1 "
+              >
+                <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
+                  View Department Info
+                </button>
+
+              </Link>
+              <Link
+                to={routes.contactSupport}
+                className="text-[#ffff]  transition-colors duration-200 md:font-medium px-2 py-1 "
+              >
+                <button className="px-2 py-3 md:px-6 md:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40">
+                  Contact Support
+                </button>
+
+              </Link>
+          </div>
+
 
           <div className="container mx-auto px-6 pt-20 pb-12">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -252,8 +301,8 @@ const Hero = () => {
                 </h1>
 
                 <p className="text-xl text-gray-300 leading-relaxed">
-                  Report civic issues instantly. Track progress in real-time. 
-                  Experience transparent governance with automated complaint routing, 
+                  Report civic issues instantly. Track progress in real-time.
+                  Experience transparent governance with automated complaint routing,
                   time-bound resolutions, and comprehensive insights for authorities.
                 </p>
 
@@ -303,23 +352,21 @@ const Hero = () => {
                     <TrendingUp className="w-5 h-5 text-blue-400" />
                     How It Works
                   </h3>
-                  
+
                   <div className="space-y-4">
                     {flows.map((flow, i) => {
                       const Icon = flow.icon;
                       const isActive = activeFlow === i;
                       return (
-                        <div 
+                        <div
                           key={i}
-                          className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-500 ${
-                            isActive 
-                              ? 'bg-gradient-to-r ' + flow.color + ' shadow-lg scale-105' 
-                              : 'bg-white/5'
-                          }`}
+                          className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-500 ${isActive
+                            ? 'bg-gradient-to-r ' + flow.color + ' shadow-lg scale-105'
+                            : 'bg-white/5'
+                            }`}
                         >
-                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 ${
-                            isActive ? 'bg-white/20' : 'bg-white/10'
-                          }`}>
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 ${isActive ? 'bg-white/20' : 'bg-white/10'
+                            }`}>
                             <Icon className="w-6 h-6" />
                           </div>
                           <div>
@@ -343,7 +390,7 @@ const Hero = () => {
                     <span className="text-2xl font-bold text-green-400">89.6%</span>
                   </div>
                   <div className="w-full bg-white/10 rounded-full h-2">
-                    <div 
+                    <div
                       className="bg-gradient-to-r from-green-400 to-emerald-500 h-2 rounded-full transition-all duration-1000"
                       style={{ width: '89.6%' }}
                     />
@@ -372,11 +419,10 @@ const Hero = () => {
               const Icon = dept.icon;
               const isActive = activeDept === i;
               return (
-                <div 
+                <div
                   key={i}
-                  className={`p-6 bg-white/5 backdrop-blur-sm rounded-2xl border transition-all duration-500 hover:scale-105 ${
-                    isActive ? 'border-' + dept.color + '-400 shadow-lg shadow-' + dept.color + '-500/30' : 'border-white/10'
-                  }`}
+                  className={`p-6 bg-white/5 backdrop-blur-sm rounded-2xl border transition-all duration-500 hover:scale-105 ${isActive ? 'border-' + dept.color + '-400 shadow-lg shadow-' + dept.color + '-500/30' : 'border-white/10'
+                    }`}
                 >
                   <div className={`w-16 h-16 bg-gradient-to-br from-${dept.color}-500 to-${dept.color}-600 rounded-xl flex items-center justify-center mb-4`}>
                     <Icon className="w-8 h-8" />
@@ -393,7 +439,7 @@ const Hero = () => {
                     </div>
                   </div>
                   <div className="w-full bg-white/10 rounded-full h-2">
-                    <div 
+                    <div
                       className={`bg-gradient-to-r from-${dept.color}-400 to-${dept.color}-500 h-2 rounded-full`}
                       style={{ width: `${(parseInt(dept.resolved) / parseInt(dept.count)) * 100}%` }}
                     />
@@ -419,7 +465,7 @@ const Hero = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {solvedCases.map((item, i) => (
-              <div 
+              <div
                 key={i}
                 className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden hover:border-green-400/50 transition-all duration-300 hover:scale-105"
               >
@@ -429,13 +475,13 @@ const Hero = () => {
                     <ArrowRight className="w-6 h-6 text-gray-400" />
                     <div className="text-4xl">{item.after}</div>
                   </div>
-                  
+
                   <h3 className="text-lg font-bold mb-2">{item.title}</h3>
                   <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
                     <MapPin className="w-4 h-4" />
                     <span>{item.location}</span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-1">
                       <Clock className="w-4 h-4 text-green-400" />
@@ -446,7 +492,7 @@ const Hero = () => {
                       <span className="text-sm font-semibold">{item.rating}</span>
                     </div>
                   </div>
-                  
+
                   <div className="px-3 py-1 bg-purple-500/20 border border-purple-400/30 rounded-full text-xs text-purple-300">
                     {item.dept}
                   </div>
@@ -477,7 +523,7 @@ const Hero = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {states.map((state, i) => (
-              <div 
+              <div
                 key={i}
                 className="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:border-blue-400/50 transition-all duration-300 hover:scale-105"
               >
@@ -514,7 +560,7 @@ const Hero = () => {
             {features.map((feature, i) => {
               const Icon = feature.icon;
               return (
-                <div 
+                <div
                   key={i}
                   className="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-purple-400/50 transition-all duration-300 hover:scale-105 text-center"
                 >
@@ -535,7 +581,7 @@ const Hero = () => {
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-5xl font-bold mb-6">Ready to Make a Difference?</h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of citizens using Civic Eye to improve their communities. 
+            Join thousands of citizens using Civic Eye to improve their communities.
             Your voice matters, and we're here to make sure it's heard.
           </p>
           <div className="flex gap-4 justify-center">
