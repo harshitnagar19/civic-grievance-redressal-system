@@ -113,11 +113,11 @@ DepartmentServices.getAllDepartmentInDisrtict = async ({state , district}) =>{
       data:response
     }
   }catch(err){
-    return {
-      status: "ERR",
-      msg: err.message,
-      data: [],
-    };
+      return {
+        status: "ERR",
+        msg: err.message,
+        data: [],
+      };
   }
 }
 
@@ -137,5 +137,22 @@ DepartmentServices.getDepartmentInfo = async ({state,district,departmentName})=>
     };
   }
 }
+
+DepartmentServices.getDepartmentByStateAndDistrict = async (state, district , DepartmentShortName ,isVerified) => {
+  try {
+    const response = await Department.find({ state, city: district, DepartmentShortName , isVerified: true });
+    return {
+      status: "OK",
+      msg: "sucessfully get all departments in district",
+      data: response
+    };
+  } catch (err) {
+    return {
+      status: "ERR",
+      msg: err.message,
+      data: [],
+    };
+  }
+};
 
 export default DepartmentServices;
