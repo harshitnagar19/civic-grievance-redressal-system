@@ -262,6 +262,7 @@ departmentControllers.getAllDepartmentOfDistrict = async (req,res)=>{
         data: [],
       });
     }
+    console.log("hello")
     const department = await DepartmentServices.getAllDepartmentInDisrtict({state ,district})
     if(department.status=="ERR"){
       res.status(500).send(department);
