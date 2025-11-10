@@ -20,11 +20,11 @@ AreaServices.getAreaByStateAndDistrict = async (state, district) => {
 }
 AreaServices.getDistinctTypesWithWardStatus = async () => {
   try {
-    const types = await Area.distinct("type");
+    const types = await Areas.distinct("type");
 
     const result = await Promise.all(
       types.map(async (type) => {
-        const hasWard = await Area.exists({
+        const hasWard = await Areas.exists({
           type,
           wardNumber: { $ne: null },
         });
