@@ -1,6 +1,23 @@
-import Area from "../Models/Area.js";
+import Areas from "../Models/Areas.js";
 
-const AreaServices = {}
+const AreaServices = {};
+
+AreaServices.getAreaByStateAndDistrict = async (state, district) => {
+  try {
+    const response = await Areas.find({ state, district, isActive: true });
+    return {
+        status: "OK",
+        msg : "Successfully get all areas in district",
+        data: response
+    };
+  } catch (err) {
+     return {
+      status: "ERR",
+      msg: err.message,
+      data: [],
+    };
+  }
+}
 AreaServices.getDistinctTypesWithWardStatus = async () => {
   try {
     const types = await Area.distinct("type");
@@ -24,3 +41,4 @@ AreaServices.getDistinctTypesWithWardStatus = async () => {
 };
 
 export default AreaServices;
+
