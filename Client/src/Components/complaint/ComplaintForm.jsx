@@ -2,90 +2,82 @@ import React, { useEffect, useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import Select from "react-select";
 import logo2 from "../../assets/logo2.png";
-import axios from "axios";
+import axios from 'axios'
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-
 export const ComplaintForm = ({ formikProps }) => {
   const { values, setFieldValue, isSubmitting, handleBlur } = formikProps;
-  const [states, setStates] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [areaType, setAreaType] = useState([]);
-  const [isWardExist, setIsWardExist] = useState(false);
-  const userEmail = useSelector((state) => state.userData.email);
-  const notifyError = (err) => toast.error(err);
+  const [states, setStates] = useState([])
+  const [districts, setDistricts] = useState([])
+  const [department, setDepartment] = useState([])
+  const userEmail=useSelector((state)=>state.userData.email)
+  const notifyError = (err) => toast.error(err)
 
-  // Fetch all states
+  //state api call
   useEffect(() => {
     const getAllState = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BASEURL}/department/get-all-state-of-department`
-        );
-        setStates(res.data.data);
-      } catch (error) {
-        notifyError(error.response?.data?.msg || "Failed to fetch states");
+        const response = await axios.get(`${import.meta.env.VITE_BASEURL}/department/get-all-state-of-department`);
+        // console.log(response.data);
+        setStates(response.data.data)
       }
-    };
+      catch (error) {
+        notifyError(error.msg)
+      }
+    }
     getAllState();
-  }, []);
+  }, [])
 
-  // Fetch districts
+  //district api call
   useEffect(() => {
-    if (!states.length) return;
     const getDistrict = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BASEURL}/department/get-all-districts-of-state?state=Madhya Pradesh`
-        );
-        setDistricts(res.data.data);
-      } catch (error) {
-        notifyError(error.response?.data?.msg || "Failed to fetch districts");
+        const response = await axios.get(`${import.meta.env.VITE_BASEURL}/department/get-all-districts-of-state?state=Madhya Pradesh`);
+        // console.log(response.data);
+        setDistricts(response.data.data)
       }
-    };
+      catch (error) {
+        notifyError(error.msg)
+      }
+    }
     getDistrict();
-  }, [states]);
-
-  // Fetch departments
+  }, [states])
+  
+  //department api call
   useEffect(() => {
-    if (!districts.length) return;
     const getDepartment = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BASEURL}/department/get-all-department-of-district?district=Dewas&state=Madhya Pradesh`
-        );
-        setDepartment(res.data.data);
-      } catch (error) {
-        notifyError(error.response?.data?.msg || "Failed to fetch departments");
+        const response = await axios.get(`${import.meta.env.VITE_BASEURL}/department/get-all-department-of-district?district=Dewas&state=Madhya Pradesh`);
+        console.log(response.data.data);
+        setDepartment(response.data.data)
       }
-    };
+      catch (error) {
+        notifyError(error.msg)
+      }
+    }
     getDepartment();
-  }, [districts]);
+  }, [districts])
+  
+  const stateOptions = states.map(s => ({
+    value: s,
+    label: s,
+  }));
+  
+  const districtOptions = districts.map((d)=>({
+    value:d,
+    label:d,
+  }));
+  
+  const departmentOptions = department.map(dep => ({
+    value: dep,
+    label: dep,
+  }));
 
-  // Fetch area types
-  useEffect(() => {
-    const getArea = async () => {
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_BASEURL}/area/types`);
-        setAreaType(res.data.data);
-      } catch (error) {
-        notifyError(error.response?.data?.msg || "Failed to fetch area types");
-      }
-    };
-    getArea();
-  }, []);
-
-  // Ward existence logic
-  useEffect(() => {
-    const selected = areaType.find((a) => a.type === values.location?.type);
-    setIsWardExist(selected?.isWardExists ?? false);
-  }, [values.location?.type, areaType]);
-
-  const stateOptions = states.map((s) => ({ value: s, label: s }));
-  const districtOptions = districts.map((d) => ({ value: d, label: d }));
-  const departmentOptions = department.map((dep) => ({ value: dep, label: dep }));
-  const areaTypeOptions = areaType.map((a) => ({ value: a.type, label: a.type }));
+  const priorityOptions = [
+    { value: "1", label: "High" },
+    { value: "2", label: "Medium" },
+    { value: "3", label: "Low" },
+  ];
 
   return (
     <div
@@ -112,8 +104,10 @@ export const ComplaintForm = ({ formikProps }) => {
               <Field
                 type="email"
                 name="userEmail"
-                readOnly
+                disabled
+                placeholder={userEmail}
                 value={userEmail}
+                onChange={(e) => setFieldValue("userEmail", e.target.value)}
                 className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 onBlur={handleBlur}
               />
@@ -151,7 +145,7 @@ export const ComplaintForm = ({ formikProps }) => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">State</label>
                 <Select
                   options={stateOptions}
-                  value={stateOptions.find((opt) => opt.value === values.state)}
+                  value={stateOptions.find(opt => opt.value === values.state)}
                   onChange={(selected) => {
                     setFieldValue("state", selected.value);
                     setFieldValue("district", "");
@@ -159,21 +153,25 @@ export const ComplaintForm = ({ formikProps }) => {
                     setFieldValue("location.district", "");
                   }}
                   placeholder="Select State"
+                  className="w-full"
                 />
+                <ErrorMessage name="state" component="div" className="text-red-500 text-sm mt-1" />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">District</label>
                 <Select
                   options={districtOptions}
-                  value={districtOptions.find((opt) => opt.value === values.district)}
+                  value={districtOptions.find(opt => opt.value === values.district)}
                   onChange={(selected) => {
                     setFieldValue("district", selected.value);
                     setFieldValue("location.district", selected.value);
                   }}
                   placeholder="Select District"
                   isDisabled={!values.state}
+                  className="w-full"
                 />
+                <ErrorMessage name="district" component="div" className="text-red-500 text-sm mt-1" />
               </div>
             </div>
 
@@ -182,104 +180,101 @@ export const ComplaintForm = ({ formikProps }) => {
               <label className="block text-sm font-semibold text-gray-700 mb-2">Department</label>
               <Select
                 options={departmentOptions}
-                value={departmentOptions.find((opt) => opt.value === values.department)}
+                value={departmentOptions.find(opt => opt.value === values.department)}
                 onChange={(selected) => setFieldValue("department", selected.value)}
                 placeholder="Select Department"
                 isDisabled={!values.district}
+                className="w-full"
               />
+              <ErrorMessage name="department" component="div" className="text-red-500 text-sm mt-1" />
             </div>
 
-            {/* Location */}
+            {/* Location fields */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
-                <Select
-                  options={areaTypeOptions}
-                  value={areaTypeOptions.find((opt) => opt.value === values.location?.type)}
-                  onChange={(selected) => setFieldValue("location.type", selected.value)}
-                  placeholder="Select area type"
+                <Field
+                  type="text"
+                  name="location.type"
+                  placeholder="Type"
+                  value={values.location.type}
+                  onChange={(e) => setFieldValue("location.type", e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Ward Number</label>
                 <Field
-                  disabled={!isWardExist}
                   type="number"
                   name="location.wardNumber"
                   placeholder="Ward Number"
-                  value={values.location?.wardNumber || ""}
+                  value={values.location.wardNumber}
                   onChange={(e) => setFieldValue("location.wardNumber", e.target.value)}
-                  className={`w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition ${isWardExist ? "" : "cursor-not-allowed opacity-50"}`}
+                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Area Name</label>
                 <Field
                   type="text"
                   name="location.areaName"
                   placeholder="Area Name"
-                  value={values.location?.areaName || ""}
+                  value={values.location.areaName}
                   onChange={(e) => setFieldValue("location.areaName", e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition"
                 />
               </div>
             </div>
 
+            {/* Priority */}
+            <div className="mb-5">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Priority</label>
+              <Select
+                options={priorityOptions}
+                value={priorityOptions.find(opt => opt.value === values.priority)}
+                onChange={(selected) => setFieldValue("priority", selected.value)}
+                placeholder="Select Priority"
+                className="w-full"
+              />
+              <ErrorMessage name="priority" component="div" className="text-red-500 text-sm mt-1" />
+            </div>
+
+            {/* Status */}
+            <div className="mb-5">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+              <Field
+                type="text"
+                name="status"
+                placeholder="Status"
+                value={values.status}
+                onChange={(e) => setFieldValue("status", e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition"
+              />
+              <ErrorMessage name="status" component="div" className="text-red-500 text-sm mt-1" />
+            </div>
+
             {/* Image Upload */}
             <div className="mb-8">
               <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Image</label>
-              <div className="relative">
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="image-upload"
-                  onChange={e => {
-                    if (e.target.files[0]) {
-                      setFieldValue("image.file", e.target.files[0]);
-                      setFieldValue("image.url", URL.createObjectURL(e.target.files[0]));
-                    }
-                  }}
-                  className="hidden"
-                />
-                <label
-                  htmlFor="image-upload"
-                  className="flex items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition duration-200"
-                >
-                  <div className="text-center">
-                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <p className="mt-2 text-sm text-gray-600">
-                      <span className="font-semibold text-blue-600">Click to upload</span> or drag and drop
-                    </p>
-                  </div>
-                </label>
-                {values.image?.url && (
-                  <div className="mt-4 relative">
-                    <img src={values.image.url} alt="Preview" className="w-full h-48 object-cover rounded-xl border border-gray-300" />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setFieldValue("image.file", null);
-                        setFieldValue("image.url", "");
-                      }}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                )}
-              </div>
-              <ErrorMessage name="image.file" component="div" className="text-red-500 text-sm mt-1" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files[0]) {
+                    setFieldValue("image.url", URL.createObjectURL(e.target.files[0]));
+                  }
+                }}
+                className="w-full p-3 border border-gray-300 rounded-xl text-sm file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:bg-blue-50 file:text-blue-700 file:font-semibold hover:file:bg-blue-100 transition"
+              />
+              <ErrorMessage name="image.url" component="div" className="text-red-500 text-sm mt-1" />
             </div>
 
             {/* Submit */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full py-4 text-white font-bold text-lg rounded-xl focus:ring-4 focus:ring-blue-300 transition duration-200 shadow-lg ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
+              className={`w-full py-4 text-white font-bold text-lg rounded-xl focus:ring-4 focus:ring-blue-300 transition duration-200 shadow-lg
+                ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
             >
               {isSubmitting ? "Submitting..." : "Submit Complaint"}
             </button>
