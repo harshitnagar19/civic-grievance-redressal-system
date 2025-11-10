@@ -92,3 +92,4 @@ export const departmentLoginValidationSchema = Joi.object({
     "any.required": "Password is required",
   }),
 }).required();
+

@@ -42,7 +42,7 @@ const ComplainSchema = new Schema({
     },
     location: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Areas",
+        ref: "Area",
         required: true,
     },
 },{
