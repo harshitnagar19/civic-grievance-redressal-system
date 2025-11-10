@@ -11,5 +11,9 @@ complainRoute.get("/get-all-complain",verifyToken,complainController.getAllCompl
 // post
 complainRoute.post("/add",verifyToken,complainController.add);
 complainRoute.post("/get-complain-by-department",verifyToken,complainController.getComplainByDepartment);
-
+complainRoute.post(
+  "/get-complain-by-user",
+  verifyToken,
+  complainController.getComplainByUserID
+);
 export default complainRoute;
