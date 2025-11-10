@@ -3,11 +3,14 @@ import { Formik, Form } from "formik";
 import axios from "axios";
 import { ComplaintForm } from "./ComplaintForm";
 import { ComplaintValidations } from "../../validations/ComplaintValidations";
+import { toast } from "react-toastify";
 
 const CLOUD_NAME = "dvvae8cxm";
 const UPLOAD_PRESET = "unsigned_upload";
 
 export const ComplaintWrapper = () => {
+  const token=localStorage.getItem("token");
+  //Image upload handling
   const handleUpload = async (file) => {
     if (!file) return null;
     const formData = new FormData();
@@ -19,9 +22,14 @@ export const ComplaintWrapper = () => {
         `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
         formData
       );
-      return res.data.secure_url;
+
+      return {
+        url: res.data.secure_url,
+        public_id: res.data.public_id,
+      };
     } catch (error) {
       console.error("Cloudinary upload failed:", error);
+      toast.error("Image upload failed. Please try again.");
       return null;
     }
   };
@@ -31,7 +39,7 @@ export const ComplaintWrapper = () => {
     district: "",
     location: {
       type: "",
-      wardNumber: "",
+      wardNumber: null,
       areaName: "",
       district: "",
       state: "",
@@ -40,20 +48,38 @@ export const ComplaintWrapper = () => {
     userEmail: "",
     title: "",
     description: "",
-    image: { file: null, url: "" },
+    image: {
+      url: "",
+      public_id: "",
+    },
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    console.log("values: " ,values);
+    
     try {
-      let uploadedUrl = values.image?.url;
+      // Upload image if file exists
       if (values.image?.file) {
-        uploadedUrl = await handleUpload(values.image.file);
-        values.image.url = uploadedUrl;
+        const uploaded = await handleUpload(values.image.file);
+        if (uploaded) {
+          values.image.url = uploaded.url;
+          values.image.public_id = uploaded.public_id;
+        }
+        delete values.image.file; // remove file object from data
       }
 
-      console.log("Final submitted data:", values);
-        } catch (error) {
-      console.error(error);
+      // Send complaint data to your backend
+      
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASEURL}/complain/add`,
+        values,{ headers: { token: token } }
+      );
+      
+      toast.success("Complaint submitted successfully!");
+      console.log("Complaint saved:", res.data);
+    } catch (error) {
+      toast.error("Failed to submit complaint");
+      console.error("Error while submitting complaint:", error);
     } finally {
       setSubmitting(false);
       resetForm();

@@ -8,4 +8,7 @@ export const routes = {
     deptLogin:'/dept-login',
     departmentInfo:'/department-state',
     raiseComplaint:'/raise-complaint',
+    seeComplaints:'/all-complaint',
+    userComplaint:"/user-complaint",
+    deptComplaint:"/dept-complaint"
 };

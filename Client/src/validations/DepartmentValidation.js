@@ -42,7 +42,7 @@ export const DepartmentSignUpValidation = object({
     deptAddress: string()
         .required("Department name is required")
         .min(2, "Minimun 2 characters required")
-        .max(50, "Name can't be longer than 50 characters"),
+        .max(100, "Address can't be longer than 100 characters"),
 
 });
 export const DepartmentLoginValidation= object({
