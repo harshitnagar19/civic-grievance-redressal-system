@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../data/routes";
 
 function DepartmentSignUpWrapper() {
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const initialValues = {
     departmentName: "",
     headOfDepartment: "",
@@ -21,18 +21,22 @@ function DepartmentSignUpWrapper() {
     deptAddress: "",
     district: "",
   };
-
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    
-    const { district, departmentName, headOfDepartment, departmentShortName, ...restValues } = values;
-    
     const apiPayload = {
-      DepartmentName:departmentName,
-      DepartmentShortName: departmentShortName,
-      HeadOfDepartment: headOfDepartment,
-      ...restValues 
+      DepartmentName: values.departmentName,
+      DepartmentShortName: values.departmentShortName,
+      HeadOfDepartment: values.headOfDepartment,
+      email: values.email,
+      password: values.password,
+      mobileNumber: values.mobileNumber,
+      city: values.city,
+      state: values.state,
+      district: values.district,
+      deptAddress: values.deptAddress,
     };
-    console.log(apiPayload)
+
+    console.log(apiPayload);
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASEURL}/department/signup`,
@@ -40,10 +44,10 @@ function DepartmentSignUpWrapper() {
       );
       toast.success("Department registered successfully!");
       resetForm();
-      navigate(routes.deptLogin)
+      navigate(routes.deptLogin);
     } catch (error) {
       console.error(error);
-      toast.error(error.response.data.msg)
+      toast.error(error.response?.data?.msg || "Something went wrong");
     } finally {
       setSubmitting(false);
     }
