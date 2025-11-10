@@ -151,75 +151,143 @@ complainController.getAllComplain = async (req, res) => {
     }
 };
 
-// complainController.getComplainByDepartment = async (req, res) => {
-//   try {
-//     // 1️⃣ Validate request body
-//     const { error } = ComplainValidationGetDataSchema.validate(req.body);
-//     if (error) {
-//       return res.status(400).send({
-//         status: "ERR",
-//         msg: error.details[0].message,
-//         data: [],
-//       });
-//     }
+complainController.getComplainByDepartment = async (req, res) => {
+  
+  try {
+    // 1️⃣ Validate request body
+    const { error } = ComplainValidationGetDataSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.details[0].message,
+        data: [],
+      });
+    }
 
-//     const { departmentName , state , district } = req.body;
+    const { departmentName , state , district } = req.body;
 
-//     // 2️⃣ Find department by name
-//     const dept = await Department.findOne({ 
-//       DepartmentName: departmentName,
-//       state,
-//       city:district
-//      });
-//     if (!dept) {
-//       return res.status(400).send({
-//         status: "ERR",
-//         msg: "Department not found",
-//         data: [],
-//       });
-//     }
+    // 2️⃣ Find department by name
+    const dept = await Department.findOne({ 
+      DepartmentName: departmentName,
+      state,
+      city:district
+     });
+    if (!dept) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "Department not found",
+        data: [],
+      });
+    }
 
-//     // 3️⃣ Fetch all complaints for this department
-//     const complains = await Complain.find({ departmentId: dept._id })
-//       .populate({
-//         path: "userId",
-//         select: "userName email mobileNumber -_id",
-//       })
-//       .populate({
-//         path: "departmentId",
-//         select: "departmentName state district -_id",
-//       })
-//       .populate({
-//         path: "location",
-//         select: "areaName wardNumber district state type -_id",
-//       })
-//       .sort({ createdAt: -1 });
+    // 3️⃣ Fetch all complaints for this department
+    const complains = await Complain.find({ departmentId: dept._id })
+      .populate({
+        path: "userId",
+        select: "userName email mobileNumber -_id",
+      })
+      .populate({
+        path: "departmentId",
+        select: "departmentName state district -_id",
+      })
+      .populate({
+        path: "location",
+        select: "areaName wardNumber district state type -_id",
+      })
+      .sort({ createdAt: -1 });
 
-//     // 4️⃣ No complaints found
-//     if (!complains.length) {
-//       return res.status(200).send({
-//         status: "OK",
-//         msg: `No complaints found for department '${departmentName}'`,
-//         data: [],
-//       });
-//     }
+    // 4️⃣ No complaints found
+    if (!complains.length) {
+      return res.status(200).send({
+        status: "OK",
+        msg: `No complaints found for department '${departmentName}'`,
+        data: [],
+      });
+    }
 
-//     // 5️⃣ Return success response
-//     return res.status(200).send({
-//       status: "OK",
-//       msg: `Complaints fetched successfully for department '${departmentName}'`,
-//       count: complains.length,
-//       data: complains,
-//     });
-//   } catch (err) {
-//     console.error("Error fetching complaints by department:", err);
-//     return res.status(500).send({
-//       status: "ERR",
-//       msg: "Server error while fetching complaints by department",
-//       error: err.message,
-//     });
-//   }
-// };
+    // 5️⃣ Return success response
+    return res.status(200).send({
+      status: "OK",
+      msg: `Complaints fetched successfully for department '${departmentName}'`,
+      count: complains.length,
+      data: complains,
+    });
+  } catch (err) {
+    console.error("Error fetching complaints by department:", err);
+    return res.status(500).send({
+      status: "ERR",
+      msg: "Server error while fetching complaints by department",
+      error: err.message,
+    });
+  }
+};
+
+complainController.getComplainByUserID = async (req, res) => {
+  try {
+    
+    const userEmail = req.user?.email; // ✅ From verified JWT
+    const { filter } = req.body;
+
+    if (!userEmail) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "User not found in token",
+        data: [],
+      });
+    }
+
+    // 2️⃣ Build query
+    const user = await User.findOne({email:userEmail})
+    const userId = user._id;
+    const query = { userId };
+    if (filter && ["Pending", "Solved", "Rejected"].includes(filter)) {
+      query.status = filter;
+    }
+
+    // 3️⃣ Fetch complaints
+    console.log(query)
+    const complains = await Complain.find(query)
+      .populate({
+        path: "departmentId",
+        select: "departmentName state district -_id",
+      })
+      .populate({
+        path: "location",
+        select: "areaName wardNumber district state type -_id",
+      })
+      .sort({ createdAt: -1 });
+
+    // 4️⃣ No results
+    if (!complains.length) {
+      return res.status(200).send({
+        status: "OK",
+        msg:
+          filter && filter.trim() !== ""
+            ? `No complaints found with status '${filter}'`
+            : `No complaints found for this user`,
+        data: [],
+      });
+    }
+
+    // 5️⃣ Success
+    return res.status(200).send({
+      status: "OK",
+      msg:
+        filter && filter.trim() !== ""
+          ? `Complaints fetched successfully with status '${filter}'`
+          : `All complaints fetched successfully`,
+      count: complains.length,
+      data: complains,
+    });
+  } catch (err) {
+    console.error("Error fetching complaints by user ID:", err);
+    return res.status(500).send({
+      status: "ERR",
+      msg: "Server error while fetching complaints",
+      error: err.message,
+    });
+  }
+};
 
 
 export default complainController;
