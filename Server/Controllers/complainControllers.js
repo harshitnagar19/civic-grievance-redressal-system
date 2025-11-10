@@ -1,9 +1,224 @@
 import express from "express";
+import mongoose from "mongoose";
 
+
+import Complain from "../Models/Complain.js";
+import Area from "../Models/Area.js";
+import User from "../Models/User.js";
+import Department from "../Models/Department.js"; // Assuming this exists
+import {ComplainValidationGetDataSchema ,ComplainValidationAddSchema} from "../Validations/ComplainValidation.js"
 const complainController = {};
 
-complainController.add = async (req,res)=>{
-    
-}
+// ✅ Validation schema using Joi
+
+
+// ✅ Controller to add a new complaint
+complainController.add = async (req, res) => {
+  try {
+    // 1️⃣ Validate request body
+    const { error } = ComplainValidationAddSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send(
+        { status:"ERR",
+          msg: error.details[0].message,
+          data:[]
+        });
+    }
+
+    const { state, district, location, department, userEmail, title, description, image } = req.body;
+
+    // 2️⃣ Find user by email
+    const user = await User.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(400).send({ 
+            status:"ERR",
+            msg: "User Not Found",
+            data:[]
+          });
+    }
+
+    // 3️⃣ Find or verify the area
+    const area = await Area.findOne({
+      areaName: location.areaName,
+      district: location.district,
+      state: location.state,
+      wardNumber: location.wardNumber ?? null,
+    });
+
+    if (!area) {
+      return res.status(400).send({ 
+        status:"ERR",
+        msg: "Area Not Found",
+        data:[]
+      });
+    }
+
+    // 4️⃣ Find department
+   
+    const dept = await Department.findOne({ DepartmentName: department , state:state , city:district });
+    if (!dept) {
+      return res.status(404).send({ 
+        status:"ERR",
+        msg: "Department Not Found",
+        data:[]
+      });
+    }
+
+    // 5️⃣ Check if similar complaint already exists
+    const existingComplain = await Complain.findOne({
+      departmentId: dept._id,
+      location: area._id,
+      //title: { $regex: new RegExp(title, "i") }, // case-insensitive match
+    });
+
+    if (existingComplain) {
+      return res.status(200).send({
+        status: "ERR",
+        msg: "Issue already exists in your area. Please increase priority.",
+        data: {existingComplainId:existingComplain._id},
+      });
+    }
+
+    // 6️⃣ Create new complaint
+    const newComplain = new Complain({
+      userId: user._id,
+      departmentId: dept._id,
+      title,
+      description,
+      priority: 1, // default
+      status: "Pending",
+      image,
+      location: area._id,
+    });
+
+    await newComplain.save();
+
+    return res.status(201).send({
+      status: "OK",
+      msg: "Complaint added successfully.",
+      data: newComplain,
+    });
+  } catch (err) {
+    // console.error("Error adding complaint:", err);
+    return res.status(500).send({ 
+        status: "ERR",
+        msg: `${err.message} , Server Error at add complain`, 
+        data:[]  });
+  }
+};
+
+complainController.getAllComplain = async (req, res) => {
+    try {
+      // Fetch all complaints and populate related info
+      const complains = await Complain.find()
+        .populate({
+          path: "userId",
+          select: "userName email mobileNumber -_id",
+        })
+        .populate({
+          path: "departmentId",
+          select: "departmentName state district -_id",
+        })
+        .populate({
+          path: "location",
+          select: "areaName wardNumber district state type -_id",
+        })
+        .sort({ createdAt: -1 }); // newest first
+  
+      // If no complaints found
+      if (!complains.length) {
+        return res.status(200).send({
+          status: "OK",
+          msg: "No complaints found",
+          data: [],
+        });
+      }
+  
+      // Return success response
+      return res.status(200).send({
+        status: "OK",
+        msg: "All complaints fetched successfully",
+        count: complains.length,
+        data: complains,
+      });
+    } catch (err) {
+      console.error("Error fetching complaints:", err);
+      return res.status(500).send({
+        status: "ERR",
+        msg: "Server error while fetching complaints",
+        error: err.message,
+      });
+    }
+};
+
+complainController.getComplainByDepartment = async (req, res) => {
+  try {
+    // 1️⃣ Validate request body
+    const { error } = ComplainValidationGetDataSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.details[0].message,
+        data: [],
+      });
+    }
+
+    const { departmentName , state , district } = req.body;
+
+    // 2️⃣ Find department by name
+    const dept = await Department.findOne({ 
+      DepartmentName: departmentName,
+      state,
+      city:district
+     });
+    if (!dept) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "Department not found",
+        data: [],
+      });
+    }
+
+    // 3️⃣ Fetch all complaints for this department
+    const complains = await Complain.find({ departmentId: dept._id })
+      .populate({
+        path: "userId",
+        select: "userName email mobileNumber -_id",
+      })
+      .populate({
+        path: "departmentId",
+        select: "departmentName state district -_id",
+      })
+      .populate({
+        path: "location",
+        select: "areaName wardNumber district state type -_id",
+      })
+      .sort({ createdAt: -1 });
+
+    // 4️⃣ No complaints found
+    if (!complains.length) {
+      return res.status(200).send({
+        status: "OK",
+        msg: `No complaints found for department '${departmentName}'`,
+        data: [],
+      });
+    }
+
+    // 5️⃣ Return success response
+    return res.status(200).send({
+      status: "OK",
+      msg: `Complaints fetched successfully for department '${departmentName}'`,
+      count: complains.length,
+      data: complains,
+    });
+  } catch (err) {
+    console.error("Error fetching complaints by department:", err);
+    return res.status(500).send({
+      status: "ERR",
+      msg: "Server error while fetching complaints by department",
+      error: err.message,
+    });
+  }
+};
 
 export default complainController;
