@@ -64,10 +64,10 @@ const Header = () => {
             About Us
           </Link>
           <Link
-            to={routes.departmentWorks}
+            to={userRole === "" ? (deptRole === "" ? routes.deptLogin : routes.deptDashboard) : routes.userDashboard}
             className="text-[#212121] hover:text-[#1565C0] transition-colors duration-200 font-medium px-2 py-1 shadow-blue-200 hover:bg-gray-200 rounded-2xl"
           >
-            View Department Works
+            DashBoard
           </Link>
           <Link
             to={routes.departmentInfo}

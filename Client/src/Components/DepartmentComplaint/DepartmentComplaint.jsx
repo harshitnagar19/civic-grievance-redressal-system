@@ -21,7 +21,7 @@ export default function DepartmentComplaint() {
       const res = await axios.post(
         `${import.meta.env.VITE_BASEURL}/complain/get-complain-by-department`,
         {
-          departmentName:dept.departmentName,
+          departmentName:deptData.DepartmentName,
           state: deptData.state,
           district: deptData.city
         },

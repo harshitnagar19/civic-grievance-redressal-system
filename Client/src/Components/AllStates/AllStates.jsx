@@ -24,7 +24,7 @@ const AllStates = () => {
     useEffect(() => {
         getAllStates();
     }, [])
-    if(states.length==0) return <>Loading...</> 
+    if(states.length==0) return <div className='flex h-screen w-full justify-center items-center'><div className='text-2xl'>Loading...</div></div> 
     return (
         <div className='p-16 flex gap-15 flex-wrap shrink-1 '>{
             states?.map((ele, ind) => {

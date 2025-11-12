@@ -86,8 +86,8 @@ export const ComplaintForm = ({ formikProps }) => {
   useEffect(() => {
     const selected = areaType.find((a) => a.type === values.location?.type);
     setIsWardExist(selected?.isWardExists ?? false);
-  }, [values.location?.type, areaType]);
 
+  }, [values.location?.type, areaType]);
   const stateOptions = states.map((s) => ({ value: s, label: s }));
   const districtOptions = districts.map((d) => ({ value: d, label: d }));
   const departmentOptions = department.map((dep) => ({ value: dep, label: dep }));
