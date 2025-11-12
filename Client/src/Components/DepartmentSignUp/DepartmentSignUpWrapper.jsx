@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { DepartmentSignUpValidation } from "../../validations/DepartmentValidation";
+import { useDispatch, useSelector } from 'react-redux'
+import { DepartmentSignUpValidation } from "../../validations/DepartmentValidation"
 import DepartmentSignUpForm from "./DepartmentSignUpForm";
+import axios from 'axios'
+import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-import { routes } from "../../data/routes";
-
+import { routes } from '../../data/routes'
 function DepartmentSignUpWrapper() {
   const navigate = useNavigate()
   const initialValues = {
@@ -16,7 +16,6 @@ function DepartmentSignUpWrapper() {
     email: "",
     password: "",
     mobileNumber: "",
-    city: "",
     state: "",
     deptAddress: "",
     district: "",
@@ -29,9 +28,8 @@ function DepartmentSignUpWrapper() {
       email: values.email,
       password: values.password,
       mobileNumber: values.mobileNumber,
-      city: values.city,
       state: values.state,
-      district: values.district,
+      city: values.district,
       deptAddress: values.deptAddress,
     };
 
@@ -51,22 +49,28 @@ function DepartmentSignUpWrapper() {
     } finally {
       setSubmitting(false);
     }
-  };
-
+  }
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={DepartmentSignUpValidation}
-      validateOnChange={false}
-      onSubmit={handleSubmit}
-    >
-      {(formikProps) => (
-        <Form>
-          <DepartmentSignUpForm formikProps={formikProps} />
-        </Form>
-      )}
-    </Formik>
-  );
+    <>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={DepartmentSignUpValidation}
+        validateOnChange={false}
+        onSubmit={handleSubmit}
+      >
+        {(formikProps) => (
+          <Form>
+            <DepartmentSignUpForm
+              formikProps={formikProps}
+            />
+          </Form>
+        )
+
+        }
+
+      </Formik>
+    </>
+  )
 }
 
-export default DepartmentSignUpWrapper;
+export default DepartmentSignUpWrapper

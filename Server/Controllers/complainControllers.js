@@ -152,6 +152,7 @@ complainController.getAllComplain = async (req, res) => {
 };
 
 complainController.getComplainByDepartment = async (req, res) => {
+  
   try {
     // 1️⃣ Validate request body
     const { error } = ComplainValidationGetDataSchema.validate(req.body);
@@ -220,5 +221,73 @@ complainController.getComplainByDepartment = async (req, res) => {
     });
   }
 };
+
+complainController.getComplainByUserID = async (req, res) => {
+  try {
+    
+    const userEmail = req.user?.email; // ✅ From verified JWT
+    const { filter } = req.body;
+
+    if (!userEmail) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "User not found in token",
+        data: [],
+      });
+    }
+
+    // 2️⃣ Build query
+    const user = await User.findOne({email:userEmail})
+    const userId = user._id;
+    const query = { userId };
+    if (filter && ["Pending", "Solved", "Rejected"].includes(filter)) {
+      query.status = filter;
+    }
+
+    // 3️⃣ Fetch complaints
+    console.log(query)
+    const complains = await Complain.find(query)
+      .populate({
+        path: "departmentId",
+        select: "departmentName state district -_id",
+      })
+      .populate({
+        path: "location",
+        select: "areaName wardNumber district state type -_id",
+      })
+      .sort({ createdAt: -1 });
+
+    // 4️⃣ No results
+    if (!complains.length) {
+      return res.status(200).send({
+        status: "OK",
+        msg:
+          filter && filter.trim() !== ""
+            ? `No complaints found with status '${filter}'`
+            : `No complaints found for this user`,
+        data: [],
+      });
+    }
+
+    // 5️⃣ Success
+    return res.status(200).send({
+      status: "OK",
+      msg:
+        filter && filter.trim() !== ""
+          ? `Complaints fetched successfully with status '${filter}'`
+          : `All complaints fetched successfully`,
+      count: complains.length,
+      data: complains,
+    });
+  } catch (err) {
+    console.error("Error fetching complaints by user ID:", err);
+    return res.status(500).send({
+      status: "ERR",
+      msg: "Server error while fetching complaints",
+      error: err.message,
+    });
+  }
+};
+
 
 export default complainController;

@@ -19,8 +19,8 @@ export const ComplaintForm = ({ formikProps }) => {
 
   // Fetch all states
   useEffect(() => {
+    values.userEmail = userEmail;
     const getAllState = async () => {
-      values.userEmail = userEmail;
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_BASEURL}/department/get-all-state-of-department`

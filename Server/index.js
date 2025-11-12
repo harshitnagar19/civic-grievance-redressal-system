@@ -25,9 +25,8 @@ import refreshroute from "./Routes/refreshRoutes.js";
 app.use("/refresh",refreshroute);
 
 import areaRoute from "./Routes/areaRoutes.js";
-app.use("/area",areaRoute);
+// app.use("/area",areaRoute);
 
-import areaRoute from "./Routes/areaRoutes.js";
 app.use("/area",areaRoute)
 
 
