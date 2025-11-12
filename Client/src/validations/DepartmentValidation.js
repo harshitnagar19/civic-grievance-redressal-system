@@ -29,8 +29,8 @@ export const DepartmentSignUpValidation = object({
         .min(6, "Password must be at least 6 characters")
         .max(20, "Password can't be more than 20 characters"),
 
-    city: string()
-        .required("City name is required")
+    district: string()
+        .required("District name is required")
         .min(2, "Minimun 2 characters required")
         .max(20, "Name can't be longer than 20 characters"),
 
@@ -40,7 +40,7 @@ export const DepartmentSignUpValidation = object({
         .max(50, "Name can't be longer than 50 characters"),
 
     deptAddress: string()
-        .required("Department name is required")
+        .required("Department Address name is required")
         .min(2, "Minimun 2 characters required")
         .max(100, "Address can't be longer than 100 characters"),
 
