@@ -27,7 +27,11 @@ app.use("/refresh",refreshroute);
 import areaRoute from "./Routes/areaRoutes.js";
 app.use("/area",areaRoute);
 
-app.use("/area",areaRoute)
+import adminRoute from "./Routes/adminRoutes.js";
+app.use("/admin",adminRoute);
+
+
+
 
 
 const PORT = process.env.PORT;

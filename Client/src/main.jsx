@@ -24,6 +24,8 @@ import DepartmentInfo from './Components/DepartmentInfo/DepartmentInfo.jsx';
 import Header from './Components/Header/Header.jsx';
 import Footer from './Components/Footer/Footer.jsx';
 import ComplaintWrapper from './Components/complaint/ComplaintWrapper.jsx'
+import AdminLogin from './Components/Admin/AdminLogin.jsx';
+import AdminDashboard from './Components/Admin/AdminDashboard.jsx';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -34,7 +36,10 @@ const router = createBrowserRouter(
       {/* department */}
       <Route path={routes.deptSignUp} element={<DepartmentSignUpWrapper />}></Route>
       <Route path={routes.deptLogin} element={<DepartmentSignInWrapper />}></Route>
+      <Route path={routes.adminLogin} element={<AdminLogin/>}></Route>
 
+      {/* Admin */}
+      <Route path={routes.adminDashboard} element={<AdminDashboard/>}></Route>
       
       <Route path="/" element={<Hero />}></Route>
       <Route path={routes.aboutUs} element={<><Header /><AboutUs /><Footer /></>}></Route>
