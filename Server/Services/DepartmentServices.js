@@ -155,4 +155,79 @@ DepartmentServices.getDepartmentByStateAndDistrict = async (state, district , De
   }
 };
 
+DepartmentServices.getUnverifiedDepartments = async () => {
+  try {
+    const response = await Department.find({ isVerified: false }).select("-password");
+
+    return {
+      status: "OK",
+      msg: "Successfully fetched unverified departments",
+      data: response
+    };
+  } catch (err) {
+    return {
+      status: "ERR",
+      msg: err.message,
+      data: []
+    };
+  }
+};
+
+DepartmentServices.verifyDepartment = async (mongoId) => {
+  try {
+    const updated = await Department.findByIdAndUpdate(
+      mongoId,                  // 👈 Use _id here
+      { isVerified: true },
+      { new: true }
+    ).select("-password");
+
+    if (!updated) {
+      return {
+        status: "OK",
+        msg: "Department not found",
+        data: []
+      };
+    }
+
+    return {
+      status: "OK",
+      msg: "Department verified successfully",
+      data: [updated]
+    };
+
+  } catch (err) {
+    return {
+      status: "ERR",
+      msg: err.message,
+      data: []
+    };
+  }
+};
+
+DepartmentServices.rejectDepartment = async (mongoId) => {
+  try {
+    const deleted = await Department.findByIdAndDelete(mongoId);
+
+    if (!deleted) {
+      return {
+        status: "OK",
+        msg: "Department not found",
+        data: []
+      };
+    }
+
+    return {
+      status: "OK",
+      msg: "Department rejected and deleted successfully",
+      data: [deleted]
+    };
+  } catch (err) {
+    return {
+      status: "ERR",
+      msg: err.message,
+      data: []
+    };
+  }
+};
+
 export default DepartmentServices;
