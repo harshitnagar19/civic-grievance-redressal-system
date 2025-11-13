@@ -9,5 +9,8 @@ export const routes = {
     departmentInfo:'/department-state',
     raiseComplaint:'/raise-complaint',
     adminLogin:'/admin-login',
-    adminDashboard:"/admin-dashboard"
+    adminDashboard:"/admin-dashboard",
+    seeComplaints:'/all-complaint',
+    userComplaint:"/user-complaint",
+    deptComplaint:"/dept-complaint"
 };

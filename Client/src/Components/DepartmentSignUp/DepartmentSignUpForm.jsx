@@ -35,9 +35,8 @@ const DepartmentSignUpForm = ({ formikProps }) => {
             {[1, 2, 3].map((step) => (
               <div key={step} className="flex items-center">
                 <div
-                  className={`rounded-full h-8 w-8 flex items-center justify-center text-sm font-medium ${
-                    step <= currentStep ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-600"
-                  }`}
+                  className={`rounded-full h-8 w-8 flex items-center justify-center text-sm font-medium ${step <= currentStep ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-600"
+                    }`}
                 >
                   {step}
                 </div>
@@ -54,8 +53,8 @@ const DepartmentSignUpForm = ({ formikProps }) => {
             {currentStep === 1
               ? "Department Information"
               : currentStep === 2
-              ? "Contact Details"
-              : "Address & Security"}
+                ? "Contact Details"
+                : "Address & Security"}
           </div>
         </div>
 
@@ -198,20 +197,7 @@ const DepartmentSignUpForm = ({ formikProps }) => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">City</label>
-                <Field
-                  type="text"
-                  name="city"
-                  placeholder="City"
-                  value={values.city}
-                  onChange={(e) => setFieldValue("city", e.target.value)}
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  onBlur={handleBlur}
-                  autoComplete="address-level2"
-                />
-                <ErrorMessage name="city" component="div" className="text-red-500 text-sm mt-1" />
-              </div>
+
 
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1">Department Address</label>
