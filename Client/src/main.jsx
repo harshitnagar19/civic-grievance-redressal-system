@@ -26,6 +26,9 @@ import Footer from './Components/Footer/Footer.jsx';
 import ComplaintWrapper from './Components/complaint/ComplaintWrapper.jsx'
 import AdminLogin from './Components/Admin/AdminLogin.jsx';
 import AdminDashboard from './Components/Admin/AdminDashboard.jsx';
+import AllComplaints from './Components/AllComplaints/AllComplaints.jsx';
+import UserComplaint from './Components/userComplaint/UserComplaint.jsx';
+import DepartmentComplaint from './Components/DepartmentComplaint/DepartmentComplaint.jsx';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -53,6 +56,9 @@ const router = createBrowserRouter(
         <Route path={routes.userDashboard} element={<OAuth><UserDashboard /></OAuth>}></Route>
         <Route path={routes.deptDashboard} element={<OAuth><DepartmentDashboard /></OAuth>}></Route>
         <Route path={routes.raiseComplaint} element={<OAuth><ComplaintWrapper /></OAuth>}></Route>
+        <Route path={routes.seeComplaints} element={<OAuth><AllComplaints/></OAuth>}></Route>
+        <Route path={routes.userComplaint} element={<OAuth><UserComplaint/></OAuth>}></Route>
+        <Route path={routes.deptComplaint} element={<OAuth><DepartmentComplaint/></OAuth>}></Route>
       </Route>
       <Route path='*' element={<NotFound />}></Route>
     </>

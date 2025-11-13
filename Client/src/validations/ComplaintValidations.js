@@ -15,8 +15,7 @@ export const ComplaintValidations = object({
     .min(20, "Minimum 20 characters required")
     .max(1000, "Description can't exceed 1000 characters"),
 
-  department: string()
-    .required("Please select a department"),
+  department: string().required("Please select a department"),
 
   state: string()
     .required("State is required")
@@ -28,24 +27,29 @@ export const ComplaintValidations = object({
     .min(2, "Minimum 2 characters required")
     .max(50, "District name can't be longer than 50 characters"),
 
-  priority: number()
-    .required("Please select priority")
-    .min(1, "Invalid priority value")
-    .max(3, "Invalid priority value"),
+  location: object({
+    type: string().nullable(),
+    wardNumber: number().nullable(),
+    areaName: string().nullable(),
+  }),
 
-  image: mixed()
-    .nullable()
-    .test(
-      "fileSize",
-      "File size is too large",
-      value => !value || (value && value.size <= 2 * 1024 * 1024) // 2MB max
-    )
-    .test(
-      "fileFormat",
-      "Unsupported file type",
-      value =>
-        !value ||
-        (value &&
-          ["image/jpeg", "image/png", "application/pdf"].includes(value.type))
-    ),
+  image: object({
+    file: mixed()
+      .nullable()
+      .test(
+        "fileSize",
+        "File size is too large (max 2MB)",
+        (value) => !value || (value && value.size <= 2 * 1024 * 1024)
+      )
+      .test(
+        "fileFormat",
+        "Unsupported file type (only JPG/PNG allowed)",
+        (value) =>
+          !value ||
+          (value &&
+            ["image/jpeg", "image/png", "image/jpg"].includes(value.type))
+      ),
+    url: string().nullable(),
+    public_id: string().nullable(),
+  }),
 });
