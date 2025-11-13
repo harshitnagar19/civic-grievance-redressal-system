@@ -2,6 +2,7 @@ import express from "express";
 import { userLoginValidationSchema } from "../Validations/UserValidation.js";
 import { generateToken } from "../utils/token/generateToken.js";
 import AdminService from "../Services/AdminServices.js";
+import DepartmentServices from "../Services/DepartmentServices.js";
 
 const adminController = {};
 
@@ -85,5 +86,119 @@ adminController.login = async (req,res)=>{
         });
       }
 }
+
+adminController.getUnverifiedDepartments = async (req, res) => {
+  try {
+    const response = await DepartmentServices.getUnverifiedDepartments();
+
+    if (response.status === "ERR") {
+      return res.status(500).send({
+        status: "ERR",
+        msg: response.msg,
+        data: []
+      });
+    }
+
+    if (response.data.length === 0) {
+      return res.status(200).send({
+        status: "OK",
+        msg: "No unverified departments found",
+        data: []
+      });
+    }
+
+    return res.status(200).send({
+      status: "OK",
+      msg: "Unverified departments fetched successfully",
+      count: response.data.length,
+      data: response.data
+    });
+
+  } catch (err) {
+    return res.status(500).send({
+      status: "ERR",
+      msg: "Server error while fetching unverified departments",
+      data: []
+    });
+  }
+};
+
+
+adminController.verifyDepartment = async (req, res) => {
+  try {
+    const { _id } = req.body;   // 👈 Expect _id from client
+
+    if (!_id) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "_id is required",
+        data: []
+      });
+    }
+
+    const response = await DepartmentServices.verifyDepartment(_id);
+
+    if (response.status === "ERR") {
+      return res.status(500).send({
+        status: "ERR",
+        msg: response.msg,
+        data: []
+      });
+    }
+
+    return res.status(200).send({
+      status: "OK",
+      msg: response.msg,
+      data: response.data
+    });
+
+  } catch (err) {
+    return res.status(500).send({
+      status: "ERR",
+      msg: `Server error: ${err.message}`,
+      data: []
+    });
+  }
+};
+
+
+adminController.rejectDepartment = async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    if (!_id) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "_id is required",
+        data: []
+      });
+    }
+
+    const response = await DepartmentServices.rejectDepartment(_id);
+
+    if (response.status === "ERR") {
+      return res.status(500).send({
+        status: "ERR",
+        msg: response.msg,
+        data: []
+      });
+    }
+
+    return res.status(200).send({
+      status: "OK",
+      msg: response.msg,
+      data: response.data
+    });
+
+  } catch (err) {
+    return res.status(500).send({
+      status: "ERR",
+      msg: `Server error: ${err.message}`,
+      data: []
+    });
+  }
+};
+
+
 
 export default adminController;
