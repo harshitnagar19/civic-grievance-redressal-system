@@ -17,7 +17,8 @@ export default function UserComplaint() {
       });
 
       if (res.data.status === "OK") {
-        setComplaints(res.data.data);
+        const complaints=res.data.data.filter((f)=> f.status!== "Reject")
+        setComplaints(complaints);
       } else {
         toast.error("Failed to fetch user complaints");
       }

@@ -48,9 +48,7 @@ export default function DepartmentDashboard() {
 
       if (res.data.status === "OK") {
         // Filter complaints belonging to this department
-        const deptComplaints = res.data.data.filter(
-          (c) => c.departmentId?.state === deptData.state
-        );
+        const deptComplaints = res.data.data
 
         setStats({
           total: deptComplaints.length,
