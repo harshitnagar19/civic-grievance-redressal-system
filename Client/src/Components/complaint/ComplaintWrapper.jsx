@@ -9,10 +9,12 @@ const CLOUD_NAME = "dvvae8cxm";
 const UPLOAD_PRESET = "unsigned_upload";
 
 export const ComplaintWrapper = () => {
-  const token=localStorage.getItem("token");
-  //Image upload handling
+  const token = localStorage.getItem("token");
+
+  // Upload image to Cloudinary
   const handleUpload = async (file) => {
     if (!file) return null;
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", UPLOAD_PRESET);
@@ -55,34 +57,55 @@ export const ComplaintWrapper = () => {
   };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    console.log("values: " ,values);
-    
     try {
-      // Upload image if file exists
+      let imageData = { ...values.image };
+
+      // Upload to Cloudinary
       if (values.image?.file) {
         const uploaded = await handleUpload(values.image.file);
         if (uploaded) {
-          values.image.url = uploaded.url;
-          values.image.public_id = uploaded.public_id;
+          imageData = {
+            url: uploaded.url,
+            public_id: uploaded.public_id,
+          };
         }
-        delete values.image.file; // remove file object from data
       }
 
-      // Send complaint data to your backend
-      
-      const res = await axios.post(
+      // Never mutate Formik values — build a clean payload
+      const payload = {
+        state: values.state,
+        district: values.district,
+        department: values.department,
+        userEmail: values.userEmail,
+        title: values.title,
+        description: values.description,
+        location: {
+          type: values.location.type,
+          wardNumber: values.location.wardNumber,
+          areaName: values.location.areaName,
+          district: values.location.district,
+          state: values.location.state,
+        },
+        image: imageData,
+      };
+
+      // Submit complaint
+      await axios.post(
         `${import.meta.env.VITE_BASEURL}/complain/add`,
-        values,{ headers: { token: token } }
+        payload,
+        { headers: { token } }
       );
-      
+
       toast.success("Complaint submitted successfully!");
-      console.log("Complaint saved:", res.data);
+
+      // Proper reset (NOW WORKS)
+      resetForm();
+
     } catch (error) {
+      console.error("Error submitting complaint:", error);
       toast.error("Failed to submit complaint");
-      console.error("Error while submitting complaint:", error);
     } finally {
       setSubmitting(false);
-      resetForm();
     }
   };
 
@@ -91,6 +114,7 @@ export const ComplaintWrapper = () => {
       initialValues={initialValues}
       validationSchema={ComplaintValidations}
       onSubmit={handleSubmit}
+      enableReinitialize={true} // ensures full reset
     >
       {(formikProps) => (
         <Form>

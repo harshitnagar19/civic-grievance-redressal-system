@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../../data/routes'
 import { toast } from 'react-toastify';
 import axios from 'axios'
+import { Loader2 } from 'lucide-react'
 import { addDeptData } from '../../Store/departmentDataSlice'
 function OAuth({ children }) {
     const notifyError = (err) => toast.error(err);
@@ -56,7 +57,9 @@ function OAuth({ children }) {
     return (
         <>
             {
-                isLoading ? "loading:..." : children}
+                isLoading ? <div className="flex justify-center items-center h-64">
+            <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
+          </div> : children}
 
         </>
 
