@@ -1,3 +1,4 @@
+import Complain from "../Models/Complain.js";
 import Department from "../Models/Department.js";
 
 const DepartmentServices = {};
@@ -229,5 +230,39 @@ DepartmentServices.rejectDepartment = async (mongoId) => {
     };
   }
 };
+
+DepartmentServices.rejectComplain = async (_id,reason)=>{
+  try {
+    const updated = await Complain.findByIdAndUpdate(
+        _id,
+        {
+            status: "Reject",
+            rejectReason: reason
+        },
+        { new: true } // returns updated document
+    );
+
+    if (!updated) {
+        return {
+            status: "ERR",
+            msg: "Complain not found",
+            data: null
+        };
+    }
+
+    return {
+        status: "OK",
+        msg: "Complain rejected successfully",
+        data: updated
+    };
+
+} catch (error) {
+    return {
+        status: "ERR",
+        msg: error.message,
+        data: null
+    };
+}
+}
 
 export default DepartmentServices;

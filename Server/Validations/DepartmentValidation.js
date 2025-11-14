@@ -93,3 +93,24 @@ export const departmentLoginValidationSchema = Joi.object({
   }),
 }).required();
 
+export const departmentRejectComplainValidationSchema = Joi.object({
+  _id: Joi.string().required().messages({
+      "any.required": "Complain ID is required",
+      "string.empty": "Complain ID cannot be empty"
+  }),
+
+  status: Joi.string()
+      .valid("Reject")
+      .required()
+      .messages({
+          "any.only": "Status must be Reject",
+          "any.required": "Status is required"
+      }),
+
+  reason: Joi.string()
+      .required()
+      .messages({
+          "any.required": "Reason is required",
+          "string.empty": "Reason cannot be empty"
+      })
+}).required();

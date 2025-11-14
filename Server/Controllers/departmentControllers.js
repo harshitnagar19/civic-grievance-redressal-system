@@ -3,6 +3,7 @@ import DepartmentServices from "../Services/DepartmentServices.js";
 import {
   departmentSignUpValidationSchema,
   departmentLoginValidationSchema,
+  departmentRejectComplainValidationSchema,
 } from "../Validations/DepartmentValidation.js";
 import { generateToken } from "../utils/token/generateToken.js";
 import hashPassword from "../utils/password/hashPassword.js";
@@ -299,6 +300,32 @@ departmentControllers.getDepartmenInfo = async (req,res)=>{
     res.status(500).send({
       status: "ERR",
       msg: `error in server to get all getAllDepartmentOfDistrict, ${err.message}`,
+      data: [],
+    });
+  }
+}
+
+
+departmentControllers.rejectComplain = async (req,res)=>{
+  try{
+    const { value, error } = departmentRejectComplainValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      });
+    }
+    const response = await DepartmentServices.rejectComplain(value._id , value.reason);
+    if(response.status=="OK"){
+      return res.status(200).send(response)
+    }else{
+      return res.status(500).send(response)
+    }
+  }catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: `error in server to get all departmentControllers, ${err.message}`,
       data: [],
     });
   }
