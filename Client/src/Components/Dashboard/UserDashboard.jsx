@@ -33,10 +33,12 @@ function UserDashboard() {
   }, []);
 
   const fetchUserComplaints = async () => {
+
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASEURL}/complain/get-all-complain`,
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASEURL}/complain/get-complain-by-user`,
+        {filter:""},
         { headers: { token } }
       );
 
@@ -44,6 +46,7 @@ function UserDashboard() {
         const complaints = res.data.data;
         
         // Calculate statistics
+        console.log(complaints)
         setStats({
           total: complaints.length,
           pending: complaints.filter(c => c.status === 'Pending').length,

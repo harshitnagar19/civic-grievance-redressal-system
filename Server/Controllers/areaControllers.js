@@ -26,4 +26,5 @@ areaControllers.getAreaByStateAndDistrict = async (req, res) => {
   });
 }
 };
+
 export default areaControllers;

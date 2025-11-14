@@ -27,7 +27,7 @@ const ComplainSchema = new Schema({
     },
     status:{
         type:String,
-        enum:["Pending","Active","Complete","Reject"],
+        enum:["Pending","Active","Resolved","Reject"],
         required:true
     },
     image: {
@@ -45,6 +45,10 @@ const ComplainSchema = new Schema({
         ref: "Area",
         required: true,
     },
+    rejectReason: {
+        type: String,
+        default: null  // or "" (your choice)
+    }
 },{
     timestamps:true
 });

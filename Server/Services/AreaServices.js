@@ -6,18 +6,18 @@ AreaServices.getAreaByStateAndDistrict = async (state, district) => {
   try {
     const response = await Areas.find({ state, district, isActive: true });
     return {
-        status: "OK",
-        msg : "Successfully get all areas in district",
-        data: response
+      status: "OK",
+      msg: "Successfully get all areas in district",
+      data: response,
     };
   } catch (err) {
-     return {
+    return {
       status: "ERR",
       msg: err.message,
       data: [],
     };
   }
-}
+};
 AreaServices.getDistinctTypesWithWardStatus = async () => {
   try {
     const types = await Areas.distinct("type");
@@ -40,5 +40,75 @@ AreaServices.getDistinctTypesWithWardStatus = async () => {
   }
 };
 
-export default AreaServices;
+AreaServices.getAllAreasByDistrict = async ({
+  state,
+  district,
+  type,
+  wardNumber,
+}) => {
+  console.log(wardNumber)
+  if (!wardNumber) {
+    try {
+      const areas = await Areas.find(
+        { state, district, type },
+        { areaName: 1, _id: 0 } // return only areaName
+      );
 
+      return {
+        status: "OK",
+        msg: "Areas fetched successfully",
+        data: areas,
+      };
+    } catch (error) {
+      return {
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      };
+    }
+  }else{
+    try {
+
+      const areas = await Areas.find(
+        { state, district, type ,wardNumber },
+        { areaName: 1, _id: 0 } // return only areaName
+      );
+
+      return {
+        status: "OK",
+        msg: "Areas fetched successfully",
+        data: areas,
+      };
+    } catch (error) {
+      return {
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      };
+    }
+  }
+};
+AreaServices.getAllWardByDistrict = async ({ state, district, type }) => {
+  try {
+    const wardNumbers = await Areas.distinct("wardNumber", {
+      state,
+      district,
+      type
+    });
+
+    return {
+      status: "OK",
+      msg: "Ward numbers fetched successfully",
+      data: wardNumbers
+    };
+
+  } catch (error) {
+    return {
+      status: "ERR",
+      msg: error.message,
+      data: []
+    };
+  }
+};
+
+export default AreaServices;

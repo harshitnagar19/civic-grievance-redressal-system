@@ -17,4 +17,9 @@ deptroute.get("/get-department-info",departmentControllers.getDepartmenInfo)
 //area routes
 deptroute.get("/get-area-by-state-and-district",areaControllers.getAreaByStateAndDistrict)  
 
+
+// reject complain 
+
+deptroute.post("/reject-complain",departmentControllers.rejectComplain)
+
 export default deptroute ;
