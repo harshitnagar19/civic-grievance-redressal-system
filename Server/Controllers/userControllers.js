@@ -29,6 +29,7 @@ const transporter = nodemailer.createTransport({
     },
   });
 
+  
 userControllers.sendOtp = async (req, res) => {
   try {
     const { value, error } = userOtpValidationSchema.validate(req.body);
@@ -55,19 +56,8 @@ userControllers.sendOtp = async (req, res) => {
             attempts: 0,
           });
 
-          let mailOptions = {
-            from: "ayushpatel062004@gmail.com",
-            to: email,
-            subject: "Your verification OTP",
-            text: `Your one-time verification code is ${otp}. It expires in ${
-              OTP_TTL_MS / 60000
-            } minutes.`,
-            html: `<p>Your one-time verification code is <b>${otp}</b>. It expires in ${
-              OTP_TTL_MS / 60000
-            } minutes.</p>`,
-          };
-
-          await transporter.sendMail({
+        
+          const o = await transporter.sendMail({
             from: process.env.BREVO_FROM,
             to: email,
             subject: "Your Verification OTP",
@@ -75,6 +65,7 @@ userControllers.sendOtp = async (req, res) => {
               OTP_TTL_MS / 60000
             } minutes.</p>`,
           });
+          console.log(o)
           res.status(200).send({
             status: "OK",
             msg: "OTP sent successfully",
