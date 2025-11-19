@@ -4,6 +4,8 @@ import {
   departmentSignUpValidationSchema,
   departmentLoginValidationSchema,
   departmentRejectComplainValidationSchema,
+  departmentActiveComplainValidationSchema,
+  departmentResolvedComplainValidationSchema,
 } from "../Validations/DepartmentValidation.js";
 import { generateToken } from "../utils/token/generateToken.js";
 import hashPassword from "../utils/password/hashPassword.js";
@@ -322,6 +324,60 @@ departmentControllers.rejectComplain = async (req,res)=>{
     }else{
       return res.status(500).send(response)
     }
+  }catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: `error in server to get all departmentControllers, ${err.message}`,
+      data: [],
+    });
+  }
+}
+
+departmentControllers.activeComplain = async (req,res)=>{
+  try{
+    const { value, error } = departmentActiveComplainValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      });
+    }
+    console.log(value._id)
+    const response = await DepartmentServices.activeComplain(value._id);
+    if(response.status=="OK"){
+      return res.status(200).send(response)
+    }else{
+      return res.status(500).send(response)
+    }
+
+  }catch (err) {
+    res.status(500).send({
+      status: "ERR",
+      msg: `error in server to get all departmentControllers, ${err.message}`,
+      data: [],
+    });
+  }
+}
+
+departmentControllers.resolvedComplain = async (req,res)=>{
+  try{
+    const { value, error } = departmentResolvedComplainValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      });
+    }
+    console.log(value._id)
+    const response = await DepartmentServices.resolvedComplain(value._id);
+    if(response.status=="OK"){
+      return res.status(200).send(response)
+    }else{
+      return res.status(500).send(response)
+    }
+
   }catch (err) {
     res.status(500).send({
       status: "ERR",
