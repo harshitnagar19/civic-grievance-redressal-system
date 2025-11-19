@@ -61,7 +61,7 @@ userControllers.sendOtp = async (req, res) => {
             from: process.env.BREVO_FROM,
             to: email,
             subject: "Your Verification OTP",
-            html: `<p>Your OTP is <b>${otp}</b>. It expires in ${
+            html: `<p>Your OTP Is <b>${otp}</b>. It expires in ${
               OTP_TTL_MS / 60000
             } minutes.</p>`,
           });
