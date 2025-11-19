@@ -46,7 +46,7 @@ const router = createBrowserRouter(
       <Route path={routes.adminLogin} element={<AdminLogin/>}></Route>
 
       {/* Admin */}
-      <Route path='/admin/dashboard' element={<AdminDashboardHome/>}></Route>
+      <Route path='/admin-dashboard' element={<AdminDashboardHome/>}></Route>
       <Route path={routes.unverifiedDepartments} element={<UnverifiedDepartments/>}></Route>
       <Route path={routes.unsolvedComplaints} element={<UnsolvedComplaints/>}></Route>
       

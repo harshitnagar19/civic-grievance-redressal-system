@@ -28,7 +28,6 @@ const AllDepartment = () => {
         })
     }
 
-
     useEffect(() => {
         getAllDepartment();
     }, [])

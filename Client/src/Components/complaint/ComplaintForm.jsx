@@ -9,7 +9,6 @@ import { Upload, X, Mail, FileText, MapPin, Building2, Image as ImageIcon } from
 
 export const ComplaintForm = ({ formikProps }) => {
   const { values, setFieldValue, isSubmitting, handleBlur } = formikProps;
-
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [department, setDepartment] = useState([]);
@@ -388,7 +387,6 @@ export const ComplaintForm = ({ formikProps }) => {
                 <ImageIcon className="w-4 h-4 text-blue-500" />
                 Upload Supporting Image
               </label>
-
               <input
                 type="file"
                 accept="image/*"

@@ -37,6 +37,15 @@ complainController.add = async (req, res) => {
           });
     }
 
+    if(user.credit<5){
+      return res.status(400).send({ 
+        status:"ERR",
+        msg: "User Not Allow To Add Complain that Have less then 5 credit points",
+        data:[]
+      });
+    }
+    
+
     // 3️⃣ Find or verify the area
     const area = await Area.findOne({
       areaName: location.areaName,
@@ -65,19 +74,19 @@ complainController.add = async (req, res) => {
     }
 
     // 5️⃣ Check if similar complaint already exists
-    const existingComplain = await Complain.findOne({
-      departmentId: dept._id,
-      location: area._id,
-      //title: { $regex: new RegExp(title, "i") }, // case-insensitive match
-    });
+    // const existingComplain = await Complain.findOne({
+    //   departmentId: dept._id,
+    //   location: area._id,
+    //   //title: { $regex: new RegExp(title, "i") }, // case-insensitive match
+    // });
 
-    if (existingComplain) {
-      return res.status(200).send({
-        status: "ERR",
-        msg: "Issue already exists in your area. Please increase priority.",
-        data: {existingComplainId:existingComplain._id},
-      });
-    }
+    // if (existingComplain) {
+    //   return res.status(200).send({
+    //     status: "ERR",
+    //     msg: "Issue already exists in your area. Please increase priority.",
+    //     data: {existingComplainId:existingComplain._id},
+    //   });
+    // }
 
     // 6️⃣ Create new complaint
     const newComplain = new Complain({

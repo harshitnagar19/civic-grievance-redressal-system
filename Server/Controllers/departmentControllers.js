@@ -11,6 +11,7 @@ import { generateToken } from "../utils/token/generateToken.js";
 import hashPassword from "../utils/password/hashPassword.js";
 import verifyPassword from "../utils/password/verifyPassword.js";
 import Department from "../Models/Department.js";
+import User from "../Models/User.js";
 
 const departmentControllers = {};
 departmentControllers.signup = async (req, res) => {
@@ -34,34 +35,41 @@ departmentControllers.signup = async (req, res) => {
       }
 
       if (existingDepartment.data.length > 0) {
-      return res.status(400).send({
-        status: "ERR",
-        msg: "Department already registered with given email",
-        data: [],
-      });
-    }
+        return res.status(400).send({
+          status: "ERR",
+          msg: "Department already registered with given email",
+          data: [],
+        });
+      }
 
-      const existingDepartmentLocation = await DepartmentServices.getDepartmentByStateAndDistrict(
-        value?.state,
-        value?.city,
-        value?.DepartmentShortName
-      )
+      const existingDepartmentLocation =
+        await DepartmentServices.getDepartmentByStateAndDistrict(
+          value?.state,
+          value?.city,
+          value?.DepartmentShortName
+        );
 
-      if(existingDepartmentLocation?.status=="ERR"){
-        return res.status(500).send(existingDepartmentLocation)
+      if (existingDepartmentLocation?.status == "ERR") {
+        return res.status(500).send(existingDepartmentLocation);
       }
 
       if (existingDepartmentLocation.data.length > 0) {
-      return res.status(400).send({
-        status: "ERR",
-        msg: "Department already registered in given state and district",
-        data: [],
-      });
-    }
+        return res.status(400).send({
+          status: "ERR",
+          msg: "Department already registered in given state and district",
+          data: [],
+        });
+      }
 
-      if (existingDepartment?.status == "OK" && existingDepartmentLocation?.status=="OK") {
+      if (
+        existingDepartment?.status == "OK" &&
+        existingDepartmentLocation?.status == "OK"
+      ) {
         // department not found , means need to signup
-        if (existingDepartment.data.length == 0 && existingDepartmentLocation.data.length==0) {
+        if (
+          existingDepartment.data.length == 0 &&
+          existingDepartmentLocation.data.length == 0
+        ) {
           try {
             const hashedPassword = await hashPassword(value.password);
             value.password = hashedPassword;
@@ -239,12 +247,11 @@ departmentControllers.getAllDistrictsOfState = async (req, res) => {
         data: [],
       });
     }
-    const cities = await DepartmentServices.getAllDistrictsInState({state})
-    if(cities.status=="ERR"){
-      res.status(500).send(cities)
-    }
-    else{
-      res.status(200).send(cities)
+    const cities = await DepartmentServices.getAllDistrictsInState({ state });
+    if (cities.status == "ERR") {
+      res.status(500).send(cities);
+    } else {
+      res.status(200).send(cities);
     }
   } catch (err) {
     res.status(500).send({
@@ -255,9 +262,9 @@ departmentControllers.getAllDistrictsOfState = async (req, res) => {
   }
 };
 
-departmentControllers.getAllDepartmentOfDistrict = async (req,res)=>{
+departmentControllers.getAllDepartmentOfDistrict = async (req, res) => {
   try {
-    const { district , state } = req.query;
+    const { district, state } = req.query;
     if (!district || !state) {
       return res.status(400).send({
         status: "ERR",
@@ -265,52 +272,60 @@ departmentControllers.getAllDepartmentOfDistrict = async (req,res)=>{
         data: [],
       });
     }
-    console.log("hello")
-    const department = await DepartmentServices.getAllDepartmentInDisrtict({state ,district})
-    if(department.status=="ERR"){
+    console.log("hello");
+    const department = await DepartmentServices.getAllDepartmentInDisrtict({
+      state,
+      district,
+    });
+    if (department.status == "ERR") {
       res.status(500).send(department);
-    }else{
-      res.status(200).send(department)
+    } else {
+      res.status(200).send(department);
     }
-  }catch (err) {
+  } catch (err) {
     res.status(500).send({
       status: "ERR",
       msg: `error in server to get all getAllDepartmentOfDistrict, ${err.message}`,
       data: [],
     });
   }
-}
+};
 
-departmentControllers.getDepartmenInfo = async (req,res)=>{
-  try{
-    const { district , state , departmentName} = req.query;
+departmentControllers.getDepartmenInfo = async (req, res) => {
+  try {
+    const { district, state, departmentName } = req.query;
     if (!district || !state || !departmentName) {
       return res.status(400).send({
         status: "ERR",
         msg: "district and state and departmentName is required in query param",
         data: [],
       });
-    }else{
-      const departInfo = await DepartmentServices.getDepartmentInfo({district , state , departmentName})
-      if(departInfo.status=="ERR"){
-        return res.status(500).send(departInfo)
-      }else{
-        return res.status(200).send(departInfo)
+    } else {
+      const departInfo = await DepartmentServices.getDepartmentInfo({
+        district,
+        state,
+        departmentName,
+      });
+      if (departInfo.status == "ERR") {
+        return res.status(500).send(departInfo);
+      } else {
+        return res.status(200).send(departInfo);
       }
     }
-  }catch (err) {
+  } catch (err) {
     res.status(500).send({
       status: "ERR",
       msg: `error in server to get all getAllDepartmentOfDistrict, ${err.message}`,
       data: [],
     });
   }
-}
+};
 
-
-departmentControllers.rejectComplain = async (req,res)=>{
-  try{
-    const { value, error } = departmentRejectComplainValidationSchema.validate(req.body);
+departmentControllers.rejectComplain = async (req, res) => {
+  try {
+    const { value, error } = departmentRejectComplainValidationSchema.validate(
+      req.body
+    );
     if (error) {
       return res.status(400).send({
         status: "ERR",
@@ -318,24 +333,39 @@ departmentControllers.rejectComplain = async (req,res)=>{
         data: [],
       });
     }
-    const response = await DepartmentServices.rejectComplain(value._id , value.reason);
-    if(response.status=="OK"){
-      return res.status(200).send(response)
-    }else{
-      return res.status(500).send(response)
+    const response = await DepartmentServices.rejectComplain(
+      value._id,
+      value.reason
+    );
+    if (response.status == "OK") {
+      const userId = response.data.userId;
+
+      // Update user credit: decrease by 1
+      await User.findByIdAndUpdate(
+        userId,
+        { $inc: { credit: -1 } }, // decrement credit by 1
+        { new: true }
+      );
+
+      return res.status(200).send(response);
+      return res.status(200).send(response);
+    } else {
+      return res.status(500).send(response);
     }
-  }catch (err) {
+  } catch (err) {
     res.status(500).send({
       status: "ERR",
       msg: `error in server to get all departmentControllers, ${err.message}`,
       data: [],
     });
   }
-}
+};
 
-departmentControllers.activeComplain = async (req,res)=>{
-  try{
-    const { value, error } = departmentActiveComplainValidationSchema.validate(req.body);
+departmentControllers.activeComplain = async (req, res) => {
+  try {
+    const { value, error } = departmentActiveComplainValidationSchema.validate(
+      req.body
+    );
     if (error) {
       return res.status(400).send({
         status: "ERR",
@@ -343,26 +373,26 @@ departmentControllers.activeComplain = async (req,res)=>{
         data: [],
       });
     }
-    console.log(value._id)
+    console.log(value._id);
     const response = await DepartmentServices.activeComplain(value._id);
-    if(response.status=="OK"){
-      return res.status(200).send(response)
-    }else{
-      return res.status(500).send(response)
+    if (response.status == "OK") {
+      return res.status(200).send(response);
+    } else {
+      return res.status(500).send(response);
     }
-
-  }catch (err) {
+  } catch (err) {
     res.status(500).send({
       status: "ERR",
       msg: `error in server to get all departmentControllers, ${err.message}`,
       data: [],
     });
   }
-}
+};
 
-departmentControllers.resolvedComplain = async (req,res)=>{
-  try{
-    const { value, error } = departmentResolvedComplainValidationSchema.validate(req.body);
+departmentControllers.resolvedComplain = async (req, res) => {
+  try {
+    const { value, error } =
+      departmentResolvedComplainValidationSchema.validate(req.body);
     if (error) {
       return res.status(400).send({
         status: "ERR",
@@ -370,21 +400,20 @@ departmentControllers.resolvedComplain = async (req,res)=>{
         data: [],
       });
     }
-    console.log(value._id)
+    console.log(value._id);
     const response = await DepartmentServices.resolvedComplain(value._id);
-    if(response.status=="OK"){
-      return res.status(200).send(response)
-    }else{
-      return res.status(500).send(response)
+    if (response.status == "OK") {
+      return res.status(200).send(response);
+    } else {
+      return res.status(500).send(response);
     }
-
-  }catch (err) {
+  } catch (err) {
     res.status(500).send({
       status: "ERR",
       msg: `error in server to get all departmentControllers, ${err.message}`,
       data: [],
     });
   }
-}
+};
 
 export default departmentControllers;

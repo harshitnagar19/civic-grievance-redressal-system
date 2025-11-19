@@ -10,6 +10,11 @@ adminRoute.get(
   adminController.getUnverifiedDepartments
 );
 
+adminRoute.get(
+  "/get-pending-complain/department-not-solve",
+  adminController.getPendingComplainThatNotSolvedByDepartment
+);
+
 adminRoute.post(
   "/verify-department",                     // admin must be logged in
   adminController.verifyDepartment

@@ -20,18 +20,20 @@ const OTP_TTL_MS = 1 * 60 * 1000; // 5 minutes
 const MAX_OTP_ATTEMPTS = 5;
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "ayushpatel062004@gmail.com",
-    pass: "hiok hpiz nrib crqq",
-  },
-});
+    host: "smtp-relay.brevo.com",
+    port: process.env.SMTP_PORT,
+    secure: false,
+    auth: {
+      user: process.env.BREVO_USER,
+      pass: process.env.BREVO_PASS,
+    },
+  });
 
+  
 userControllers.sendOtp = async (req, res) => {
   try {
     const { value, error } = userOtpValidationSchema.validate(req.body);
     if (error) {
-      console.log(error);
       return res.status(400).send({
         status: "ERR",
         msg: error.message,
@@ -54,33 +56,21 @@ userControllers.sendOtp = async (req, res) => {
             attempts: 0,
           });
 
-          let mailOptions = {
-            from: "ayushpatel062004@gmail.com",
+        
+          const o = await transporter.sendMail({
+            from: process.env.BREVO_FROM,
             to: email,
-            subject: "Your verification OTP",
-            text: `Your one-time verification code is ${otp}. It expires in ${
-              OTP_TTL_MS / 60000
-            } minutes.`,
-            html: `<p>Your one-time verification code is <b>${otp}</b>. It expires in ${
+            subject: "Your Verification OTP",
+            html: `<p>Your OTP Is <b>${otp}</b>. It expires in ${
               OTP_TTL_MS / 60000
             } minutes.</p>`,
-          };
-
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              return res.status(500).send({
-                status: "ERR",
-                msg: `error in sending mail ${error?.message}`,
-                data: [],
-              });
-            } else {
-              res.status(200).send({
-                status: "OK",
-                msg: "OTP sent",
-                sessionId,
-                ttl: OTP_TTL_MS,
-              });
-            }
+          });
+          console.log(o)
+          res.status(200).send({
+            status: "OK",
+            msg: "OTP sent successfully",
+            sessionId,
+            ttl: OTP_TTL_MS,
           });
         } else {
           return res.status(400).send({

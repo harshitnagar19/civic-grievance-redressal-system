@@ -3,6 +3,7 @@ import { userLoginValidationSchema } from "../Validations/UserValidation.js";
 import { generateToken } from "../utils/token/generateToken.js";
 import AdminService from "../Services/AdminServices.js";
 import DepartmentServices from "../Services/DepartmentServices.js";
+import Complain from "../Models/Complain.js";
 
 const adminController = {};
 
@@ -198,6 +199,33 @@ adminController.rejectDepartment = async (req, res) => {
     });
   }
 };
+
+
+adminController.getPendingComplainThatNotSolvedByDepartment = async (req, res) => {
+  try {
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+    const pendingComplains = await Complain.find({
+      status: "Pending",
+      updatedAt: { $lte: twentyFourHoursAgo },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Complaints pending for more than 24 hours",
+      data: pendingComplains,
+    });
+
+  } catch (error) {
+    console.error("Error fetching pending complaints:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 
 
 
