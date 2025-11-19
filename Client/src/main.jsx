@@ -29,6 +29,10 @@ import AdminDashboard from './Components/Admin/AdminDashboard.jsx';
 import AllComplaints from './Components/AllComplaints/AllComplaints.jsx';
 import UserComplaint from './Components/userComplaint/UserComplaint.jsx';
 import DepartmentComplaint from './Components/DepartmentComplaint/DepartmentComplaint.jsx';
+import ActiveComplaint from './Components/DepartmentComplaint/ActiveComplaint.jsx';
+import UnverifiedDepartments from './Components/Admin/UnverifiedDepartments.jsx';
+import UnsolvedComplaints from './Components/Admin/UnsolvedComplaints.jsx';
+import AdminDashboardHome from './Components/Admin/AdminDashboardHome.jsx';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -42,7 +46,9 @@ const router = createBrowserRouter(
       <Route path={routes.adminLogin} element={<AdminLogin/>}></Route>
 
       {/* Admin */}
-      <Route path={routes.adminDashboard} element={<AdminDashboard/>}></Route>
+      <Route path='/admin/dashboard' element={<AdminDashboardHome/>}></Route>
+      <Route path={routes.unverifiedDepartments} element={<UnverifiedDepartments/>}></Route>
+      <Route path={routes.unsolvedComplaints} element={<UnsolvedComplaints/>}></Route>
       
       <Route path="/" element={<Hero />}></Route>
       <Route path={routes.aboutUs} element={<><Header /><AboutUs /><Footer /></>}></Route>
@@ -59,6 +65,7 @@ const router = createBrowserRouter(
         <Route path={routes.seeComplaints} element={<OAuth><AllComplaints/></OAuth>}></Route>
         <Route path={routes.userComplaint} element={<OAuth><UserComplaint/></OAuth>}></Route>
         <Route path={routes.deptComplaint} element={<OAuth><DepartmentComplaint/></OAuth>}></Route>
+        <Route path={routes.activeComplaint} element={<OAuth><ActiveComplaint/></OAuth>}></Route>
       </Route>
       <Route path='*' element={<NotFound />}></Route>
     </>

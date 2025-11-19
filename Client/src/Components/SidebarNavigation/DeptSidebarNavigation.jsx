@@ -11,6 +11,7 @@ import {
   Star,
   LogOut,
   ChevronRight,
+  BadgeCheck ,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -39,6 +40,7 @@ export default function DeptSidebarNavigation() {
     { id: "DashBoard", text: "Dashboard", icon: FileText, navigateTo: routes.deptDashboard },
     { id: "AllComplaints", text: "All Complaints", icon: CheckCircle, navigateTo: routes.seeComplaints },
     { id: "deptComplaint", text: "Received Complaints", icon: TrendingUp, navigateTo: routes.deptComplaint },
+    { id: "activeComplaint", text: "Active Complaints", icon: BadgeCheck, navigateTo: routes.activeComplaint },
     { id: "Areas", text: "Issue In Areas", icon: MapPin, navigateTo: routes.issueAreas },
     { id: "Announcements", text: "Announcements", icon: Bell, navigateTo: routes.announcements },
     { id: "Settings", text: "Settings", icon: Settings, navigateTo: routes.settings },
@@ -54,7 +56,7 @@ export default function DeptSidebarNavigation() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate(routes.deptLogin);
+    navigate(routes.hero);
   };
 
   return (

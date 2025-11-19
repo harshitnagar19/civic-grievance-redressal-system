@@ -4,13 +4,14 @@ import axios from "axios";
 import { ComplaintForm } from "./ComplaintForm";
 import { ComplaintValidations } from "../../validations/ComplaintValidations";
 import { toast } from "react-toastify";
-
+import { routes } from "../../data/routes";
+import { useNavigate } from "react-router-dom";
 const CLOUD_NAME = "dvvae8cxm";
 const UPLOAD_PRESET = "unsigned_upload";
 
 export const ComplaintWrapper = () => {
   const token = localStorage.getItem("token");
-
+  const navigate=useNavigate();
   // Upload image to Cloudinary
   const handleUpload = async (file) => {
     if (!file) return null;
@@ -97,9 +98,8 @@ export const ComplaintWrapper = () => {
       );
 
       toast.success("Complaint submitted successfully!");
-
-      // Proper reset (NOW WORKS)
       resetForm();
+      navigate(routes.seeComplaints);
 
     } catch (error) {
       console.error("Error submitting complaint:", error);

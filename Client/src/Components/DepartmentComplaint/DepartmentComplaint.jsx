@@ -7,7 +7,6 @@ import {
   MapPin,
   Clock,
   AlertCircle,
-  Building2,
   User,
   X,
 } from "lucide-react";
@@ -16,10 +15,10 @@ export default function DepartmentComplaint() {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showRejectModal, setShowRejectModal] = useState(false);
-  const [selectedComplaintId, setSelectedComplaintId] = useState(null);
   const [rejectReason, setRejectReason] = useState("");
   const deptData = useSelector((store) => store.departmentData);
-  const [complaintId,setComplaintId]=useState("")
+  const [complaintId, setComplaintId] = useState("");
+
   const fetchDepartmentComplaints = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -35,7 +34,7 @@ export default function DepartmentComplaint() {
 
       if (res.data.status === "OK") {
         const pendingComplaints = res.data.data.filter(
-          (f) => f.status == "Pending"
+          (f) => f.status === "Pending"
         );
         setComplaints(pendingComplaints);
       } else {
@@ -49,10 +48,30 @@ export default function DepartmentComplaint() {
     }
   };
 
+  // ACCEPT HANDLER
   const updateComplaintStatus = async (id, newStatus) => {
-   
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASEURL}/department/active-complain`,
+        {
+          _id: id,
+          status: "Active",
+        }
+      );
+
+      if (res.data.status === "OK") {
+        toast.success("Complaint accepted successfully");
+        fetchDepartmentComplaints();
+      } else {
+        toast.error(res.data.message || "Failed to update complaint");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data?.message || "Error updating complaint");
+    }
   };
 
+  // Reject handler
   const handleRejectSubmit = async () => {
     if (!rejectReason.trim()) {
       toast.error("Please provide a reason for rejection");
@@ -65,15 +84,14 @@ export default function DepartmentComplaint() {
         {
           _id: complaintId,
           reason: rejectReason,
-          status:'Reject',
-        },
+          status: "Reject",
+        }
       );
 
       if (res.data.status === "OK") {
         toast.success("Complaint rejected successfully");
         setShowRejectModal(false);
         setRejectReason("");
-        setSelectedComplaintId(null);
         fetchDepartmentComplaints();
       } else {
         toast.error(res.data.message || "Failed to reject complaint");
@@ -87,7 +105,6 @@ export default function DepartmentComplaint() {
   const handleModalClose = () => {
     setShowRejectModal(false);
     setRejectReason("");
-    setSelectedComplaintId(null);
   };
 
   useEffect(() => {
@@ -136,15 +153,8 @@ export default function DepartmentComplaint() {
                     alt="complaint"
                     className="w-full h-full object-cover"
                   />
-                  <div
-                    className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm ${complaint.status === "Pending"
-                        ? "bg-amber-500/90 text-white"
-                        : complaint.status === "Resolved"
-                          ? "bg-green-500/90 text-white"
-                          : "bg-blue-500/90 text-white"
-                      }`}
-                  >
-                    {complaint.status}
+                  <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm bg-amber-500/90 text-white">
+                    Pending
                   </div>
                 </div>
 
@@ -191,25 +201,21 @@ export default function DepartmentComplaint() {
                     <label className="text-sm text-gray-700 font-medium">
                       Update Status:
                     </label>
+
                     <select
                       className="mt-1 w-full border rounded-lg px-3 py-2 text-sm text-gray-700 bg-gray-50 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
-                      value={complaint.status}
+                      defaultValue=""
                       onChange={(e) => {
-                        console.log(complaint._id);
-                        if (e.target.value === "Reject"){
+                        if (e.target.value === "Reject") {
                           setComplaintId(complaint._id);
                           setShowRejectModal(true);
-                          
-                        }else{
-                          updateComplaintStatus(complaint._id, e.target.value)
-
+                        } else if (e.target.value === "Active") {
+                          updateComplaintStatus(complaint._id, "Active");
                         }
-                      }
-                      }
+                      }}
                     >
-                      <option value="Pending">Pending</option>
-                      <option value="In Progress">In Progress</option>
-                      <option value="Resolved">Resolved</option>
+                      <option value="" disabled>Select Action</option>
+                      <option value="Active">Active</option>
                       <option value="Reject">Reject</option>
                     </select>
                   </div>
@@ -220,7 +226,7 @@ export default function DepartmentComplaint() {
         )}
       </div>
 
-      {/* Reject Reason Modal */}
+      {/* Reject Modal */}
       {showRejectModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-in">

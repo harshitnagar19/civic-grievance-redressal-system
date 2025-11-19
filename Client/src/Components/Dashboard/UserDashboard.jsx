@@ -51,7 +51,7 @@ function UserDashboard() {
           total: complaints.length,
           pending: complaints.filter(c => c.status === 'Pending').length,
           resolved: complaints.filter(c => c.status === 'Resolved').length,
-          inProgress: complaints.filter(c => c.status === 'In Progress').length
+          Active: complaints.filter(c => c.status === 'Active').length
         });
 
         // Get recent 5 complaints
@@ -186,8 +186,8 @@ function UserDashboard() {
           />
           <StatCard
             icon={TrendingUp}
-            label="In Progress"
-            value={stats.inProgress}
+            label="Active"
+            value={stats.Active}
             color="text-purple-600"
             bgColor="bg-purple-50"
           />

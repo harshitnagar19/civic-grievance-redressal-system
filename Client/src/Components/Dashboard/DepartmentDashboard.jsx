@@ -24,7 +24,7 @@ export default function DepartmentDashboard() {
     total: 0,
     pending: 0,
     resolved: 0,
-    inProgress: 0,
+    Active: 0,
   });
   const [recentComplaints, setRecentComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,8 +54,8 @@ export default function DepartmentDashboard() {
           total: deptComplaints.length,
           pending: deptComplaints.filter((c) => c.status === "Pending").length,
           resolved: deptComplaints.filter((c) => c.status === "Resolved").length,
-          inProgress: deptComplaints.filter(
-            (c) => c.status === "In Progress"
+          Active: deptComplaints.filter(
+            (c) => c.status === "Active"
           ).length,
         });
 
@@ -199,8 +199,8 @@ export default function DepartmentDashboard() {
           />
           <StatCard
             icon={TrendingUp}
-            label="In Progress"
-            value={stats.inProgress}
+            label="Active"
+            value={stats.Active}
             color="text-purple-600"
             bgColor="bg-purple-50"
           />

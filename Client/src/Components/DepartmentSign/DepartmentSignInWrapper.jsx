@@ -23,7 +23,6 @@ function DepartmentSignInWrapper() {
                 .then((response) => {
                     localStorage.setItem("token", response.data.data[0].token);                 
                     dispatch(addDeptData(response.data.data[0]));
-                    console.log(response);
                     // notifySuccess(response.data.msg);
                     navigate(routes.deptDashboard);
                 })

@@ -62,8 +62,8 @@ export default function UserSidebarNavigation() {
 
   // 🔹 Logout handler
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove JWT token
-    navigate(routes.userLogin);
+    localStorage.removeItem('token'); 
+    navigate(routes.hero);
   };
 
   return (
