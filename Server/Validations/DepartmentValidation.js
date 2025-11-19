@@ -114,3 +114,33 @@ export const departmentRejectComplainValidationSchema = Joi.object({
           "string.empty": "Reason cannot be empty"
       })
 }).required();
+
+export const departmentActiveComplainValidationSchema = Joi.object({
+  _id: Joi.string().required().messages({
+      "any.required": "Complain ID is required",
+      "string.empty": "Complain ID cannot be empty"
+  }),
+
+  status: Joi.string()
+      .valid("Active")
+      .required()
+      .messages({
+          "any.only": "Status must be Active",
+          "any.required": "Status is required"
+      }),
+}).required();
+
+export const departmentResolvedComplainValidationSchema = Joi.object({
+  _id: Joi.string().required().messages({
+      "any.required": "Complain ID is required",
+      "string.empty": "Complain ID cannot be empty"
+  }),
+
+  status: Joi.string()
+      .valid("Resolved")
+      .required()
+      .messages({
+          "any.only": "Status must be Resolved",
+          "any.required": "Status is required"
+      }),
+}).required();

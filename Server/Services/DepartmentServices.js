@@ -72,12 +72,12 @@ DepartmentServices.signup = async ({
 
 DepartmentServices.getStatesOfAllDepartment = async () => {
   try {
-    const response = await Department.distinct("state")
+    const response = await Department.distinct("state");
     return {
-      status:"OK",
-      msg:"sucessfully get all states",
-      data:response
-    }
+      status: "OK",
+      msg: "sucessfully get all states",
+      data: response,
+    };
   } catch (err) {
     return {
       status: "ERR",
@@ -87,65 +87,87 @@ DepartmentServices.getStatesOfAllDepartment = async () => {
   }
 };
 
-DepartmentServices.getAllDistrictsInState = async ({state})=>{
-  try{
-    const response = await Department.distinct("city",{state});
-    return {
-      status:"OK",
-      msg:"sucessfully get all districts in state",
-      data:response
-    }
-
-  }catch(err){
-    return {
-      status: "ERR",
-      msg: err.message,
-      data: [],
-    };
-  }
-}
-
-DepartmentServices.getAllDepartmentInDisrtict = async ({state , district}) =>{
-  try{
-    const response = await Department.distinct("DepartmentName" , {state , city:district , isVerified:true})
-    return {
-      status:"OK",
-      msg:"sucessfully get all districts in state",
-      data:response
-    }
-  }catch(err){
-      return {
-        status: "ERR",
-        msg: err.message,
-        data: [],
-      };
-  }
-}
-
-DepartmentServices.getDepartmentInfo = async ({state,district,departmentName})=>{
-  try{
-    const response = await Department.find({state, DepartmentName:departmentName, city:district, isVerified:true})
-    return {
-      status:"OK",
-      msg:"sucessfully get Department Info",
-      data:response
-    }
-  }catch(err){
-    return {
-      status: "ERR",
-      msg: err.message,
-      data: [],
-    };
-  }
-}
-
-DepartmentServices.getDepartmentByStateAndDistrict = async (state, district , DepartmentShortName ,isVerified) => {
+DepartmentServices.getAllDistrictsInState = async ({ state }) => {
   try {
-    const response = await Department.find({ state, city: district, DepartmentShortName , isVerified: true });
+    const response = await Department.distinct("city", { state });
+    return {
+      status: "OK",
+      msg: "sucessfully get all districts in state",
+      data: response,
+    };
+  } catch (err) {
+    return {
+      status: "ERR",
+      msg: err.message,
+      data: [],
+    };
+  }
+};
+
+DepartmentServices.getAllDepartmentInDisrtict = async ({ state, district }) => {
+  try {
+    const response = await Department.distinct("DepartmentName", {
+      state,
+      city: district,
+      isVerified: true,
+    });
+    return {
+      status: "OK",
+      msg: "sucessfully get all districts in state",
+      data: response,
+    };
+  } catch (err) {
+    return {
+      status: "ERR",
+      msg: err.message,
+      data: [],
+    };
+  }
+};
+
+DepartmentServices.getDepartmentInfo = async ({
+  state,
+  district,
+  departmentName,
+}) => {
+  try {
+    const response = await Department.find({
+      state,
+      DepartmentName: departmentName,
+      city: district,
+      isVerified: true,
+    });
+    return {
+      status: "OK",
+      msg: "sucessfully get Department Info",
+      data: response,
+    };
+  } catch (err) {
+    return {
+      status: "ERR",
+      msg: err.message,
+      data: [],
+    };
+  }
+};
+
+DepartmentServices.getDepartmentByStateAndDistrict = async (
+  state,
+  district,
+  DepartmentShortName,
+  isVerified
+) => {
+  try {
+    const response = await Department.find({
+      state,
+      city: district,
+      DepartmentShortName,
+      isVerified: true,
+    });
     return {
       status: "OK",
       msg: "sucessfully get all departments in district",
-      data: response
+      data: response,
     };
   } catch (err) {
     return {
@@ -158,18 +180,20 @@ DepartmentServices.getDepartmentByStateAndDistrict = async (state, district , De
 
 DepartmentServices.getUnverifiedDepartments = async () => {
   try {
-    const response = await Department.find({ isVerified: false }).select("-password");
+    const response = await Department.find({ isVerified: false }).select(
+      "-password"
+    );
 
     return {
       status: "OK",
       msg: "Successfully fetched unverified departments",
-      data: response
+      data: response,
     };
   } catch (err) {
     return {
       status: "ERR",
       msg: err.message,
-      data: []
+      data: [],
     };
   }
 };
@@ -177,7 +201,7 @@ DepartmentServices.getUnverifiedDepartments = async () => {
 DepartmentServices.verifyDepartment = async (mongoId) => {
   try {
     const updated = await Department.findByIdAndUpdate(
-      mongoId,                  // 👈 Use _id here
+      mongoId, // 👈 Use _id here
       { isVerified: true },
       { new: true }
     ).select("-password");
@@ -186,21 +210,20 @@ DepartmentServices.verifyDepartment = async (mongoId) => {
       return {
         status: "OK",
         msg: "Department not found",
-        data: []
+        data: [],
       };
     }
 
     return {
       status: "OK",
       msg: "Department verified successfully",
-      data: [updated]
+      data: [updated],
     };
-
   } catch (err) {
     return {
       status: "ERR",
       msg: err.message,
-      data: []
+      data: [],
     };
   }
 };
@@ -213,56 +236,119 @@ DepartmentServices.rejectDepartment = async (mongoId) => {
       return {
         status: "OK",
         msg: "Department not found",
-        data: []
+        data: [],
       };
     }
 
     return {
       status: "OK",
       msg: "Department rejected and deleted successfully",
-      data: [deleted]
+      data: [deleted],
     };
   } catch (err) {
     return {
       status: "ERR",
       msg: err.message,
-      data: []
+      data: [],
     };
   }
 };
 
-DepartmentServices.rejectComplain = async (_id,reason)=>{
+DepartmentServices.rejectComplain = async (_id, reason) => {
   try {
     const updated = await Complain.findByIdAndUpdate(
-        _id,
-        {
-            status: "Reject",
-            rejectReason: reason
-        },
-        { new: true } // returns updated document
+      _id,
+      {
+        status: "Reject",
+        rejectReason: reason,
+      },
+      { new: true } // returns updated document
     );
 
     if (!updated) {
-        return {
-            status: "ERR",
-            msg: "Complain not found",
-            data: null
-        };
+      return {
+        status: "ERR",
+        msg: "Complain not found",
+        data: null,
+      };
     }
 
     return {
-        status: "OK",
-        msg: "Complain rejected successfully",
-        data: updated
+      status: "OK",
+      msg: "Complain rejected successfully",
+      data: updated,
     };
-
-} catch (error) {
+  } catch (error) {
     return {
-        status: "ERR",
-        msg: error.message,
-        data: null
+      status: "ERR",
+      msg: error.message,
+      data: null,
     };
-}
+  }
+};
+
+DepartmentServices.activeComplain = async (_id) => {
+  try {
+    const updated = await Complain.findByIdAndUpdate(
+      _id,
+      {
+        status: "Active",
+      },
+      { new: true } // returns updated document
+    );
+
+    if (!updated) {
+      return {
+        status: "ERR",
+        msg: "Complain not found",
+        data: null,
+      };
+    }
+
+    return {
+      status: "OK",
+      msg: "Complain Active successfully",
+      data: updated,
+    };
+  } catch (error) {
+    return {
+      status: "ERR",
+      msg: error.message,
+      data: null,
+    };
+  }
+};
+
+DepartmentServices.resolvedComplain = async (_id) =>{
+  try {
+    const updated = await Complain.findByIdAndUpdate(
+      _id,
+      {
+        status: "Resolved",
+      },
+      { new: true } // returns updated document
+    );
+
+    if (!updated) {
+      return {
+        status: "ERR",
+        msg: "Complain not found",
+        data: null,
+      };
+    }
+
+    return {
+      status: "OK",
+      msg: "Complain Active successfully",
+      data: updated,
+    };
+  } catch (error) {
+    return {
+      status: "ERR",
+      msg: error.message,
+      data: null,
+    };
+  }
 }
 
 export default DepartmentServices;
