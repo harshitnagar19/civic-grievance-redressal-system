@@ -21,5 +21,7 @@ deptroute.get("/get-area-by-state-and-district",areaControllers.getAreaByStateAn
 // reject complain 
 
 deptroute.post("/reject-complain",departmentControllers.rejectComplain)
+deptroute.post("/active-complain",departmentControllers.activeComplain)
+deptroute.post("/resolved-complain",departmentControllers.resolvedComplain)
 
 export default deptroute ;
