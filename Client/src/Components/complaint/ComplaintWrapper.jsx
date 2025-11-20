@@ -91,19 +91,22 @@ export const ComplaintWrapper = () => {
       };
 
       // Submit complaint
-      await axios.post(
-        `${import.meta.env.VITE_BASEURL}/complain/add`,
-        payload,
-        { headers: { token } }
-      );
-
-      toast.success("Complaint submitted successfully!");
-      resetForm();
-      navigate(routes.seeComplaints);
-
+      try{
+        await axios.post(
+          `${import.meta.env.VITE_BASEURL}/complain/add`,
+          payload,
+          { headers: { token } }
+        );
+        toast.success("Complaint submitted successfully!");
+        resetForm();
+        navigate(routes.seeComplaints);
+      }catch(err){
+        console.error("credit Error submitting complaint:", err.response.data.msg);
+        toast.error(` credit Failed to submit complaint ${err?.response?.data?.msg}`);
+      }
     } catch (error) {
-      console.error("Error submitting complaint:", error);
-      toast.error("Failed to submit complaint");
+      console.error("Error submitting complaint:", error.message);
+      toast.error(`Failed to submit complaint`);
     } finally {
       setSubmitting(false);
     }
