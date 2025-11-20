@@ -9,7 +9,7 @@ export const DepartmentSignUpValidation = object({
 
     departmentShortName: string()
         .required("Department short name is required")
-        .max(5, "Maximun 5 characters allowed"),
+        .max(10, "Maximun 10 characters allowed"),
 
     headOfDepartment: string()
         .required("Name of HOD is required")
