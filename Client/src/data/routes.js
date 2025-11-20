@@ -1,4 +1,5 @@
 export const routes = {
+    hero:'/',
     userSignup: '/user-signup',
     userLogin: '/user-login',
     userDashboard: '/user-dashboard',
@@ -10,7 +11,10 @@ export const routes = {
     raiseComplaint:'/raise-complaint',
     adminLogin:'/admin-login',
     adminDashboard:"/admin-dashboard",
+    unverifiedDepartments:'/admin/unverified-departments',
+    unsolvedComplaints:'/admin/unsolved-complaints',
     seeComplaints:'/all-complaint',
     userComplaint:"/user-complaint",
-    deptComplaint:"/dept-complaint"
+    deptComplaint:"/dept-complaint",
+    activeComplaint:"/active-complaint"
 };

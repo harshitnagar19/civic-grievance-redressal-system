@@ -7,29 +7,36 @@ import {
   MapPin,
   Clock,
   AlertCircle,
-  Building2,
   User,
+  X,
 } from "lucide-react";
 
 export default function DepartmentComplaint() {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
-  const deptData= useSelector((store)=>store.departmentData)
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  const deptData = useSelector((store) => store.departmentData);
+  const [complaintId, setComplaintId] = useState("");
+
   const fetchDepartmentComplaints = async () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
         `${import.meta.env.VITE_BASEURL}/complain/get-complain-by-department`,
         {
-          departmentName:deptData.DepartmentName,
+          departmentName: deptData.DepartmentName,
           state: deptData.state,
-          district: deptData.city
+          district: deptData.city,
         },
         { headers: { token } }
       );
 
       if (res.data.status === "OK") {
-        setComplaints(res.data.data);
+        const pendingComplaints = res.data.data.filter(
+          (f) => f.status === "Pending"
+        );
+        setComplaints(pendingComplaints);
       } else {
         toast.error("Failed to fetch department complaints");
       }
@@ -41,29 +48,63 @@ export default function DepartmentComplaint() {
     }
   };
 
+  // ACCEPT HANDLER
   const updateComplaintStatus = async (id, newStatus) => {
-    // try {
-    //   const token = localStorage.getItem("token");
-    //   const res = await axios.put(
-    //     `${import.meta.env.VITE_BASEURL}/complain/update-status/${id}`,
-    //     { status: newStatus },
-    //     { headers: { token } }
-    //   );
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASEURL}/department/active-complain`,
+        {
+          _id: id,
+          status: "Active",
+        }
+      );
 
-    //   if (res.data.status === "OK") {
-    //     toast.success(`Complaint marked as ${newStatus}`);
-    //     setComplaints((prev) =>
-    //       prev.map((c) =>
-    //         c._id === id ? { ...c, status: newStatus } : c
-    //       )
-    //     );
-    //   } else {
-    //     toast.error("Failed to update complaint status");
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   toast.error("Error updating status");
-    // }
+      if (res.data.status === "OK") {
+        toast.success("Complaint accepted successfully");
+        fetchDepartmentComplaints();
+      } else {
+        toast.error(res.data.message || "Failed to update complaint");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data?.message || "Error updating complaint");
+    }
+  };
+
+  // Reject handler
+  const handleRejectSubmit = async () => {
+    if (!rejectReason.trim()) {
+      toast.error("Please provide a reason for rejection");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASEURL}/department/reject-complain`,
+        {
+          _id: complaintId,
+          reason: rejectReason,
+          status: "Reject",
+        }
+      );
+
+      if (res.data.status === "OK") {
+        toast.success("Complaint rejected successfully");
+        setShowRejectModal(false);
+        setRejectReason("");
+        fetchDepartmentComplaints();
+      } else {
+        toast.error(res.data.message || "Failed to reject complaint");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Error rejecting complaint");
+    }
+  };
+
+  const handleModalClose = () => {
+    setShowRejectModal(false);
+    setRejectReason("");
   };
 
   useEffect(() => {
@@ -112,16 +153,8 @@ export default function DepartmentComplaint() {
                     alt="complaint"
                     className="w-full h-full object-cover"
                   />
-                  <div
-                    className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm ${
-                      complaint.status === "Pending"
-                        ? "bg-amber-500/90 text-white"
-                        : complaint.status === "Resolved"
-                        ? "bg-green-500/90 text-white"
-                        : "bg-blue-500/90 text-white"
-                    }`}
-                  >
-                    {complaint.status}
+                  <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm bg-amber-500/90 text-white">
+                    Pending
                   </div>
                 </div>
 
@@ -168,16 +201,22 @@ export default function DepartmentComplaint() {
                     <label className="text-sm text-gray-700 font-medium">
                       Update Status:
                     </label>
+
                     <select
                       className="mt-1 w-full border rounded-lg px-3 py-2 text-sm text-gray-700 bg-gray-50 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
-                      value={complaint.status}
-                      onChange={(e) =>
-                        updateComplaintStatus(complaint._id, e.target.value)
-                      }
+                      defaultValue=""
+                      onChange={(e) => {
+                        if (e.target.value === "Reject") {
+                          setComplaintId(complaint._id);
+                          setShowRejectModal(true);
+                        } else if (e.target.value === "Active") {
+                          updateComplaintStatus(complaint._id, "Active");
+                        }
+                      }}
                     >
-                      <option value="Pending">Pending</option>
-                      <option value="In Progress">In Progress</option>
-                      <option value="Resolved">Resolved</option>
+                      <option value="" disabled>Select Action</option>
+                      <option value="Active">Active</option>
+                      <option value="Reject">Reject</option>
                     </select>
                   </div>
                 </div>
@@ -186,6 +225,52 @@ export default function DepartmentComplaint() {
           </div>
         )}
       </div>
+
+      {/* Reject Modal */}
+      {showRejectModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-in">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-gray-900">
+                Reject Complaint
+              </h3>
+              <button
+                onClick={handleModalClose}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-gray-600 text-sm mb-4">
+              Please provide a reason for rejecting this complaint:
+            </p>
+
+            <textarea
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              placeholder="Enter rejection reason..."
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm text-gray-700 focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none resize-none"
+              rows={4}
+            />
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={handleModalClose}
+                className="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRejectSubmit}
+                className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
